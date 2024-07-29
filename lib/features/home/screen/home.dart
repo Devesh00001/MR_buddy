@@ -1,11 +1,10 @@
 import 'package:easy_date_timeline/easy_date_timeline.dart';
 import 'package:flutter/material.dart';
 import 'package:mr_buddy/features/home/provider/home_provider.dart';
-import 'package:mr_buddy/features/home/service/home_service.dart';
 import 'package:provider/provider.dart';
 import 'package:simple_gradient_text/simple_gradient_text.dart';
 
-import '../widgets/custom_form_field.dart';
+import '../../weekly plan/widgets/custom_form_field.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});

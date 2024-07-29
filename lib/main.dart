@@ -4,6 +4,7 @@ import 'package:mr_buddy/features/welcome/screen/welcome_screen.dart';
 import 'package:provider/provider.dart';
 import 'features/dashboard/provider/dashboard_provider.dart';
 import 'features/home/provider/home_provider.dart';
+import 'features/weekly plan/provider/weekly_plan_provider.dart';
 import 'features/welcome/provider/welcome_provider.dart';
 
 void main() async {
@@ -12,7 +13,8 @@ void main() async {
   runApp(MultiProvider(providers: [
     ChangeNotifierProvider(create: (_) => HomeProvider()),
     ChangeNotifierProvider(create: (_) => WelcomeProvider()),
-    ChangeNotifierProvider(create: (_) => DashboardProvider())
+    ChangeNotifierProvider(create: (_) => DashboardProvider()),
+    ChangeNotifierProvider(create: (_) => WeeklyProviderPlan())
   ], child: const MyApp()));
 }
 

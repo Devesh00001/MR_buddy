@@ -22,12 +22,9 @@ class WelcomeProvider with ChangeNotifier {
     if (await service.isUsernamePresent(userName!) != null) {
       setUser(await service.isUsernamePresent(userName!));
       status = true;
-    } else if (await service.uploadUserDeatils(userName!, selectedRole) !=
-        null) {
+    } else {
       setUser(await service.uploadUserDeatils(userName!, selectedRole));
       status = true;
-    } else {
-      status = false;
     }
   }
 }

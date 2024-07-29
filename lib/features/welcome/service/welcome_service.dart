@@ -5,16 +5,16 @@ class WelcomeService {
   Future<User?> isUsernamePresent(String username) async {
     try {
       final QuerySnapshot result = await FirebaseFirestore.instance
-          .collection('User')
+          .collection('Users')
           .where('Name', isEqualTo: username)
           .get();
-
-      final DocumentSnapshot document = result.docs[0];
-      final Map<String, dynamic> data = document.data() as Map<String, dynamic>;
-      User? user;
-      user!.fromJson(data);
-
-      return user;
+      if (result.docs.isNotEmpty) {
+        final DocumentSnapshot document = result.docs[0];
+        final Map<String, dynamic> data =
+            document.data() as Map<String, dynamic>;
+        print("found user");
+        return User.fromJson(data);
+      }
     } catch (e) {
       print('Error checking username: $e');
     }
@@ -24,7 +24,7 @@ class WelcomeService {
   Future<User?> uploadUserDeatils(String name, String role) async {
     try {
       CollectionReference collection =
-          FirebaseFirestore.instance.collection("User");
+          FirebaseFirestore.instance.collection("Users");
       User user = User(name: name, role: role);
 
       await collection.add(user.modelTojson());
@@ -33,7 +33,6 @@ class WelcomeService {
       return user;
     } catch (e) {
       print('Failed to upload data: $e');
-
     }
     return null;
   }

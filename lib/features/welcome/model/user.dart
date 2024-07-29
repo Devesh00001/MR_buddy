@@ -4,7 +4,7 @@ class User {
 
   User({required this.name, required this.role});
 
-  User fromJson(Map<String, dynamic> data) {
+  factory User.fromJson(Map<String, dynamic> data) {
     return User(name: data['Name'], role: data["Role"]);
   }
 

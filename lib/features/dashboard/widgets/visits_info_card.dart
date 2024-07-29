@@ -58,8 +58,8 @@ class VisitsInfoCard extends StatelessWidget {
                 alignment: Alignment.center,
                 children: [
                   SizedBox(
-                    height: 120,
-                    width: 120,
+                    height: Utils.deviceHeight * 0.14,
+                    width: Utils.deviceHeight * 0.14,
                     child: CircularProgressIndicator(
                       strokeWidth: 20,
                       strokeCap: StrokeCap.round,

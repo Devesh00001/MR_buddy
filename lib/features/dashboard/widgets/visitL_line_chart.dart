@@ -17,16 +17,15 @@ class VisitLineChart extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: Utils.deviceHeight * 0.20,
-      margin: const EdgeInsets.fromLTRB(0, 20, 20, 0),
-      color: Colors.white,
+      height: Utils.deviceHeight * 0.19,
+      width: Utils.deviceWidth * 0.90,
+      padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 10),
+      margin: const EdgeInsets.symmetric(horizontal: 10),
       child: LineChart(
         LineChartData(
           minY: 0,
           maxY: maxYValue,
           minX: 1,
-          // maxX: 7,
-
           gridData: FlGridData(
             drawVerticalLine: false,
             horizontalInterval: intervel,
@@ -58,11 +57,12 @@ class VisitLineChart extends StatelessWidget {
               topTitles: const AxisTitles(drawBelowEverything: false),
               leftTitles: AxisTitles(
                 sideTitles: SideTitles(
-                    showTitles: true, reservedSize: 35, interval: intervel),
+                    showTitles: true, reservedSize: 25, interval: intervel),
               ),
               bottomTitles: AxisTitles(
                   sideTitles: SideTitles(
                 showTitles: true,
+                reservedSize: 15,
                 interval: 1,
                 getTitlesWidget: (value, meta) {
                   switch (value.toInt() % 7) {
