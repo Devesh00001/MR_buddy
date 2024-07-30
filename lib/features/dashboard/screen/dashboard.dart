@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:mr_buddy/features/weekly%20plan/model/visit.dart';
 import 'package:mr_buddy/utils.dart';
 import 'package:provider/provider.dart';
+import '../../visit_detail/screen/check_in_screen.dart';
 import '../../welcome/model/user.dart';
 import '../../welcome/provider/welcome_provider.dart';
 import '../provider/dashboard_provider.dart';
@@ -45,18 +46,20 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
               padding: const EdgeInsets.all(20),
               child: Column(
                 children: [
-                  const Align(
+                  Align(
                     alignment: Alignment.centerLeft,
                     child: Text(
-                      "Your Today's Visit",
-                      style:
-                          TextStyle(fontSize: 24, fontWeight: FontWeight.w500),
+                      user!.role == 'Manager'
+                          ? "Your MR"
+                          : "Your Today's Visit",
+                      style: const TextStyle(
+                          fontSize: 24, fontWeight: FontWeight.w500),
                     ),
                   ),
                   SizedBox(
                       height: Utils.deviceHeight * 0.21,
                       child: FutureBuilder<Map<String, Visit>>(
-                          future: dashboardProvider.getWeeklyPlan(user!.name),
+                          future: dashboardProvider.getWeeklyPlan(user.name),
                           builder: (context, snapshot) {
                             if (snapshot.connectionState ==
                                 ConnectionState.waiting) {
@@ -76,25 +79,34 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
                                   String day = entry.key;
                                   Visit visit = entry.value;
 
-                                  return Container(
-                                    margin: const EdgeInsets.symmetric(
-                                        vertical: 10),
-                                    decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(10),
-                                        gradient: LinearGradient(colors: [
-                                          HexColor("00AE4D"),
-                                          HexColor("00AE4D").withOpacity(0.5)
-                                        ])),
-                                    child: ListTile(
-                                      title: Text(
-                                        day,
-                                        style: const TextStyle(
-                                            color: Colors.white),
-                                      ),
-                                      subtitle: Text(
-                                        visit.address,
-                                        style: const TextStyle(
-                                            color: Colors.white),
+                                  return InkWell(
+                                    onTap: () {
+                                      Navigator.of(context).push(
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  CheckInScreen(visit: visit)));
+                                    },
+                                    child: Container(
+                                      margin: const EdgeInsets.symmetric(
+                                          vertical: 10),
+                                      decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                          gradient: LinearGradient(colors: [
+                                            HexColor("00AE4D"),
+                                            HexColor("00AE4D").withOpacity(0.5)
+                                          ])),
+                                      child: ListTile(
+                                        title: Text(
+                                          day,
+                                          style: const TextStyle(
+                                              color: Colors.white),
+                                        ),
+                                        subtitle: Text(
+                                          visit.address,
+                                          style: const TextStyle(
+                                              color: Colors.white),
+                                        ),
                                       ),
                                     ),
                                   );

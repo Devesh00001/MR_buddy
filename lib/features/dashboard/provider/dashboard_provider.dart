@@ -26,4 +26,10 @@ class DashboardProvider with ChangeNotifier {
     weeklyPlan = await service.getWeekVisits(username);
     return weeklyPlan;
   }
+
+    Future<Map<String, Visit>> getMRWeeklyPlans(String username) async {
+    DashboardService service = DashboardService();
+    weeklyPlan = await service.getWeekVisits(username);
+    return weeklyPlan;
+  }
 }

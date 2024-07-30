@@ -8,6 +8,8 @@ class Visit {
   String contactPoint;
   String date;
   String day;
+  String comments;
+  String status;
 
   Visit(
       {required this.clientName,
@@ -18,20 +20,23 @@ class Visit {
       required this.contactPoint,
       required this.purpose,
       required this.date,
-      required this.day});
+      required this.day,
+      required this.comments,
+      required this.status});
 
   factory Visit.fromJson(Map<String, dynamic> data) {
     return Visit(
-      clientName: data['Client'],
-      mrName: data["MR Name"],
-      clientType: data["Client Type"],
-      placeType: data["Place"],
-      address: data["Address"],
-      contactPoint: data['Contact Point'],
-      purpose: data['Purpose'],
-      date: data['Date'],
-      day: data['Day'],
-    );
+        clientName: data['Client'],
+        mrName: data["MR Name"],
+        clientType: data["Client Type"],
+        placeType: data["Place"],
+        address: data["Address"],
+        contactPoint: data['Contact Point'],
+        purpose: data['Purpose'],
+        date: data['Date'],
+        day: data['Day'],
+        comments: data['Manager Comments'] ?? "",
+        status: data['Approval'] ?? "Pending");
   }
 
   Map<String, dynamic> toMap() {
@@ -45,6 +50,8 @@ class Visit {
       'Purpose': purpose,
       'Date': date,
       'Day': day,
+      'Manager Comments': comments,
+      'Approval': status
     };
   }
 }

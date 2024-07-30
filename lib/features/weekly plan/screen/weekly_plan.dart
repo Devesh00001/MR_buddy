@@ -32,7 +32,7 @@ class _WeeklyPlanState extends State<WeeklyPlan> {
     return PopScope(
       canPop: false,
       onPopInvoked: (didPop) {
-        Provider.of<WeeklyProviderPlan>(context, listen: false).resetProivder();
+        Provider.of<WeeklyProviderPlan>(context, listen: false).resetProvider();
       },
       child: Consumer<WeeklyProviderPlan>(
           builder: (context, weeklyProvider, child) {
@@ -115,11 +115,14 @@ class _WeeklyPlanState extends State<WeeklyPlan> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         CustomDropdown(
-                            selectedValue: weeklyProvider.clientType,
-                            hintText: "Client type",
-                            placeHolder: "Select client type",
-                            values: weeklyProvider.typeOfClient,
-                            setFunction: weeklyProvider.setClientType),
+                          selectedValue: weeklyProvider.clientType,
+                          hintText: "Client type",
+                          placeHolder: "Select client type",
+                          values: weeklyProvider.typeOfClient,
+                          setFunction: weeklyProvider.setClientType,
+                          isRequired: true,
+                          validateFunction: weeklyProvider.validateInput,
+                        ),
                         const SizedBox(height: 10),
                         Visibility(
                           visible:
@@ -127,21 +130,27 @@ class _WeeklyPlanState extends State<WeeklyPlan> {
                           child: Column(
                             children: [
                               CustomDropdown(
-                                  selectedValue: weeklyProvider.client,
-                                  hintText: "Client",
-                                  placeHolder: "Select client",
-                                  values: weeklyProvider.clientList,
-                                  setFunction: weeklyProvider.setClient),
+                                selectedValue: weeklyProvider.client,
+                                hintText: "Client",
+                                placeHolder: "Select client",
+                                values: weeklyProvider.clientList,
+                                setFunction: weeklyProvider.setClient,
+                                isRequired: true,
+                                validateFunction: weeklyProvider.validateInput,
+                              ),
                               const SizedBox(height: 10),
                             ],
                           ),
                         ),
                         CustomDropdown(
-                            selectedValue: weeklyProvider.placeType,
-                            hintText: "Select Place",
-                            placeHolder: "Select place type",
-                            values: weeklyProvider.typeOfPlace,
-                            setFunction: weeklyProvider.setPlaceType),
+                          selectedValue: weeklyProvider.placeType,
+                          hintText: "Select Place",
+                          placeHolder: "Select place type",
+                          values: weeklyProvider.typeOfPlace,
+                          isRequired: true,
+                          setFunction: weeklyProvider.setPlaceType,
+                          validateFunction: weeklyProvider.validateInput,
+                        ),
                         const SizedBox(height: 10),
                         Visibility(
                             visible: weeklyProvider.clientType == "New Client",

@@ -2,27 +2,36 @@ import 'package:flutter/material.dart';
 
 import '../../../utils.dart';
 
-class CustomDropdown extends StatelessWidget {
+class CustomDropdown extends StatefulWidget {
   const CustomDropdown(
       {super.key,
       required this.hintText,
       required this.placeHolder,
       required this.values,
       required this.setFunction,
-      required this.selectedValue});
+      required this.selectedValue,
+      required this.validateFunction,
+      this.isRequired = true});
   final String hintText;
   final String placeHolder;
   final List<String> values;
   final String? selectedValue;
   final Function(String) setFunction;
+  final Function(String?) validateFunction;
+  final bool isRequired;
 
+  @override
+  State<CustomDropdown> createState() => _CustomDropdownState();
+}
+
+class _CustomDropdownState extends State<CustomDropdown> {
   @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          hintText,
+          widget.hintText,
           style: TextStyle(color: HexColor("1F1F1F").withOpacity(0.5)),
         ),
         Container(
@@ -30,22 +39,29 @@ class CustomDropdown extends StatelessWidget {
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(5),
               border: Border.all(color: HexColor("1F1F1F").withOpacity(0.5))),
-          child: DropdownButton(
+          child: DropdownButtonFormField(
+            decoration: const InputDecoration(
+              isCollapsed: true,
+              border: InputBorder.none,
+            ),
+            icon: const Icon(Icons.keyboard_arrow_down_rounded),
             isExpanded: true,
             isDense: true,
             borderRadius: BorderRadius.circular(10),
-            underline: const SizedBox(),
-            hint: Text(placeHolder),
-            value: selectedValue,
+            hint: Text(widget.placeHolder),
+            value: widget.selectedValue,
             onChanged: (newValue) {
-              setFunction(newValue.toString());
+              widget.setFunction(newValue.toString());
             },
-            items: values.map((location) {
+            items: widget.values.map((location) {
               return DropdownMenuItem(
                 value: location,
                 child: Text(location),
               );
             }).toList(),
+            validator: (value) {
+              return widget.isRequired ? widget.validateFunction(value) : null;
+            },
           ),
         ),
       ],

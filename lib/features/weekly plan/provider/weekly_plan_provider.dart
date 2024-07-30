@@ -35,7 +35,9 @@ class WeeklyProviderPlan with ChangeNotifier {
         contactPoint: contactPoint!,
         purpose: purpose!,
         date: DateFormat('dd/MM/yyyy').format(focusDate),
-        day: weekday);
+        day: weekday,
+        comments: '',
+        status: 'Pending');
 
     weekdayPlans[visit.day] = visit.toMap();
 
@@ -44,7 +46,7 @@ class WeeklyProviderPlan with ChangeNotifier {
       service.uploadWeeklyPlan(weekdayPlans, mrName);
     }
     focusDate = focusDate.add(const Duration(days: 1));
-    resetProivder(allReset: false);
+    resetProvider(allReset: false);
     notifyListeners();
   }
 
@@ -92,7 +94,7 @@ class WeeklyProviderPlan with ChangeNotifier {
   }
 
   String? validateInput(String? value) {
-    if (value!.isEmpty) {
+    if (value == null || value.isEmpty) {
       return "Plase enter Value";
     }
     return null;
@@ -115,7 +117,7 @@ class WeeklyProviderPlan with ChangeNotifier {
     return weekdayName;
   }
 
-  void resetProivder({bool allReset = true}) {
+  void resetProvider({bool allReset = true}) {
     if (allReset) {
       focusDate = DateTime.now();
       weekdayPlans.clear();
