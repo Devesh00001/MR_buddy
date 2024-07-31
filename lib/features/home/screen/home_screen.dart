@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:mr_buddy/features/dashboard/screen/dashboard.dart';
-import 'package:mr_buddy/features/home/screen/home.dart';
 import 'package:mr_buddy/utils.dart';
 import 'package:mr_buddy/widgets/comman_appbar.dart';
 
+import '../../clients/screen/all_client.dart';
 import '../../weekly plan/screen/weekly_plan.dart';
 
 class Home extends StatefulWidget {
@@ -17,13 +17,14 @@ class _HomeState extends State<Home> {
   int _currentIndex = 0;
   final List<Widget> _screens = [
     const DashBoardScreen(),
-    const HomeScreen(),
+    const AllClientScreen(),
     const DashBoardScreen(),
     const DashBoardScreen(),
   ];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: const CommonAppBar(),
       body: _screens[_currentIndex],
       bottomNavigationBar: Stack(

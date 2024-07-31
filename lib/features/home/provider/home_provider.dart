@@ -23,7 +23,7 @@ class HomeProvider with ChangeNotifier {
   }
 
   String? validateInput(String? value) {
-    if (value!.isEmpty || value == null) {
+    if (value!.isEmpty) {
       return "Plase enter Value";
     }
     return null;

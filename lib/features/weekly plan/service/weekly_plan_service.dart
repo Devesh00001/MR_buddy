@@ -16,7 +16,8 @@ class WeeklyPlanService {
     }
   }
 
-  Future<bool> uploadWeeklyPlan(Map<String, dynamic> mapOfVisits,String mrName) async {
+  Future<bool> uploadWeeklyPlan(
+      Map<String, dynamic> mapOfVisits, String mrName) async {
     final firestore = FirebaseFirestore.instance;
     try {
       CollectionReference collection =

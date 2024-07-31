@@ -2,6 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:mr_buddy/features/welcome/screen/welcome_screen.dart';
 import 'package:provider/provider.dart';
+import 'features/clients/provider/client_provider.dart';
 import 'features/dashboard/provider/dashboard_provider.dart';
 import 'features/home/provider/home_provider.dart';
 import 'features/visit_detail/provider/visitdetail_provider.dart';
@@ -16,7 +17,8 @@ void main() async {
     ChangeNotifierProvider(create: (_) => WelcomeProvider()),
     ChangeNotifierProvider(create: (_) => DashboardProvider()),
     ChangeNotifierProvider(create: (_) => WeeklyProviderPlan()),
-    ChangeNotifierProvider(create: (_) => VisitDetailProvider())
+    ChangeNotifierProvider(create: (_) => VisitDetailProvider()),
+    ChangeNotifierProvider(create: (_) => ClinetProvider())
   ], child: const MyApp()));
 }
 

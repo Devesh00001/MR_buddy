@@ -12,7 +12,7 @@ class VisitDetailService {
           querySnapshot.docs.map((doc) => doc['Name'].toString()).toList();
       return medicineName;
     } catch (e) {
-      print('Error fetching client names: $e');
+      print('Error fetching Medicine names: $e');
       return [];
     }
   }
