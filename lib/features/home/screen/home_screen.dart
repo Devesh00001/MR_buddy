@@ -4,6 +4,7 @@ import 'package:mr_buddy/utils.dart';
 import 'package:mr_buddy/widgets/comman_appbar.dart';
 
 import '../../clients/screen/all_client.dart';
+import '../../drugs/screen/drugs_list.dart';
 import '../../weekly plan/screen/weekly_plan.dart';
 
 class Home extends StatefulWidget {
@@ -18,7 +19,7 @@ class _HomeState extends State<Home> {
   final List<Widget> _screens = [
     const DashBoardScreen(),
     const AllClientScreen(),
-    const DashBoardScreen(),
+    const DrugsList(),
     const DashBoardScreen(),
   ];
   @override

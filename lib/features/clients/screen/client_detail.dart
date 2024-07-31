@@ -6,17 +6,13 @@ import 'package:provider/provider.dart';
 import '../../../utils.dart';
 import '../../../widgets/custome_appbar.dart';
 import '../provider/client_provider.dart';
+import '../widget/client_data_row.dart';
 import 'past_visit_detail.dart';
 
-class ClientDetail extends StatefulWidget {
+class ClientDetail extends StatelessWidget {
   const ClientDetail({super.key, required this.client});
   final Client client;
 
-  @override
-  State<ClientDetail> createState() => _ClientDetailState();
-}
-
-class _ClientDetailState extends State<ClientDetail> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -27,7 +23,7 @@ class _ClientDetailState extends State<ClientDetail> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              widget.client.name,
+              client.name,
               style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w600),
             ),
             const SizedBox(height: 20),
@@ -38,12 +34,12 @@ class _ClientDetailState extends State<ClientDetail> {
             const SizedBox(height: 10),
             CilentDataRow(
               title: "Hospital",
-              value: widget.client.hospital,
+              value: client.hospital,
             ),
             const SizedBox(height: 10),
             CilentDataRow(
               title: "Address",
-              value: widget.client.address,
+              value: client.address,
             ),
             const SizedBox(height: 20),
             const Text(
@@ -55,7 +51,7 @@ class _ClientDetailState extends State<ClientDetail> {
                 padding: EdgeInsets.symmetric(vertical: 10),
                 height: Utils.deviceHeight * 0.6,
                 child: FutureBuilder<Map<String, PastVisit>>(
-                    future: clinetProvider.getPastVisits(widget.client.name),
+                    future: clinetProvider.getPastVisits(client.name),
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
                         return const Center(child: CircularProgressIndicator());
@@ -119,29 +115,6 @@ class _ClientDetailState extends State<ClientDetail> {
           ],
         ),
       ),
-    );
-  }
-}
-
-class CilentDataRow extends StatelessWidget {
-  const CilentDataRow({super.key, required this.title, required this.value});
-
-  final String title;
-  final String value;
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Text(
-          "$title: ",
-          style: TextStyle(color: Colors.black.withOpacity(0.5), fontSize: 16),
-        ),
-        Text(
-          value,
-          style: const TextStyle(fontSize: 16),
-        ),
-      ],
     );
   }
 }

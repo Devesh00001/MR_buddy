@@ -8,10 +8,10 @@ class ClientService {
     try {
       final querySnapshot = await firestore.collection('Clients').get();
       if (querySnapshot.docs.isNotEmpty) {
-        final client = querySnapshot.docs.map((doc) => doc).toList();
+        final clients = querySnapshot.docs.map((doc) => doc).toList();
         List<Client> clientList = [];
 
-        client.forEach((client) {
+        clients.forEach((client) {
           clientList.add(Client.fromJson(client.data()));
         });
         return clientList;

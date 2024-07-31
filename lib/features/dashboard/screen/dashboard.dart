@@ -1,5 +1,6 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 import 'package:mr_buddy/features/weekly%20plan/model/visit.dart';
 import 'package:mr_buddy/utils.dart';
 import 'package:provider/provider.dart';
@@ -63,8 +64,10 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
                           builder: (context, snapshot) {
                             if (snapshot.connectionState ==
                                 ConnectionState.waiting) {
-                              return const Center(
-                                  child: CircularProgressIndicator());
+                              return Center(
+                                  child: Lottie.asset(
+                                      "assets/lottie/loading.json",
+                                      height: 100));
                             } else if (snapshot.hasError) {
                               return Center(
                                   child: Text('Error: ${snapshot.error}'));
@@ -113,8 +116,7 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
                                 }).toList(),
                               );
                             }
-                          })
-                          )
+                          }))
                 ],
               ))
         ],

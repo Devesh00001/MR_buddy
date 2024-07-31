@@ -24,8 +24,7 @@ class _AllClientScreenState extends State<AllClientScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(child:
-        Consumer<ClinetProvider>(builder: (context, clinetProvider, child) {
+    return Consumer<ClinetProvider>(builder: (context, clinetProvider, child) {
       return Column(
         children: [
           Padding(
@@ -43,8 +42,7 @@ class _AllClientScreenState extends State<AllClientScreen> {
               ),
             ),
           ),
-          Container(
-            height: Utils.deviceHeight * 0.6,
+          Expanded(
             child: ListView.builder(
                 itemCount: clinetProvider.displayClientList.length,
                 itemBuilder: (ctx, index) {
@@ -90,6 +88,6 @@ class _AllClientScreenState extends State<AllClientScreen> {
           ),
         ],
       );
-    }));
+    });
   }
 }
