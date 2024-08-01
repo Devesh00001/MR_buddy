@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
-import 'package:mr_buddy/features/drugs/model/drug.dart';
 import 'package:provider/provider.dart';
 
 import '../../../utils.dart';
@@ -45,66 +44,51 @@ class _DrugsListState extends State<DrugsList> {
             ),
           ),
           Expanded(
-              child: FutureBuilder<List<Drug>>(
-                  future: drugsProvider.getDrugName(),
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return Center(
-                          child: Lottie.asset("assets/lottie/loading.json",
-                              height: 200));
-                    } else if (snapshot.hasError) {
-                      return Center(child: Text('Error: ${snapshot.error}'));
-                    } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                      return const Center(child: Text('No Drugs found'));
-                    } else {
-                      return ListView.builder(
-                          itemCount: drugsProvider.displayDrugList.length,
-                          itemBuilder: (ctx, index) {
-                            return Container(
-                              height: Utils.deviceHeight * 0.1,
-                              margin: const EdgeInsets.all(10),
-                              decoration: BoxDecoration(
-                                  color: HexColor("2F52AC"),
-                                  borderRadius: BorderRadius.circular(10)),
-                              child: Center(
-                                child: ListTile(
-                                  trailing: ElevatedButton(
-                                      style: ElevatedButton.styleFrom(
-                                          padding: const EdgeInsets.symmetric(
-                                              horizontal: 10),
-                                          minimumSize: Size.zero,
-                                          shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(5)),
-                                          backgroundColor: HexColor("00AE4D")),
-                                      onPressed: () {
-                                        Navigator.of(context).push(
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    DrugDetails(
-                                                        drug: drugsProvider
-                                                                .displayDrugList[
-                                                            index])));
-                                      },
-                                      child: const Text(
-                                        "View",
-                                        style: TextStyle(color: Colors.white),
-                                      )),
-                                  title: Text(
-                                    drugsProvider.displayDrugList[index].name,
-                                    style: const TextStyle(
-                                        color: Colors.white, fontSize: 16),
-                                  ),
-                                  subtitleTextStyle: const TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 12,
-                                      height: 2),
-                                ),
-                              ),
-                            );
-                          });
-                    }
-                  })),
+            child: drugsProvider.isLoading
+                ? Center(
+                    child:
+                        Lottie.asset("assets/lottie/loading.json", height: 200))
+                : ListView.builder(
+                    itemCount: drugsProvider.displayDrugList.length,
+                    itemBuilder: (ctx, index) {
+                      return Container(
+                        height: Utils.deviceHeight * 0.1,
+                        margin: const EdgeInsets.all(10),
+                        decoration: BoxDecoration(
+                            color: HexColor("2F52AC"),
+                            borderRadius: BorderRadius.circular(10)),
+                        child: Center(
+                          child: ListTile(
+                            trailing: ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 10),
+                                    minimumSize: Size.zero,
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(5)),
+                                    backgroundColor: HexColor("00AE4D")),
+                                onPressed: () {
+                                  Navigator.of(context).push(MaterialPageRoute(
+                                      builder: (context) => DrugDetails(
+                                          drug: drugsProvider
+                                              .displayDrugList[0])));
+                                },
+                                child: const Text(
+                                  "View",
+                                  style: TextStyle(color: Colors.white),
+                                )),
+                            title: Text(
+                              drugsProvider.displayDrugList[index].name,
+                              style: const TextStyle(
+                                  color: Colors.white, fontSize: 16),
+                            ),
+                            subtitleTextStyle: const TextStyle(
+                                color: Colors.white, fontSize: 12, height: 2),
+                          ),
+                        ),
+                      );
+                    }),
+          ),
         ],
       );
     });

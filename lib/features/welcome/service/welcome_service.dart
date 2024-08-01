@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:mr_buddy/features/welcome/model/user.dart';
 
 class WelcomeService {
-  Future<User?> isUsernamePresent(String username) async {
+  Future<User> isUsernamePresent(String username) async {
     try {
       final QuerySnapshot result = await FirebaseFirestore.instance
           .collection('Users')
@@ -18,14 +18,14 @@ class WelcomeService {
     } catch (e) {
       print('Error checking username: $e');
     }
-    return null;
+    return User(name: "", role: "", mrNames: []);
   }
 
   Future<User?> uploadUserDeatils(String name, String role) async {
     try {
       CollectionReference collection =
           FirebaseFirestore.instance.collection("Users");
-      User user = User(name: name, role: role);
+      User user = User(name: name, role: role, mrNames: []);
 
       await collection.add(user.modelTojson());
 

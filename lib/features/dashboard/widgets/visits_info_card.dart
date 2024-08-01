@@ -5,11 +5,16 @@ import '../../../utils.dart';
 import '../provider/dashboard_provider.dart';
 import 'date_tile.dart';
 
-class VisitsInfoCard extends StatelessWidget {
+class VisitsInfoCard extends StatefulWidget {
   const VisitsInfoCard({
     super.key,
   });
 
+  @override
+  State<VisitsInfoCard> createState() => _VisitsInfoCardState();
+}
+
+class _VisitsInfoCardState extends State<VisitsInfoCard> {
   @override
   Widget build(BuildContext context) {
     return Consumer<DashboardProvider>(
@@ -60,12 +65,18 @@ class VisitsInfoCard extends StatelessWidget {
                   SizedBox(
                     height: Utils.deviceHeight * 0.14,
                     width: Utils.deviceHeight * 0.14,
-                    child: CircularProgressIndicator(
-                      strokeWidth: 20,
-                      strokeCap: StrokeCap.round,
-                      backgroundColor: HexColor("4AB97B").withOpacity(0.5),
-                      color: HexColor("4AB97B"),
-                      value: dashboardProvider.completedVisits / 100,
+                    child: TweenAnimationBuilder<double>(
+                      tween: Tween(
+                          begin: 0,
+                          end: dashboardProvider.completedVisits / 100),
+                      duration: const Duration(seconds: 1),
+                      builder: (context, value, _) => CircularProgressIndicator(
+                        strokeWidth: 20,
+                        strokeCap: StrokeCap.round,
+                        backgroundColor: HexColor("4AB97B").withOpacity(0.5),
+                        color: HexColor("4AB97B"),
+                        value: value,
+                      ),
                     ),
                   ),
                   Text(

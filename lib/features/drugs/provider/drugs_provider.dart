@@ -6,12 +6,21 @@ import '../service/drug_service.dart';
 class DrugsProvider with ChangeNotifier {
   List<Drug> drugs = [];
   List<Drug> displayDrugList = [];
+  bool isLoading = false;
 
   Future<List<Drug>> getDrugName() async {
+    setIsLoadingState(true);
+    drugs.clear();
     DrugService service = DrugService();
     drugs = await service.getDrugs();
     displayDrugList = [...drugs];
+    setIsLoadingState(false);
     return displayDrugList;
+  }
+
+  setIsLoadingState(bool value) {
+    isLoading = value;
+    notifyListeners();
   }
 
   void getSearchList(String query) {

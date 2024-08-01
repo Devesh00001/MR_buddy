@@ -47,9 +47,7 @@ class ClientDetail extends StatelessWidget {
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
             ),
             Consumer<ClinetProvider>(builder: (context, clinetProvider, child) {
-              return Container(
-                padding: EdgeInsets.symmetric(vertical: 10),
-                height: Utils.deviceHeight * 0.6,
+              return Expanded(
                 child: FutureBuilder<Map<String, PastVisit>>(
                     future: clinetProvider.getPastVisits(client.name),
                     builder: (context, snapshot) {

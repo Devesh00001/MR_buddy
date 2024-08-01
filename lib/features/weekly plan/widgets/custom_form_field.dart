@@ -6,10 +6,15 @@ import '../provider/weekly_plan_provider.dart';
 
 class CustomFormField extends StatefulWidget {
   const CustomFormField(
-      {super.key, required this.hintText, this.value = "", this.size = 44});
+      {super.key,
+      required this.hintText,
+      this.value = "",
+      this.size = 60,
+      this.maxLine});
   final String hintText;
   final String value;
   final double size;
+  final int? maxLine;
 
   @override
   State<CustomFormField> createState() => _CustomFormFieldState();
@@ -36,6 +41,8 @@ class _CustomFormFieldState extends State<CustomFormField> {
       weeklyProvider.setContactPoint(_controller.text);
     } else if (widget.hintText == "Date") {
       weeklyProvider.setDate(_controller.text);
+    } else if (widget.hintText == 'Name') {
+      weeklyProvider.setClientName(_controller.text);
     }
   }
 
@@ -60,7 +67,7 @@ class _CustomFormFieldState extends State<CustomFormField> {
         SizedBox(
           height: widget.size,
           child: TextFormField(
-            maxLines: widget.size ~/ 20,
+            maxLines: widget.maxLine ?? widget.size ~/ 25,
             controller: _controller,
             readOnly: widget.value != "" ? true : false,
             decoration: InputDecoration(

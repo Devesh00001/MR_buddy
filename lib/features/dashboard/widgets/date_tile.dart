@@ -8,7 +8,7 @@ class DateTile extends StatelessWidget {
   const DateTile({super.key, required this.date});
   final DateTime date;
   String formatDate(DateTime _date) {
-    String formattedDate = DateFormat('dd/MM').format(_date);
+    String formattedDate = DateFormat('dd-MM').format(_date);
     return formattedDate;
   }
 

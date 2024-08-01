@@ -59,7 +59,7 @@ class PastVisitDetail extends StatelessWidget {
             const SizedBox(height: 10),
             VisitTextField(
               hintText: "Lead suggetion",
-              value: pastVisit.leadScore,
+              value: pastVisit.leadSuggestion,
               validateFunction: (value) {},
             ),
             const SizedBox(height: 10),

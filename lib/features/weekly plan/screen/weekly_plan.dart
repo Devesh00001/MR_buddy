@@ -8,6 +8,7 @@ import '../../../widgets/custome_appbar.dart';
 import '../widgets/custom_form_field.dart';
 import '../provider/weekly_plan_provider.dart';
 import '../widgets/custom_dropdown.dart';
+import 'success_screen_weeklplan.dart';
 
 class WeeklyPlan extends StatefulWidget {
   const WeeklyPlan({super.key});
@@ -71,8 +72,8 @@ class _WeeklyPlanState extends State<WeeklyPlan> {
   Widget dayForm(DateTime date) {
     bool lastDayOfWeek() {
       final provider = Provider.of<WeeklyProviderPlan>(context, listen: false);
-      if (DateFormat('dd/MM/yyyy').format(provider.focusDate) ==
-          DateFormat('dd/MM/yyyy').format(provider.friday)) {
+      if (DateFormat('dd-MM-yyyy').format(provider.focusDate) ==
+          DateFormat('dd-MM-yyyy').format(provider.friday)) {
         return true;
       } else {
         return false;
@@ -123,7 +124,7 @@ class _WeeklyPlanState extends State<WeeklyPlan> {
                           isRequired: true,
                           validateFunction: weeklyProvider.validateInput,
                         ),
-                        const SizedBox(height: 10),
+                        const SizedBox(height: 20),
                         Visibility(
                           visible:
                               weeklyProvider.clientType == "Existing Client",
@@ -135,10 +136,13 @@ class _WeeklyPlanState extends State<WeeklyPlan> {
                                 placeHolder: "Select client",
                                 values: weeklyProvider.clientList,
                                 setFunction: weeklyProvider.setClient,
-                                isRequired: true,
+                                isRequired: weeklyProvider.clientType ==
+                                        "Existing Client"
+                                    ? true
+                                    : false,
                                 validateFunction: weeklyProvider.validateInput,
                               ),
-                              const SizedBox(height: 10),
+                              const SizedBox(height: 20),
                             ],
                           ),
                         ),
@@ -151,32 +155,35 @@ class _WeeklyPlanState extends State<WeeklyPlan> {
                           setFunction: weeklyProvider.setPlaceType,
                           validateFunction: weeklyProvider.validateInput,
                         ),
-                        const SizedBox(height: 10),
+                        const SizedBox(height: 20),
                         Visibility(
                             visible: weeklyProvider.clientType == "New Client",
                             child: const Column(
                               children: [
-                                CustomFormField(hintText: "Name"),
+                                CustomFormField(hintText: "Name", maxLine: 1),
                                 SizedBox(height: 10),
                               ],
                             )),
-                        const CustomFormField(hintText: "Address"),
+                        const CustomFormField(hintText: "Address", maxLine: 1),
                         const SizedBox(height: 10),
-                        const CustomFormField(hintText: "Visit Purpose/Plan"),
+                        const CustomFormField(
+                            hintText: "Visit Purpose/Plan", maxLine: 1),
                         const SizedBox(height: 10),
-                        const CustomFormField(hintText: "Contact Point/Doctor"),
+                        const CustomFormField(
+                            hintText: "Contact Point/Doctor", maxLine: 1),
                         const SizedBox(height: 10),
                         CustomFormField(
                           hintText: "Date",
-                          value: DateFormat('dd/MM/yyyy')
+                          maxLine: 1,
+                          value: DateFormat('dd-MM-yyyy')
                               .format(weeklyProvider.focusDate),
                         ),
-                        const SizedBox(height: 10),
+                        const SizedBox(height: 20),
                         Center(
                           child: Container(
                             height: Utils.deviceHeight * 0.12,
                             width: Utils.deviceWidth * 0.8,
-                            padding: EdgeInsets.all(8),
+                            padding: const EdgeInsets.all(8),
                             decoration: BoxDecoration(
                                 color: Colors.white,
                                 borderRadius: BorderRadius.circular(20),
@@ -184,7 +191,7 @@ class _WeeklyPlanState extends State<WeeklyPlan> {
                                   BoxShadow(
                                       color: Colors.black.withOpacity(0.15),
                                       blurRadius: 12,
-                                      offset: Offset(2, 2))
+                                      offset: const Offset(2, 2))
                                 ]),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.center,
@@ -208,9 +215,7 @@ class _WeeklyPlanState extends State<WeeklyPlan> {
                                       var picked =
                                           await FilePicker.platform.pickFiles();
 
-                                      if (picked != null) {
-                                        print(picked.files.first.name);
-                                      }
+                                      if (picked != null) {}
                                     },
                                     child: Text(
                                       "Upload +",
@@ -246,6 +251,11 @@ class _WeeklyPlanState extends State<WeeklyPlan> {
                             color: Colors.white)),
                     onPressed: () {
                       if (_formKey.currentState!.validate()) {
+                        if (lastDayOfWeek()) {
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) =>
+                                  const SuccessScreenWeeklyPlan()));
+                        }
                         weeklyProvider.uploadData('Devesh');
                       }
                     },

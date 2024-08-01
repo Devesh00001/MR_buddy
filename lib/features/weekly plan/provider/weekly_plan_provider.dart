@@ -16,6 +16,7 @@ class WeeklyProviderPlan with ChangeNotifier {
   String? clientType;
   List<String> typeOfClient = ["New Client", "Existing Client"];
   String? client;
+  String? clientName;
   List<String> clientList = [];
   String? address;
   String? purpose;
@@ -24,17 +25,17 @@ class WeeklyProviderPlan with ChangeNotifier {
   Map<String, dynamic> weekdayPlans = {};
 
   void uploadData(String mrName) {
-    String weekday = getWeekdayName(DateFormat('dd/MM/yyyy').format(focusDate));
+    String weekday = getWeekdayName(DateFormat('dd-MM-yyyy').format(focusDate));
 
     Visit visit = Visit(
-        clientName: client!,
+        clientName: client ?? clientName!,
         mrName: mrName,
         clientType: clientType!,
         placeType: placeType!,
         address: address!,
         contactPoint: contactPoint!,
         purpose: purpose!,
-        date: DateFormat('dd/MM/yyyy').format(focusDate),
+        date: DateFormat('dd-MM-yyyy').format(focusDate),
         day: weekday,
         comments: '',
         status: 'Pending');
@@ -64,6 +65,10 @@ class WeeklyProviderPlan with ChangeNotifier {
 
   setDate(String value) {
     date = value;
+  }
+
+  setClientName(String value) {
+    clientName = value;
   }
 
   setClient(String value) {
@@ -101,7 +106,7 @@ class WeeklyProviderPlan with ChangeNotifier {
   }
 
   String getWeekdayName(String value) {
-    final inputFormat = DateFormat('dd/MM/yyyy');
+    final inputFormat = DateFormat('dd-MM-yyyy');
 
     DateTime dateTime;
     try {

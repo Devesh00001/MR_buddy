@@ -58,7 +58,7 @@ class DrugDetails extends StatelessWidget {
                 heading: "Real World Effectiveness",
                 value: drug.realWorldEffectiveness,
               ),
-              Divider(height: 20),
+              const Divider(height: 20),
               const Text(
                 "Safety Data",
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
@@ -73,7 +73,7 @@ class DrugDetails extends StatelessWidget {
                 heading: "Drug Interactions",
                 value: drug.drugInteractions,
               ),
-              Divider(height: 20),
+              const Divider(height: 20),
               const Text(
                 "Dosage Information",
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
@@ -137,12 +137,15 @@ class PromotionalDetail extends StatelessWidget {
                           ]),
                       child: Row(
                         children: [
-                          Text(drug.offers[index]['Discount']),
+                          Text(
+                            drug.offers[index]['Discount'] ?? "",
+                            style: const TextStyle(color: Colors.green),
+                          ),
                           const VerticalDivider(
                             thickness: 2,
                             color: Colors.black,
                           ),
-                          Text(drug.offers[index]['Summary'])
+                          Text(drug.offers[index]['Summary'] ?? "")
                         ],
                       ));
                 }),

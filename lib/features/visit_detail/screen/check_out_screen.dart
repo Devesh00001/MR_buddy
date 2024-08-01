@@ -9,6 +9,7 @@ import '../../weekly plan/model/visit.dart';
 import '../../weekly plan/widgets/custom_dropdown.dart';
 import '../provider/visitdetail_provider.dart';
 import '../widgets/visit_status.dart';
+import 'success_screen.dart';
 
 class CheckOutScreen extends StatefulWidget {
   const CheckOutScreen({super.key, required this.visit});
@@ -148,8 +149,11 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
                           bool status = await visitDetailProvider
                               .uploadData(widget.visit);
                           if (status) {
-                            Navigator.pop(context);
-                            Navigator.pop(context);
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (BuildContext context) =>
+                                        const SuccessScreen()));
                           }
                         }
                         // Navigator.of(context).push(MaterialPageRoute(

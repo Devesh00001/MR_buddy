@@ -3,8 +3,8 @@ import 'package:mr_buddy/utils.dart';
 
 import '../../../widgets/custome_appbar.dart';
 import '../../weekly plan/model/visit.dart';
-import '../../weekly plan/widgets/custom_form_field.dart';
 import '../widgets/visit_status.dart';
+import '../widgets/visit_text_field.dart';
 import 'check_out_screen.dart';
 
 class CheckInScreen extends StatefulWidget {
@@ -34,59 +34,77 @@ class _CheckInScreenState extends State<CheckInScreen> {
                   blurRadius: 50,
                   offset: const Offset(10, 10))
             ]),
-        child: Column(
-          children: [
-            VisitStatus(
-                visitStatus: widget.visit.status, visitDate: widget.visit.date),
-            const SizedBox(height: 20),
-            SizedBox(
-              width: Utils.deviceWidth * 0.8,
-              child: Column(
-                children: [
-                  CustomFormField(
-                      hintText: "Client", value: widget.visit.clientName),
-                  const SizedBox(height: 10),
-                  CustomFormField(
-                      hintText: "Place Type", value: widget.visit.placeType),
-                  const SizedBox(height: 10),
-                  CustomFormField(
-                      hintText: "Address", value: widget.visit.address),
-                  const SizedBox(height: 10),
-                  CustomFormField(
-                      hintText: "Visit Purpose/Plan",
-                      value: widget.visit.address),
-                  const SizedBox(height: 10),
-                  CustomFormField(
-                      hintText: "Contact Point/Doctor",
-                      value: widget.visit.address),
-                  const SizedBox(height: 50),
-                  CustomFormField(
-                      hintText: "Manager Comments",
-                      value: widget.visit.comments,
-                      size: 100),
-                ],
-              ),
-            ),
-            const SizedBox(height: 20),
-            InkWell(
-              onTap: () {
-                Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => CheckOutScreen(visit: widget.visit)));
-              },
-              child: Container(
-                  width: Utils.deviceWidth * 0.4,
-                  decoration: BoxDecoration(
-                      color: HexColor("00AE4D"),
-                      borderRadius: BorderRadius.circular(5)),
-                  padding: const EdgeInsets.all(10),
-                  child: const Center(
-                    child: Text(
-                      "CHECK IN",
-                      style: TextStyle(color: Colors.white, fontSize: 15),
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              VisitStatus(
+                  visitStatus: widget.visit.status,
+                  visitDate: widget.visit.date),
+              const SizedBox(height: 20),
+              SizedBox(
+                width: Utils.deviceWidth * 0.8,
+                child: Column(
+                  children: [
+                    VisitTextField(
+                      hintText: "Client",
+                      value: widget.visit.clientName,
+                      validateFunction: (value) {},
                     ),
-                  )),
-            )
-          ],
+                    const SizedBox(height: 10),
+                    VisitTextField(
+                      hintText: "Place Type",
+                      value: widget.visit.placeType,
+                      validateFunction: (value) {},
+                    ),
+                    const SizedBox(height: 10),
+                    VisitTextField(
+                      hintText: "Address",
+                      value: widget.visit.address,
+                      validateFunction: (value) {},
+                    ),
+                    const SizedBox(height: 10),
+                    VisitTextField(
+                      hintText: "Visit Purpose/Plan",
+                      value: widget.visit.address,
+                      validateFunction: (value) {},
+                    ),
+                    const SizedBox(height: 10),
+                    VisitTextField(
+                      hintText: "Contact Point/Doctor",
+                      value: widget.visit.address,
+                      validateFunction: (value) {},
+                    ),
+                    const SizedBox(height: 50),
+                    VisitTextField(
+                        hintText: "Manager Comments",
+                        value: widget.visit.comments,
+                        validateFunction: (value) {},
+                        size: 100),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 20),
+              InkWell(
+                onTap: () {
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) =>
+                          CheckOutScreen(visit: widget.visit)));
+                },
+                child: Container(
+                    width: Utils.deviceWidth * 0.4,
+                    decoration: BoxDecoration(
+                        color: HexColor("00AE4D"),
+                        borderRadius: BorderRadius.circular(5)),
+                    padding: const EdgeInsets.all(10),
+                    child: const Center(
+                      child: Text(
+                        "CHECK IN",
+                        style: TextStyle(color: Colors.white, fontSize: 15),
+                      ),
+                    )),
+              )
+            ],
+          ),
         ),
       ),
     );
