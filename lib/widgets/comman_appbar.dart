@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:mr_buddy/utils.dart';
 
+import 'notification.dart';
+
 class CommonAppBar extends StatelessWidget implements PreferredSizeWidget {
   const CommonAppBar({super.key});
 
@@ -13,13 +15,7 @@ class CommonAppBar extends StatelessWidget implements PreferredSizeWidget {
       backgroundColor: HexColor("00AE4D"),
       elevation: 5,
       shadowColor: Colors.grey,
-      actions: const [
-        Icon(
-          Icons.notifications,
-          size: 40,
-          color: Colors.white,
-        )
-      ],
+      actions: const [Notifications()],
       title: const Text(
         "MR Buddy",
         style: TextStyle(color: Colors.white),
