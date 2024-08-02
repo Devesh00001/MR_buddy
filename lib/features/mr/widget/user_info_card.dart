@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../utils.dart';
 import '../../welcome/model/user.dart';
+import '../screen/mr_info.dart';
 
 class UserInfoCard extends StatelessWidget {
   const UserInfoCard({super.key, required this.user});
@@ -25,7 +26,7 @@ class UserInfoCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const UserDetailHeading(),
+          UserDetailHeading(user: user),
           const SizedBox(height: 10),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -52,20 +53,28 @@ class UserInfoCard extends StatelessWidget {
 }
 
 class UserDetailHeading extends StatelessWidget {
-  const UserDetailHeading({super.key});
+  const UserDetailHeading({super.key, required this.user});
+  final User user;
 
   @override
   Widget build(BuildContext context) {
-    return const Row(
+    return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(
+        const Text(
           "MR Info",
           style: TextStyle(fontSize: 20),
         ),
-        Text(
-          "More Info",
-          style: TextStyle(fontSize: 20, decoration: TextDecoration.underline),
+        InkWell(
+          onTap: () {
+            Navigator.of(context).push(
+                MaterialPageRoute(builder: (context) => MRInfo(user: user)));
+          },
+          child: const Text(
+            "More Info",
+            style:
+                TextStyle(fontSize: 20, decoration: TextDecoration.underline),
+          ),
         )
       ],
     );
@@ -73,9 +82,14 @@ class UserDetailHeading extends StatelessWidget {
 }
 
 class UserDetailFiled extends StatelessWidget {
-  const UserDetailFiled({super.key, required this.title, required this.value});
+  const UserDetailFiled(
+      {super.key,
+      required this.title,
+      required this.value,
+      this.fontSize = 14});
   final String title;
   final String value;
+  final double fontSize;
 
   @override
   Widget build(BuildContext context) {
@@ -83,9 +97,13 @@ class UserDetailFiled extends StatelessWidget {
       children: [
         Text(
           "$title: ",
-          style: TextStyle(color: HexColor("1F1F1F").withOpacity(0.5)),
+          style: TextStyle(
+              color: HexColor("1F1F1F").withOpacity(0.5), fontSize: fontSize),
         ),
-        Text(value)
+        Text(
+          value,
+          style: TextStyle(fontSize: fontSize),
+        )
       ],
     );
   }

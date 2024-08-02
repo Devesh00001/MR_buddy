@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mr_buddy/features/dashboard/service/dashboard_service.dart';
+import 'package:mr_buddy/features/mr/service/mr_service.dart';
 import 'package:mr_buddy/features/welcome/model/user.dart';
 
 import '../../weekly plan/model/visit.dart';
@@ -11,6 +12,27 @@ class DashboardProvider with ChangeNotifier {
   int completedVisits = 70;
   Map<String, Visit> weeklyPlan = {};
   Map<String, User> mrListMap = {};
+  bool approve = false;
+  bool isLoading = false;
+
+  void changeStatusOfLoading() {
+    isLoading = !isLoading;
+    notifyListeners();
+  }
+
+  isWeeklyPlanStatus(String mrname) async {
+    MRService service = MRService();
+    approve = await service.isWeeklyPlanStatus(mrname);
+    notifyListeners();
+  }
+
+  updateStatusOfWeeklyPlan(String mrName) async {
+    changeStatusOfLoading();
+    MRService service = MRService();
+    approve = await service.approveWeeklyPlanStatus(mrName);
+    changeStatusOfLoading();
+    notifyListeners();
+  }
 
   Future<Map<String, User>> getAllMRDetail(List<String> mrNameList) async {
     WelcomeService service = WelcomeService();

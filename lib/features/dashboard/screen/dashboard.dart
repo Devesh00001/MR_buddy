@@ -60,7 +60,7 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
                       ),
                     ),
                     SizedBox(
-                        height: Utils.deviceHeight * 0.21,
+                        height: Utils.deviceHeight * 0.3,
                         child: FutureBuilder<Map<String, dynamic>>(
                             future: user.role == 'MR'
                                 ? dashboardProvider.getWeeklyPlan(user.name)

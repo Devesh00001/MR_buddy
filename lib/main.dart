@@ -6,6 +6,7 @@ import 'features/clients/provider/client_provider.dart';
 import 'features/dashboard/provider/dashboard_provider.dart';
 import 'features/drugs/provider/drugs_provider.dart';
 import 'features/home/provider/home_provider.dart';
+import 'features/mr/provider/mr_detail_provider.dart';
 import 'features/visit_detail/provider/visitdetail_provider.dart';
 import 'features/weekly plan/provider/weekly_plan_provider.dart';
 import 'features/welcome/provider/welcome_provider.dart';
@@ -20,7 +21,8 @@ void main() async {
     ChangeNotifierProvider(create: (_) => WeeklyProviderPlan()),
     ChangeNotifierProvider(create: (_) => VisitDetailProvider()),
     ChangeNotifierProvider(create: (_) => ClinetProvider()),
-    ChangeNotifierProvider(create: (_) => DrugsProvider())
+    ChangeNotifierProvider(create: (_) => DrugsProvider()),
+    ChangeNotifierProvider(create: (_) => MRDetailProvider())
   ], child: const MyApp()));
 }
 
