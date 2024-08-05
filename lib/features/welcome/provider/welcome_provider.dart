@@ -17,14 +17,25 @@ class WelcomeProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  void setRole(String value) {
+    selectedRole = value;
+    notifyListeners();
+  }
+
+  String? validateInput(String? value) {
+    if (value == null || value.isEmpty) {
+      return "Plase enter Value";
+    }
+    return null;
+  }
+
+  setUserName(String value) {
+    userName = value;
+  }
+
   submitUserDetails() async {
     WelcomeService service = WelcomeService();
-    if (await service.isUsernamePresent(userName!) != null) {
-      setUser(await service.isUsernamePresent(userName!));
-      status = true;
-    } else {
-      setUser(await service.uploadUserDeatils(userName!, selectedRole));
-      status = true;
-    }
+    setUser(await service.isUsernamePresent(userName!));
+    status = true;
   }
 }

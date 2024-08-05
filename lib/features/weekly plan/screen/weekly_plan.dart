@@ -5,6 +5,8 @@ import 'package:intl/intl.dart';
 import 'package:mr_buddy/utils.dart';
 import 'package:provider/provider.dart';
 import '../../../widgets/custome_appbar.dart';
+import '../../welcome/model/user.dart';
+import '../../welcome/provider/welcome_provider.dart';
 import '../widgets/custom_form_field.dart';
 import '../provider/weekly_plan_provider.dart';
 import '../widgets/custom_dropdown.dart';
@@ -81,7 +83,7 @@ class _WeeklyPlanState extends State<WeeklyPlan> {
     }
 
     final _formKey = GlobalKey<FormState>();
-
+    User? user = Provider.of<WelcomeProvider>(context).user;
     return Consumer<WeeklyProviderPlan>(
         builder: (context, weeklyProvider, child) {
       return Container(
@@ -98,6 +100,7 @@ class _WeeklyPlanState extends State<WeeklyPlan> {
             ]),
         padding: const EdgeInsets.all(16.0),
         child: SingleChildScrollView(
+          physics: const NeverScrollableScrollPhysics(),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -115,6 +118,19 @@ class _WeeklyPlanState extends State<WeeklyPlan> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
+                        Visibility(
+                          visible: user!.role == 'Manager',
+                          child: CustomDropdown(
+                            selectedValue: weeklyProvider.mrName,
+                            hintText: "MR",
+                            placeHolder: "Select MR",
+                            values: user.mrNames,
+                            setFunction: weeklyProvider.setMRName,
+                            isRequired: true,
+                            validateFunction: weeklyProvider.validateInput,
+                          ),
+                        ),
+                        const SizedBox(height: 20),
                         CustomDropdown(
                           selectedValue: weeklyProvider.clientType,
                           hintText: "Client type",
@@ -249,18 +265,41 @@ class _WeeklyPlanState extends State<WeeklyPlan> {
                             fontSize: 15,
                             fontWeight: FontWeight.bold,
                             color: Colors.white)),
-                    onPressed: () {
+                    onPressed: () async {
                       if (_formKey.currentState!.validate()) {
-                        if (lastDayOfWeek()) {
-                          Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) =>
-                                  const SuccessScreenWeeklyPlan()));
+                        if (user.role == 'Manager') {
+                          bool status =
+                              await weeklyProvider.uploadWeekDayPlan();
+                          if (status == true) {
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) =>
+                                    const SuccessScreenWeeklyPlan(
+                                      heading: 'Successfully Created Visit',
+                                      subHeading:
+                                          'Send notification to your MR about visit',
+                                    )));
+                          }
+                        } else {
+                          if (lastDayOfWeek()) {
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) =>
+                                    const SuccessScreenWeeklyPlan(
+                                      heading:
+                                          'Successfully Created Your Visit',
+                                      subHeading:
+                                          'Send notification to your manager to approve for weekly plan',
+                                    )));
+                          }
+                          weeklyProvider.uploadData('Devesh');
                         }
-                        weeklyProvider.uploadData('Devesh');
                       }
                     },
                     child: Text(
-                      lastDayOfWeek() ? 'Submit' : "Submit & Next",
+                      user.role == 'Manager'
+                          ? 'Submit'
+                          : lastDayOfWeek()
+                              ? 'Submit'
+                              : "Submit & Next",
                       style: const TextStyle(fontSize: 16),
                     ),
                   ),

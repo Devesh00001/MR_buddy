@@ -7,7 +7,10 @@ import '../../home/screen/home_screen.dart';
 import '../provider/weekly_plan_provider.dart';
 
 class SuccessScreenWeeklyPlan extends StatelessWidget {
-  const SuccessScreenWeeklyPlan({super.key});
+  const SuccessScreenWeeklyPlan(
+      {super.key, required this.heading, required this.subHeading});
+  final String heading;
+  final String subHeading;
 
   @override
   Widget build(BuildContext context) {
@@ -21,17 +24,17 @@ class SuccessScreenWeeklyPlan extends StatelessWidget {
           children: [
             Lottie.asset("assets/lottie/CompleteLottie.json",
                 repeat: false, height: Utils.deviceHeight * 0.4),
-            const Text(
-              "Successfully Created Your Visit ",
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.w700),
+            Text(
+              heading,
+              style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w700),
             ),
             SizedBox(height: Utils.deviceHeight * 0.05),
             SizedBox(
               width: Utils.deviceWidth * 0.9,
-              child: const Text(
-                "Send notification to your manager to approve for weekly plan",
+              child: Text(
+                subHeading,
                 textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 16),
+                style: const TextStyle(fontSize: 16),
               ),
             ),
             InkWell(

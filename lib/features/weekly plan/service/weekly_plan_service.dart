@@ -23,7 +23,7 @@ class WeeklyPlanService {
       CollectionReference collection =
           await firestore.collection('WeeklyPlans');
       Map<String, dynamic> data = {
-        "Approval": "pending",
+        "Approval": "Pending",
         "Name": mrName,
         "Plan": mapOfVisits,
       };
@@ -32,6 +32,49 @@ class WeeklyPlanService {
       log("Weekly plan upload succesfully");
       return true;
     } catch (e) {
+      return false;
+    }
+  }
+
+  Future<bool> addOrUpdateWeekDayPlan(
+      String userName, String weekDay, Map<String, dynamic> plan) async {
+    try {
+      final collectionRef =
+          FirebaseFirestore.instance.collection('WeeklyPlans');
+
+      QuerySnapshot querySnapshot =
+          await collectionRef.where('Name', isEqualTo: userName).get();
+
+      if (querySnapshot.docs.isNotEmpty) {
+        DocumentReference docRef = querySnapshot.docs.first.reference;
+
+        try {
+          await docRef.update({
+            'Plan.$weekDay': plan,
+          });
+          print('Plan updated successfully.');
+          return true;
+        } catch (e) {
+          print('Failed to update the plan: $e');
+          return false;
+        }
+      } else {
+        try {
+          await collectionRef.add({
+            'Name': userName,
+            'Plan': {
+              weekDay: plan,
+            },
+          });
+          print('New plan created successfully.');
+          return true;
+        } catch (e) {
+          print('Failed to create a new plan: $e');
+          return false;
+        }
+      }
+    } catch (e) {
+      print('An error occurred while fetching the document: $e');
       return false;
     }
   }

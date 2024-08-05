@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import '../../../utils.dart';
 import '../../../widgets/custome_appbar.dart';
 import '../../dashboard/provider/dashboard_provider.dart';
+import '../../visit_detail/screen/manager_visit_detail.dart';
 import '../../weekly plan/model/visit.dart';
 import '../widget/button_click.dart';
 import '../widget/user_info_card.dart';
@@ -77,11 +78,13 @@ class _MRWeekDetailsState extends State<MRWeekDetails> {
 
                                       return InkWell(
                                         onTap: () {
-                                          // Navigator.of(context).push(
-                                          //     MaterialPageRoute(
-                                          //         builder: (context) =>
-                                          //             CheckInScreen(
-                                          //                 visit: visit)));
+                                          Navigator.of(context).push(
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      ManagerVisitDetail(
+                                                        visit: visit,
+                                                        user: widget.user,
+                                                      )));
                                         },
                                         child: Container(
                                           margin: const EdgeInsets.symmetric(

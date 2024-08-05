@@ -31,7 +31,6 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
       },
       child: Scaffold(
         appBar: const CustomAppBar(title: "Visit Detail"),
-        resizeToAvoidBottomInset: false,
         body: Consumer<VisitDetailProvider>(
             builder: (context, visitDetailProvider, child) {
           visitDetailProvider.getMedicineName();
@@ -63,32 +62,6 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
                       validateFunction: visitDetailProvider.validateInput,
                     ),
                     const SizedBox(height: 10),
-                    // Wrap(
-                    //   runSpacing: 10,
-                    //   children: [
-                    //     CustomDropdown(
-                    //       hintText: "Medicine",
-                    //       placeHolder: "Please select medicine",
-                    //       values: visitDetailProvider.medicineName,
-                    //       setFunction: visitDetailProvider.setMedicineName,
-                    //       selectedValue: visitDetailProvider.getSelectedValue(),
-                    //     ),
-                    //     VisitTextField(
-                    //       hintText: "Quantity",
-                    //       setFunction: visitDetailProvider.setQuantity,
-                    //     )
-                    //   ],
-                    // ),
-                    // TextButton(
-                    //     style: TextButton.styleFrom(
-                    //       padding: EdgeInsets.zero,
-                    //       tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                    //     ),
-                    //     onPressed: () {},
-                    //     child: Text(
-                    //       "Add medicine +",
-                    //       style: TextStyle(color: HexColor("0031AE")),
-                    //     )),
                     VisitTextField(
                       hintText: "Physical visit",
                       setFunction: visitDetailProvider.setPhysicalVisit,

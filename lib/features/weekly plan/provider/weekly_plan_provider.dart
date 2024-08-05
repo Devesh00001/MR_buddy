@@ -23,6 +23,7 @@ class WeeklyProviderPlan with ChangeNotifier {
   String? contactPoint;
   String? date;
   Map<String, dynamic> weekdayPlans = {};
+  String? mrName;
 
   void uploadData(String mrName) {
     String weekday = getWeekdayName(DateFormat('dd-MM-yyyy').format(focusDate));
@@ -51,6 +52,31 @@ class WeeklyProviderPlan with ChangeNotifier {
     notifyListeners();
   }
 
+  Future<bool> uploadWeekDayPlan()async {
+    String weekday = getWeekdayName(DateFormat('dd-MM-yyyy').format(focusDate));
+
+    Visit visit = Visit(
+        clientName: client ?? clientName!,
+        mrName: mrName!,
+        clientType: clientType!,
+        placeType: placeType!,
+        address: address!,
+        contactPoint: contactPoint!,
+        purpose: purpose!,
+        date: DateFormat('dd-MM-yyyy').format(focusDate),
+        day: weekday,
+        comments: '',
+        status: 'Pending');
+
+    WeeklyPlanService service = WeeklyPlanService();
+   bool status = await service.addOrUpdateWeekDayPlan(mrName!, visit.day, visit.toMap());
+
+    // focusDate = focusDate.add(const Duration(days: 1));
+    resetProvider(allReset: false);
+    notifyListeners();
+    return status;
+  }
+
   setAddress(String value) {
     address = value;
   }
@@ -65,6 +91,11 @@ class WeeklyProviderPlan with ChangeNotifier {
 
   setDate(String value) {
     date = value;
+  }
+
+  setMRName(String value) {
+    mrName = value;
+    notifyListeners();
   }
 
   setClientName(String value) {

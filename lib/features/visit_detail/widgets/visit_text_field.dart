@@ -9,13 +9,15 @@ class VisitTextField extends StatefulWidget {
       this.size = 44,
       this.setFunction,
       required this.validateFunction,
-      this.isRequired = true});
+      this.isRequired = true,
+      this.visibility = false});
   final String hintText;
   final String value;
   final double size;
   final Function(String)? setFunction;
   final Function(String?) validateFunction;
   final bool isRequired;
+  final bool visibility;
 
   @override
   State<VisitTextField> createState() => _VisitTextFieldState();
@@ -51,37 +53,35 @@ class _VisitTextFieldState extends State<VisitTextField> {
           widget.hintText,
           style: TextStyle(color: HexColor("1F1F1F").withOpacity(0.5)),
         ),
-        SizedBox(
-          height: widget.size,
-          child: TextFormField(
-            maxLines: widget.size ~/ 20,
-            controller: _controller,
-            readOnly: widget.value != "" ? true : false,
-            decoration: InputDecoration(
-                suffixIcon: widget.hintText == "Location"
-                    ? Icon(
-                        widget.value == "Match With Client Location"
-                            ? Icons.check_circle_rounded
-                            : Icons.clear_rounded,
-                        color: widget.value == "Match With Client Location"
-                            ? Colors.green
-                            : Colors.red,
-                        size: 30,
-                      )
-                    : null,
-                isCollapsed: true,
-                contentPadding: const EdgeInsets.all(10),
-                errorMaxLines: 2,
-                border: OutlineInputBorder(
-                    borderSide:
-                        BorderSide(color: HexColor("1F1F1F").withOpacity(0.5))),
-                focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: HexColor("1F1F1F"))),
-                labelStyle: TextStyle(color: HexColor("1F1F1F"))),
-            validator: (value) {
-              return widget.isRequired ? widget.validateFunction(value) : null;
-            },
-          ),
+        TextFormField(
+          maxLines: widget.visibility ? 1 : null,
+          controller: _controller,
+          readOnly: widget.value != "" ? true : false,
+          obscureText: widget.visibility,
+          decoration: InputDecoration(
+              suffixIcon: widget.hintText == "Location"
+                  ? Icon(
+                      widget.value == "Match With Client Location"
+                          ? Icons.check_circle_rounded
+                          : Icons.clear_rounded,
+                      color: widget.value == "Match With Client Location"
+                          ? Colors.green
+                          : Colors.red,
+                      size: 30,
+                    )
+                  : null,
+              isCollapsed: true,
+              contentPadding: const EdgeInsets.all(10),
+              errorMaxLines: 2,
+              border: OutlineInputBorder(
+                  borderSide:
+                      BorderSide(color: HexColor("1F1F1F").withOpacity(0.5))),
+              focusedBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: HexColor("1F1F1F"))),
+              labelStyle: TextStyle(color: HexColor("1F1F1F"))),
+          validator: (value) {
+            return widget.isRequired ? widget.validateFunction(value) : null;
+          },
         ),
       ],
     );
