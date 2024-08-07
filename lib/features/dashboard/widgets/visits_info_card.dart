@@ -6,15 +6,14 @@ import '../provider/dashboard_provider.dart';
 import 'date_tile.dart';
 
 class VisitsInfoCard extends StatefulWidget {
-  const VisitsInfoCard({
-    super.key,
-  });
+  const VisitsInfoCard({super.key});
 
   @override
   State<VisitsInfoCard> createState() => _VisitsInfoCardState();
 }
 
 class _VisitsInfoCardState extends State<VisitsInfoCard> {
+  bool isFold = Utils.deviceHeight < 600;
   @override
   Widget build(BuildContext context) {
     return Consumer<DashboardProvider>(

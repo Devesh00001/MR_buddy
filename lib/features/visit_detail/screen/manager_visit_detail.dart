@@ -4,7 +4,7 @@ import 'package:mr_buddy/features/mr/widget/user_info_card.dart';
 import 'package:mr_buddy/features/welcome/model/user.dart';
 import 'package:mr_buddy/utils.dart';
 
-import '../../../widgets/custome_appbar.dart';
+import '../../../widgets/custom_appbar.dart';
 import '../../weekly plan/model/visit.dart';
 import '../widgets/visit_text_field.dart';
 
@@ -34,7 +34,7 @@ class _ManagerVisitDetailState extends State<ManagerVisitDetail> {
           child: IntrinsicHeight(
             child: Column(
               mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 UserInfoCard(user: widget.user),
                 ClientInfoCard(visit: widget.visit),

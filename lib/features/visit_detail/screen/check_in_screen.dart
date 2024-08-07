@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mr_buddy/utils.dart';
 
-import '../../../widgets/custome_appbar.dart';
+import '../../../widgets/custom_appbar.dart';
 import '../../weekly plan/model/visit.dart';
 import '../widgets/visit_status.dart';
 import '../widgets/visit_text_field.dart';

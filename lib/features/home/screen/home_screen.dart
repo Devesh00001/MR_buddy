@@ -27,7 +27,7 @@ class _HomeState extends State<Home> {
     return Scaffold(
       extendBody: true,
       resizeToAvoidBottomInset: false,
-      appBar: const CommonAppBar(),
+      appBar: const CommonAppBar(showIcons: true),
       body: _screens[_currentIndex],
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: SizedBox(

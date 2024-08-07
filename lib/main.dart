@@ -10,6 +10,7 @@ import 'features/mr/provider/mr_detail_provider.dart';
 import 'features/visit_detail/provider/visitdetail_provider.dart';
 import 'features/weekly plan/provider/weekly_plan_provider.dart';
 import 'features/welcome/provider/welcome_provider.dart';
+import 'utils.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -31,9 +32,13 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: WelcomeScreen(),
+      builder: (context, child) {
+        Utils.init(context);
+        return child!;
+      },
+      home: const WelcomeScreen(),
     );
   }
 }

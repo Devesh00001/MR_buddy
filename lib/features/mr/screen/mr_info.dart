@@ -2,7 +2,7 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:mr_buddy/features/welcome/model/user.dart';
 
-import '../../../widgets/custome_appbar.dart';
+import '../../../widgets/custom_appbar.dart';
 import '../../dashboard/widgets/visitL_line_chart.dart';
 import '../widget/user_info_card.dart';
 

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mr_buddy/utils.dart';
 import 'package:simple_gradient_text/simple_gradient_text.dart';
-import '../../../widgets/custome_appbar.dart';
+import '../../../widgets/custom_appbar.dart';
 import '../model/drug.dart';
 import '../widget/drug_detail_card.dart';
 

@@ -3,7 +3,7 @@ import 'package:lottie/lottie.dart';
 import 'package:mr_buddy/features/welcome/model/user.dart';
 import 'package:provider/provider.dart';
 import '../../../utils.dart';
-import '../../../widgets/custome_appbar.dart';
+import '../../../widgets/custom_appbar.dart';
 import '../../dashboard/provider/dashboard_provider.dart';
 import '../../visit_detail/screen/manager_visit_detail.dart';
 import '../../weekly plan/model/visit.dart';

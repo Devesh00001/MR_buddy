@@ -1,11 +1,30 @@
 import 'dart:ui' as ui;
 import 'dart:ui';
 
+import 'package:flutter/material.dart';
+
 class Utils {
-  static double deviceWidth =
+  static double _deviceWidth =
       ui.window.physicalSize.width / ui.window.devicePixelRatio;
-  static double deviceHeight =
+  static double _deviceHeight =
       ui.window.physicalSize.height / ui.window.devicePixelRatio;
+
+  static void init(BuildContext context) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _updateDimensions();
+      ui.window.onMetricsChanged = () {
+        _updateDimensions();
+      };
+    });
+  }
+
+  static void _updateDimensions() {
+    _deviceWidth = ui.window.physicalSize.width / ui.window.devicePixelRatio;
+    _deviceHeight = ui.window.physicalSize.height / ui.window.devicePixelRatio;
+  }
+
+  static double get deviceWidth => _deviceWidth;
+  static double get deviceHeight => _deviceHeight;
 }
 
 class HexColor extends Color {

@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:mr_buddy/utils.dart';
 import 'package:provider/provider.dart';
-import '../../../widgets/custome_appbar.dart';
+import '../../../widgets/custom_appbar.dart';
 import '../../welcome/model/user.dart';
 import '../../welcome/provider/welcome_provider.dart';
 import '../widgets/custom_form_field.dart';
@@ -32,6 +32,8 @@ class _WeeklyPlanState extends State<WeeklyPlan> {
 
   @override
   Widget build(BuildContext context) {
+    double width = MediaQuery.sizeOf(context).width;
+    bool bigScreen = width >= 600 ? true : false;
     return PopScope(
       canPop: false,
       onPopInvoked: (didPop) {
@@ -56,7 +58,8 @@ class _WeeklyPlanState extends State<WeeklyPlan> {
                     weeklyProvider.setFocusDate(selectedDate);
                   },
                   activeColor: const Color(0xff85A389),
-                  dayProps: const EasyDayProps(
+                  dayProps: EasyDayProps(
+                    width: bigScreen ? 120 : 80,
                     todayHighlightStyle: TodayHighlightStyle.withBackground,
                     todayHighlightColor: Color(0xffE1ECC8),
                   ),

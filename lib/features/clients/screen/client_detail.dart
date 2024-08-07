@@ -4,7 +4,7 @@ import 'package:mr_buddy/features/visit_detail/model/past_visit.dart';
 import 'package:provider/provider.dart';
 
 import '../../../utils.dart';
-import '../../../widgets/custome_appbar.dart';
+import '../../../widgets/custom_appbar.dart';
 import '../provider/client_provider.dart';
 import '../widget/client_data_row.dart';
 import 'past_visit_detail.dart';

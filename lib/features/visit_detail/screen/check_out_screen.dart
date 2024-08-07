@@ -1,10 +1,9 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mr_buddy/features/visit_detail/widgets/visit_text_field.dart';
 import 'package:provider/provider.dart';
 
 import '../../../utils.dart';
-import '../../../widgets/custome_appbar.dart';
+import '../../../widgets/custom_appbar.dart';
 import '../../weekly plan/model/visit.dart';
 import '../../weekly plan/widgets/custom_dropdown.dart';
 import '../provider/visitdetail_provider.dart';

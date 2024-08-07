@@ -34,14 +34,16 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const CommonAppBar(),
+      appBar: const CommonAppBar(showIcons: false),
       body: Consumer<WelcomeProvider>(builder: (context, provider, child) {
         return Center(
           child: Container(
             margin: const EdgeInsets.symmetric(horizontal: 20),
             child: Column(
               children: [
-                Lottie.asset('assets/lottie/login.json'),
+                SizedBox(
+                    height: Utils.deviceHeight * 0.3,
+                    child: Lottie.asset('assets/lottie/login.json')),
                 Form(
                   key: _formKey,
                   child: Column(
