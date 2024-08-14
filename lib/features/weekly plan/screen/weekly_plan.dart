@@ -1,5 +1,4 @@
 import 'package:easy_date_timeline/easy_date_timeline.dart';
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:mr_buddy/utils.dart';
@@ -30,6 +29,54 @@ class _WeeklyPlanState extends State<WeeklyPlan> {
     super.dispose();
   }
 
+  bool lastDayOfWeek() {
+    final provider = Provider.of<WeeklyProviderPlan>(context, listen: false);
+    if (DateFormat('dd-MM-yyyy').format(provider.focusDate) ==
+        DateFormat('dd-MM-yyyy').format(provider.friday)) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  Future<bool?> _showPopup(BuildContext context) async {
+    return await showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: Colors.white,
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10.0)),
+          ),
+          title: const Text("Create a New Visit"),
+          content: const Text(
+              "Do you want to create a new visit for today's date or the next date?"),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(true);
+              },
+              child: const Text(
+                "Today",
+                style: TextStyle(color: Colors.black),
+              ),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(false);
+              },
+              child: Text(
+                lastDayOfWeek() ? 'Submit' : "Next Date",
+                style: TextStyle(color: Colors.black),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.sizeOf(context).width;
@@ -42,37 +89,61 @@ class _WeeklyPlanState extends State<WeeklyPlan> {
       child: Consumer<WeeklyProviderPlan>(
           builder: (context, weeklyProvider, child) {
         return Scaffold(
-          resizeToAvoidBottomInset: false,
-          appBar: const CustomAppBar(title: "Create Visit"),
-          body: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 10),
-            child: Column(
-              children: [
-                const SizedBox(height: 10),
-                EasyInfiniteDateTimeLine(
-                  showTimelineHeader: false,
-                  firstDate: weeklyProvider.monday,
-                  focusDate: weeklyProvider.focusDate,
-                  lastDate: weeklyProvider.friday,
-                  onDateChange: (selectedDate) {
-                    weeklyProvider.setFocusDate(selectedDate);
-                  },
-                  activeColor: const Color(0xff85A389),
-                  dayProps: EasyDayProps(
-                    width: bigScreen ? 120 : 80,
-                    todayHighlightStyle: TodayHighlightStyle.withBackground,
-                    todayHighlightColor: Color(0xffE1ECC8),
+          appBar: const CustomAppBar(title: "Weekly Plan"),
+          body: Stack(
+            children: [
+              Positioned(
+                  child: Container(
+                height: Utils.deviceHeight * 0.3,
+                decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        colors: [
+                      HexColor("00AE4D"),
+                      HexColor("00AE4D").withOpacity(0.5)
+                    ])),
+              )),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      const SizedBox(height: 10),
+                      EasyInfiniteDateTimeLine(
+                        showTimelineHeader: false,
+                        firstDate: weeklyProvider.monday,
+                        focusDate: weeklyProvider.focusDate,
+                        lastDate: weeklyProvider.friday,
+                        onDateChange: (selectedDate) {
+                          weeklyProvider.setFocusDate(selectedDate);
+                        },
+                        activeColor: HexColor("1A5319"),
+                        dayProps: EasyDayProps(
+                            height: 70,
+                            width: bigScreen ? 120 : 70,
+                            todayHighlightStyle:
+                                TodayHighlightStyle.withBackground,
+                            todayHighlightColor: const Color(0xffE1ECC8),
+                            inactiveDayStyle: DayStyle(
+                                decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(10)))),
+                      ),
+                      const SizedBox(height: 20),
+                      dayForm(weeklyProvider.focusDate)
+                    ],
                   ),
                 ),
-                const SizedBox(height: 20),
-                dayForm(weeklyProvider.focusDate)
-              ],
-            ),
+              ),
+            ],
           ),
         );
       }),
     );
   }
+
+  TimeOfDay? selectDate;
 
   Widget dayForm(DateTime date) {
     bool lastDayOfWeek() {
@@ -115,7 +186,7 @@ class _WeeklyPlanState extends State<WeeklyPlan> {
               Form(
                 key: _formKey,
                 child: SizedBox(
-                  height: Utils.deviceHeight * 0.55,
+                  height: Utils.deviceHeight * 0.6,
                   child: SingleChildScrollView(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -167,8 +238,8 @@ class _WeeklyPlanState extends State<WeeklyPlan> {
                         ),
                         CustomDropdown(
                           selectedValue: weeklyProvider.placeType,
-                          hintText: "Select Place",
-                          placeHolder: "Select place type",
+                          hintText: "Clinic Type",
+                          placeHolder: "Select clinic type",
                           values: weeklyProvider.typeOfPlace,
                           isRequired: true,
                           setFunction: weeklyProvider.setPlaceType,
@@ -189,7 +260,7 @@ class _WeeklyPlanState extends State<WeeklyPlan> {
                             hintText: "Visit Purpose/Plan", maxLine: 1),
                         const SizedBox(height: 10),
                         const CustomFormField(
-                            hintText: "Contact Point/Doctor", maxLine: 1),
+                            hintText: "Point of Contact/Doctor", maxLine: 1),
                         const SizedBox(height: 10),
                         CustomFormField(
                           hintText: "Date",
@@ -198,55 +269,6 @@ class _WeeklyPlanState extends State<WeeklyPlan> {
                               .format(weeklyProvider.focusDate),
                         ),
                         const SizedBox(height: 20),
-                        Center(
-                          child: Container(
-                            height: Utils.deviceHeight * 0.12,
-                            width: Utils.deviceWidth * 0.8,
-                            padding: const EdgeInsets.all(8),
-                            decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(20),
-                                boxShadow: [
-                                  BoxShadow(
-                                      color: Colors.black.withOpacity(0.15),
-                                      blurRadius: 12,
-                                      offset: const Offset(2, 2))
-                                ]),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              children: [
-                                Text(
-                                  "Upload any document",
-                                  style: TextStyle(
-                                      color:
-                                          HexColor("1F1F1F").withOpacity(0.5)),
-                                ),
-                                Container(
-                                  width: Utils.deviceWidth * 0.25,
-                                  height: 40,
-                                  decoration: BoxDecoration(
-                                      border:
-                                          Border.all(color: HexColor("3055B2")),
-                                      borderRadius: BorderRadius.circular(20)),
-                                  child: TextButton(
-                                    onPressed: () async {
-                                      var picked =
-                                          await FilePicker.platform.pickFiles();
-
-                                      if (picked != null) {}
-                                    },
-                                    child: Text(
-                                      "Upload +",
-                                      style:
-                                          TextStyle(color: HexColor("3055B2")),
-                                    ),
-                                  ),
-                                )
-                              ],
-                            ),
-                          ),
-                        ),
                         const SizedBox(height: 10),
                       ],
                     ),
@@ -283,17 +305,23 @@ class _WeeklyPlanState extends State<WeeklyPlan> {
                                     )));
                           }
                         } else {
-                          if (lastDayOfWeek()) {
-                            Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) =>
-                                    const SuccessScreenWeeklyPlan(
-                                      heading:
-                                          'Successfully Created Your Visit',
-                                      subHeading:
-                                          'Send notification to your manager to approve for weekly plan',
-                                    )));
+                          bool? newVisitToday = await _showPopup(context);
+                          if (newVisitToday == false) {
+                            if (lastDayOfWeek()) {
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (context) =>
+                                      const SuccessScreenWeeklyPlan(
+                                        heading:
+                                            'Successfully Created Your Visit',
+                                        subHeading:
+                                            'Send notification to your manager to approve for weekly plan',
+                                      )));
+                            }
+                            weeklyProvider.uploadData('Devesh');
+                          } else {
+                            weeklyProvider.addDataInSingleDayVisit(user.name,
+                                reset: true);
                           }
-                          weeklyProvider.uploadData('Devesh');
                         }
                       }
                     },

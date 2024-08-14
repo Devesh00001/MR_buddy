@@ -37,7 +37,7 @@ class _CustomFormFieldState extends State<CustomFormField> {
       weeklyProvider.setAddress(_controller.text);
     } else if (widget.hintText == "Visit Purpose/Plan") {
       weeklyProvider.setPurpose(_controller.text);
-    } else if (widget.hintText == "Contact Point/Doctor") {
+    } else if (widget.hintText == "Point of Contact/Doctor") {
       weeklyProvider.setContactPoint(_controller.text);
     } else if (widget.hintText == "Date") {
       weeklyProvider.setDate(_controller.text);

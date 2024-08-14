@@ -7,7 +7,7 @@ import '../service/client_service.dart';
 class ClinetProvider with ChangeNotifier {
   List<Client> clients = [];
   List<Client> displayClientList = [];
- Map<String, PastVisit> pastVisit = {};
+  Map<String, Map<String, PastVisit>> pastVisit = {};
 
   getClientName() async {
     ClientService service = ClientService();
@@ -31,7 +31,8 @@ class ClinetProvider with ChangeNotifier {
     }
   }
 
-  Future<Map<String, PastVisit>> getPastVisits(String clientName) async {
+  Future<Map<String, Map<String, PastVisit>>> getPastVisits(
+      String clientName) async {
     ClientService service = ClientService();
     pastVisit = await service.getPastVisit(clientName);
     return pastVisit;

@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:mr_buddy/features/weekly%20plan/service/weekly_plan_service.dart';
@@ -24,9 +26,41 @@ class WeeklyProviderPlan with ChangeNotifier {
   String? date;
   Map<String, dynamic> weekdayPlans = {};
   String? mrName;
+  Map<String, dynamic> dayVisits = {};
 
   void uploadData(String mrName) {
     String weekday = getWeekdayName(DateFormat('dd-MM-yyyy').format(focusDate));
+    addDataInSingleDayVisit(mrName);
+
+    weekdayPlans[DateFormat('dd-MM-yyyy').format(focusDate)] =
+        Map.from(dayVisits);
+
+    if (weekday == 'Friday') {
+      WeeklyPlanService service = WeeklyPlanService();
+      service.uploadWeeklyPlan(weekdayPlans, mrName);
+    }
+    focusDate = focusDate.add(const Duration(days: 1));
+    resetProvider(allReset: false);
+    dayVisits.clear();
+    notifyListeners();
+  }
+
+  String getRandomTime() {
+    Random random = Random();
+    int hour = random.nextInt(12) + 1;
+    int minute = random.nextInt(60);
+
+    String period = random.nextBool() ? "AM" : "PM";
+
+    String formattedMinute = minute.toString().padLeft(2, '0');
+    String formattedTime = "$hour:$formattedMinute $period";
+
+    return formattedTime;
+  }
+
+  addDataInSingleDayVisit(String mrName, {bool reset = false}) {
+    String weekday = getWeekdayName(DateFormat('dd-MM-yyyy').format(focusDate));
+    String time = getRandomTime();
 
     Visit visit = Visit(
         clientName: client ?? clientName!,
@@ -38,22 +72,19 @@ class WeeklyProviderPlan with ChangeNotifier {
         purpose: purpose!,
         date: DateFormat('dd-MM-yyyy').format(focusDate),
         day: weekday,
-        comments: '',
-        status: 'Pending');
-
-    weekdayPlans[visit.day] = visit.toMap();
-
-    if (weekday == 'Friday') {
-      WeeklyPlanService service = WeeklyPlanService();
-      service.uploadWeeklyPlan(weekdayPlans, mrName);
+        comments: ' ',
+        status: 'Pending',
+        startTime: time,
+        checkOut: false);
+    dayVisits[time] = Map.from(visit.toMap());
+    if (reset) {
+      resetProvider(allReset: false);
     }
-    focusDate = focusDate.add(const Duration(days: 1));
-    resetProvider(allReset: false);
-    notifyListeners();
   }
 
-  Future<bool> uploadWeekDayPlan()async {
+  Future<bool> uploadWeekDayPlan() async {
     String weekday = getWeekdayName(DateFormat('dd-MM-yyyy').format(focusDate));
+    String time = getRandomTime();
 
     Visit visit = Visit(
         clientName: client ?? clientName!,
@@ -65,13 +96,15 @@ class WeeklyProviderPlan with ChangeNotifier {
         purpose: purpose!,
         date: DateFormat('dd-MM-yyyy').format(focusDate),
         day: weekday,
-        comments: '',
-        status: 'Pending');
+        comments: ' ',
+        status: 'Pending',
+        startTime: time,
+        checkOut: false);
 
     WeeklyPlanService service = WeeklyPlanService();
-   bool status = await service.addOrUpdateWeekDayPlan(mrName!, visit.day, visit.toMap());
+    bool status =
+        await service.addOrUpdateWeekDayPlan(visit);
 
-    // focusDate = focusDate.add(const Duration(days: 1));
     resetProvider(allReset: false);
     notifyListeners();
     return status;
@@ -157,11 +190,11 @@ class WeeklyProviderPlan with ChangeNotifier {
     if (allReset) {
       focusDate = DateTime.now();
       weekdayPlans.clear();
+      dayVisits.clear();
     }
     placeType = null;
     clientType = null;
     client = null;
-
     clientList.clear();
     notifyListeners();
   }

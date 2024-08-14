@@ -1,10 +1,9 @@
-import 'package:flutter/cupertino.dart';
+import 'package:figma_squircle/figma_squircle.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mr_buddy/features/clients/screen/client_detail.dart';
 import 'package:mr_buddy/utils.dart';
 import 'package:provider/provider.dart';
-
 import '../provider/client_provider.dart';
 
 class AllClientScreen extends StatefulWidget {
@@ -24,6 +23,7 @@ class _AllClientScreenState extends State<AllClientScreen> {
 
   @override
   Widget build(BuildContext context) {
+    bool isTab = Utils.deviceWidth > 600 ? true : false;
     return Consumer<ClinetProvider>(builder: (context, clinetProvider, child) {
       return Column(
         children: [
@@ -46,41 +46,58 @@ class _AllClientScreenState extends State<AllClientScreen> {
             child: ListView.builder(
                 itemCount: clinetProvider.displayClientList.length,
                 itemBuilder: (ctx, index) {
-                  return Container(
-                    height: Utils.deviceHeight * 0.1,
-                    margin: const EdgeInsets.all(10),
-                    decoration: BoxDecoration(
-                        color: HexColor("2F52AC"),
-                        borderRadius: BorderRadius.circular(10)),
-                    child: Center(
-                      child: ListTile(
-                        trailing: ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 10),
-                                minimumSize: Size.zero,
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(5)),
-                                backgroundColor: HexColor("00AE4D")),
-                            onPressed: () {
-                              Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (context) => ClientDetail(
-                                      client: clinetProvider
-                                          .displayClientList[index])));
-                            },
-                            child: const Text(
-                              "View",
-                              style: TextStyle(color: Colors.white),
-                            )),
-                        title: Text(
-                          clinetProvider.displayClientList[index].name,
-                          style: const TextStyle(
-                              color: Colors.white, fontSize: 16),
+                  return InkWell(
+                    onTap: () {
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => ClientDetail(
+                              client:
+                                  clinetProvider.displayClientList[index])));
+                    },
+                    child: Container(
+                      height: Utils.deviceHeight * 0.09,
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 12, horizontal: 20),
+                      margin: const EdgeInsets.symmetric(
+                          horizontal: 10, vertical: 8),
+                      decoration: ShapeDecoration(
+                        color: HexColor("F6F5F5"),
+                        shadows: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.5),
+                            spreadRadius: 5,
+                            blurRadius: 7,
+                            offset: const Offset(0, 3),
+                          ),
+                        ],
+                        shape: SmoothRectangleBorder(
+                          borderRadius: SmoothBorderRadius(
+                            cornerRadius: 15,
+                            cornerSmoothing: 1,
+                          ),
                         ),
-                        subtitle: Text(
-                            clinetProvider.displayClientList[index].address),
-                        subtitleTextStyle: const TextStyle(
-                            color: Colors.white, fontSize: 12, height: 2),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Row(
+                            children: [
+                              const Icon(FontAwesomeIcons.userMd, size: 25),
+                              const SizedBox(width: 10),
+                              Text(
+                                clinetProvider.displayClientList[index].name,
+                                style: TextStyle(
+                                    fontSize: isTab ? 20 : 16,
+                                    fontWeight: FontWeight.w600,
+                                    color: HexColor("2F52AC")),
+                              ),
+                            ],
+                          ),
+                          Text(
+                            "Hospital: ${clinetProvider.displayClientList[index].hospital}",
+                            style: TextStyle(fontSize: isTab ? 20 : 16),
+                          ),
+                        ],
                       ),
                     ),
                   );

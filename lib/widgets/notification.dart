@@ -24,7 +24,7 @@ class _NotificationsState extends State<Notifications> {
     return PopupMenuButton(
       icon: const Icon(
         Icons.notifications,
-        size: 40,
+        size: 25,
         color: Colors.white,
       ),
       offset: const Offset(0, 60), // Adjust offset to control menu size

@@ -1,12 +1,14 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mr_buddy/features/mr/widget/user_info_card.dart';
 import 'package:mr_buddy/features/welcome/model/user.dart';
 import 'package:mr_buddy/utils.dart';
 
 import '../../../widgets/custom_appbar.dart';
+
 import '../../weekly plan/model/visit.dart';
 import '../widgets/visit_text_field.dart';
+import 'summary_page.dart';
 
 class ManagerVisitDetail extends StatefulWidget {
   const ManagerVisitDetail(
@@ -19,119 +21,35 @@ class ManagerVisitDetail extends StatefulWidget {
 }
 
 class _ManagerVisitDetailState extends State<ManagerVisitDetail> {
-  final _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: const CustomAppBar(title: "Visit Detail"),
-      body: SingleChildScrollView(
-        physics: const NeverScrollableScrollPhysics(),
-        child: ConstrainedBox(
-          constraints: BoxConstraints(
-            minWidth: Utils.deviceWidth,
-            minHeight: Utils.deviceHeight * 0.87,
-          ),
-          child: IntrinsicHeight(
+      body: Stack(
+        children: [
+          Positioned(
+              child: Container(
+            height: Utils.deviceHeight * 0.3,
+            decoration: BoxDecoration(
+                gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: [
+                  HexColor("00AE4D"),
+                  HexColor("00AE4D").withOpacity(0.5)
+                ])),
+          )),
+          Container(
+            height: Utils.deviceHeight,
+            margin: const EdgeInsets.all(20),
             child: Column(
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                UserInfoCard(user: widget.user),
-                ClientInfoCard(visit: widget.visit),
-                VisitPurposeCard(visit: widget.visit),
-                Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
-                  margin: const EdgeInsets.symmetric(horizontal: 20),
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      color: Colors.white,
-                      boxShadow: [
-                        BoxShadow(
-                            color: Colors.black.withOpacity(0.3),
-                            blurRadius: 50,
-                            offset: const Offset(10, 10))
-                      ]),
-                  child: Form(
-                    key: _formKey,
-                    child: Column(
-                      children: [
-                        VisitTextField(
-                          hintText: 'Add Comments',
-                          validateFunction: (value) {
-                            if (value == null || value.isEmpty) {
-                              return "Plase enter Value";
-                            }
-                            return null;
-                          },
-                        ),
-                        const SizedBox(height: 10),
-                        InkWell(
-                          onTap: () {
-                            if (_formKey.currentState!.validate()) {}
-                          },
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 40, vertical: 10),
-                            decoration: BoxDecoration(
-                                color: HexColor("2FBD6E"),
-                                borderRadius: BorderRadius.circular(10)),
-                            child: const Text(
-                              "Submit",
-                              style:
-                                  TextStyle(color: Colors.white, fontSize: 16),
-                            ),
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                )
+                Expanded(flex: 2, child: UserInfoCard(user: widget.user)),
+                const SizedBox(height: 10),
+                Expanded(flex: 5, child: ClientInfoCard(visit: widget.visit)),
               ],
             ),
           ),
-        ),
-      ),
-    );
-  }
-}
-
-class VisitPurposeCard extends StatelessWidget {
-  const VisitPurposeCard({
-    super.key,
-    required this.visit,
-  });
-
-  final Visit visit;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
-      margin: const EdgeInsets.symmetric(horizontal: 20),
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10),
-          color: Colors.white,
-          boxShadow: [
-            BoxShadow(
-                color: Colors.black.withOpacity(0.3),
-                blurRadius: 50,
-                offset: const Offset(10, 10))
-          ]),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Text(
-            "Client Info",
-            style: TextStyle(fontSize: 20),
-          ),
-          const SizedBox(height: 10),
-          VisitTextField(
-            hintText: "Purpose",
-            value: visit.purpose,
-            size: 100,
-            validateFunction: (value) {},
-          )
         ],
       ),
     );
@@ -139,18 +57,15 @@ class VisitPurposeCard extends StatelessWidget {
 }
 
 class ClientInfoCard extends StatelessWidget {
-  const ClientInfoCard({
-    super.key,
-    required this.visit,
-  });
+  const ClientInfoCard({super.key, required this.visit});
 
   final Visit visit;
 
   @override
   Widget build(BuildContext context) {
+    final _formKey = GlobalKey<FormState>();
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
-      margin: const EdgeInsets.symmetric(horizontal: 20),
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
           color: Colors.white,
@@ -160,37 +75,85 @@ class ClientInfoCard extends StatelessWidget {
                 blurRadius: 50,
                 offset: const Offset(10, 10))
           ]),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          const Text(
-            "Client Info",
-            style: TextStyle(fontSize: 20),
-          ),
-          const SizedBox(height: 10),
-          Wrap(
-            direction: Axis.vertical,
-            children: [
-              UserDetailFiled(
-                title: "Client Name",
-                value: visit.clientName,
-                fontSize: 16,
+      child: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            const Text(
+              "Client Info",
+              style: TextStyle(fontSize: 20),
+            ),
+            const SizedBox(height: 20),
+            Row(
+              // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                UserDetailFiled(
+                  icon: FontAwesomeIcons.userDoctor,
+                  title: "Client Name",
+                  value: visit.clientName,
+                ),
+                const Spacer(),
+                UserDetailFiled(
+                  icon: FontAwesomeIcons.hospitalUser,
+                  title: "Hospital",
+                  value: visit.address,
+                ),
+                const SizedBox(height: 10),
+              ],
+            ),
+            const SizedBox(height: 10),
+            UserDetailFiled(
+              icon: Icons.location_on_rounded,
+              title: "Address",
+              value: visit.address,
+            ),
+            const SizedBox(height: 10),
+            const SummaryCardTile(
+                title: "Purpose",
+                value:
+                    "The doctor suggested connecting with a fellow specialist who might be interested in our"),
+            const SizedBox(height: 10),
+            Form(
+              key: _formKey,
+              child: Column(
+                children: [
+                  VisitTextField(
+                    hintText: 'Add Comments',
+                    size: 100,
+                    validateFunction: (value) {
+                      if (value == null || value.isEmpty) {
+                        return "Plase enter Value";
+                      }
+                      return null;
+                    },
+                  ),
+                  const SizedBox(height: 10),
+                  InkWell(
+                    onTap: () {
+                      if (_formKey.currentState!.validate()) {
+                        var snackBar =
+                            const SnackBar(content: Text('Your Comment added'));
+                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                      }
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 40, vertical: 10),
+                      decoration: BoxDecoration(
+                          color: HexColor("2FBD6E"),
+                          borderRadius: BorderRadius.circular(10)),
+                      child: const Text(
+                        "Submit",
+                        style: TextStyle(color: Colors.white, fontSize: 16),
+                      ),
+                    ),
+                  )
+                ],
               ),
-              const SizedBox(height: 10),
-              UserDetailFiled(
-                title: "Hospital",
-                value: visit.address,
-                fontSize: 16,
-              ),
-              const SizedBox(height: 10),
-              UserDetailFiled(
-                title: "Address",
-                value: visit.address,
-                fontSize: 16,
-              ),
-            ],
-          ),
-        ],
+            )
+          ],
+        ),
       ),
     );
   }

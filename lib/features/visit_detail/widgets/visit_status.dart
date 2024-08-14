@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class VisitStatus extends StatelessWidget {
   const VisitStatus(
@@ -10,37 +11,25 @@ class VisitStatus extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      mainAxisAlignment: MainAxisAlignment.start,
       children: [
         Container(
             padding: const EdgeInsets.all(4),
-            decoration: BoxDecoration(
-                border: Border.all(color: Colors.black),
-                borderRadius: BorderRadius.circular(5)),
-            child: Row(
-              children: [
-                Text("Status: $visitStatus"),
-                const SizedBox(width: 5),
-                Icon(
-                  visitStatus == 'Approve'
-                      ? Icons.done_outline_rounded
-                      : Icons.clear_rounded,
-                  color: visitStatus == 'Approve' ? Colors.green : Colors.red,
-                )
-              ],
+            child: Icon(
+              visitStatus == 'Approve'
+                  ? Icons.check_circle_outline_outlined
+                  : FontAwesomeIcons.circleExclamation,
+              size: 40,
+              color: visitStatus == 'Approve' ? Colors.green : Colors.yellow,
             )),
         Container(
             padding: const EdgeInsets.all(4),
-            decoration: BoxDecoration(
-                border: Border.all(color: Colors.black),
-                borderRadius: BorderRadius.circular(5)),
             child: Row(
               children: [
-                Text("Date: $visitDate"),
-                const SizedBox(width: 5),
-                const Icon(
-                  Icons.date_range,
-                )
+                Text(
+                  visitStatus == 'Approve' ? "Approve" : "Pending for approvel",
+                  style: const TextStyle(fontSize: 16),
+                ),
               ],
             ))
       ],

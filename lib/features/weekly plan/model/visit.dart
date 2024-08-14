@@ -10,6 +10,8 @@ class Visit {
   String day;
   String comments;
   String status;
+  String startTime;
+  bool checkOut;
 
   Visit(
       {required this.clientName,
@@ -22,7 +24,9 @@ class Visit {
       required this.date,
       required this.day,
       required this.comments,
-      required this.status});
+      required this.status,
+      required this.startTime,
+      required this.checkOut});
 
   factory Visit.fromJson(Map<String, dynamic> data) {
     return Visit(
@@ -36,7 +40,9 @@ class Visit {
         date: data['Date'],
         day: data['Day'],
         comments: data['Manager Comments'] ?? "",
-        status: data['Approval'] ?? "Pending");
+        status: data['Approval'] ?? "Pending",
+        startTime: data['Start Time'] ?? "",
+        checkOut: data['Check Out']);
   }
 
   Map<String, dynamic> toMap() {
@@ -51,7 +57,9 @@ class Visit {
       'Date': date,
       'Day': day,
       'Manager Comments': comments,
-      'Approval': status
+      'Approval': status,
+      'Start Time': startTime,
+      'Check Out': checkOut
     };
   }
 }

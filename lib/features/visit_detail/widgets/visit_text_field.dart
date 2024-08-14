@@ -10,7 +10,9 @@ class VisitTextField extends StatefulWidget {
       this.setFunction,
       required this.validateFunction,
       this.isRequired = true,
-      this.visibility = false});
+      this.visibility = false,
+      this.textFieldColor = Colors.transparent,
+      this.readOnly = false});
   final String hintText;
   final String value;
   final double size;
@@ -18,6 +20,8 @@ class VisitTextField extends StatefulWidget {
   final Function(String?) validateFunction;
   final bool isRequired;
   final bool visibility;
+  final Color textFieldColor;
+  final bool readOnly;
 
   @override
   State<VisitTextField> createState() => _VisitTextFieldState();
@@ -53,35 +57,42 @@ class _VisitTextFieldState extends State<VisitTextField> {
           widget.hintText,
           style: TextStyle(color: HexColor("1F1F1F").withOpacity(0.5)),
         ),
-        TextFormField(
-          maxLines: widget.visibility ? 1 : null,
-          controller: _controller,
-          readOnly: widget.value != "" ? true : false,
-          obscureText: widget.visibility,
-          decoration: InputDecoration(
-              suffixIcon: widget.hintText == "Location"
-                  ? Icon(
-                      widget.value == "Match With Client Location"
-                          ? Icons.check_circle_rounded
-                          : Icons.clear_rounded,
-                      color: widget.value == "Match With Client Location"
-                          ? Colors.green
-                          : Colors.red,
-                      size: 30,
-                    )
-                  : null,
-              isCollapsed: true,
-              contentPadding: const EdgeInsets.all(10),
-              errorMaxLines: 2,
-              border: OutlineInputBorder(
-                  borderSide:
-                      BorderSide(color: HexColor("1F1F1F").withOpacity(0.5))),
-              focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: HexColor("1F1F1F"))),
-              labelStyle: TextStyle(color: HexColor("1F1F1F"))),
-          validator: (value) {
-            return widget.isRequired ? widget.validateFunction(value) : null;
-          },
+        SizedBox(height: 5),
+        Container(
+          color: widget.textFieldColor,
+          height: widget.size,
+          child: TextFormField(
+            cursorColor: Colors.black,
+            maxLines: widget.visibility ? 1 : null,
+            controller: _controller,
+            readOnly: widget.readOnly,
+            obscureText: widget.visibility,
+            expands: widget.visibility ? false : true,
+            decoration: InputDecoration(
+                suffixIcon: widget.hintText == "Location"
+                    ? Icon(
+                        widget.value == "Match With Client Location"
+                            ? Icons.check_circle_rounded
+                            : Icons.clear_rounded,
+                        color: widget.value == "Match With Client Location"
+                            ? Colors.green
+                            : Colors.red,
+                        size: 30,
+                      )
+                    : null,
+                isCollapsed: true,
+                contentPadding: const EdgeInsets.all(10),
+                errorMaxLines: 1,
+                border: OutlineInputBorder(
+                    borderSide:
+                        BorderSide(color: HexColor("1F1F1F").withOpacity(0.5))),
+                focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: HexColor("1F1F1F"))),
+                labelStyle: TextStyle(color: HexColor("1F1F1F"))),
+            validator: (value) {
+              return widget.isRequired ? widget.validateFunction(value) : null;
+            },
+          ),
         ),
       ],
     );

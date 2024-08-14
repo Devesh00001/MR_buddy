@@ -34,7 +34,10 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const CommonAppBar(showIcons: false),
+      appBar: const CommonAppBar(
+        showIcons: false,
+        title: "Login",
+      ),
       body: Consumer<WelcomeProvider>(builder: (context, provider, child) {
         return Center(
           child: Container(
@@ -78,11 +81,16 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                           decoration: BoxDecoration(
                               color: HexColor("00AE4D"),
                               borderRadius: BorderRadius.circular(5)),
-                          child: const Center(
-                              child: Text(
-                            "Login",
-                            style: TextStyle(color: Colors.white, fontSize: 16),
-                          )),
+                          child: Center(
+                              child: provider.getIsloading()
+                                  ? const CircularProgressIndicator(
+                                      color: Colors.white,
+                                    )
+                                  : const Text(
+                                      "Login",
+                                      style: TextStyle(
+                                          color: Colors.white, fontSize: 16),
+                                    )),
                         ),
                       )
                     ],

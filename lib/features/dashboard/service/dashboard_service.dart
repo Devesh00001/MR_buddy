@@ -3,7 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import '../../weekly plan/model/visit.dart';
 
 class DashboardService {
-  Future<Map<String, Visit>> getWeekVisits(String username) async {
+  Future<Map<String, Visit>> getWeekVisits(String username, String date) async {
     try {
       final QuerySnapshot result = await FirebaseFirestore.instance
           .collection('WeeklyPlans')
@@ -15,7 +15,7 @@ class DashboardService {
         final Map<String, dynamic> data =
             document.data() as Map<String, dynamic>;
 
-        data['Plan'].forEach((key, value) {
+        data['Plan'][date].forEach((key, value) {
           mappedData[key] = Visit.fromJson(value);
         });
       }

@@ -41,28 +41,34 @@ class MRService {
 
         Map<String, dynamic>? plan = data['Plan'] as Map<String, dynamic>?;
 
-        Map<String, dynamic> headApprovel = {};
-
-        data.forEach((key, value) {
-          headApprovel['Approval'] = 'Approve';
-        });
-
         if (plan != null) {
           Map<String, dynamic> updates = {};
 
-          plan.forEach((weekday, visitData) {
-            updates['Plan.$weekday.Approval'] = 'Approve';
+         
+          plan.forEach((date, timeMap) {
+            
+            if (timeMap is Map<String, dynamic>) {
+              timeMap.forEach((time, lastMap) {
+              
+                if (lastMap is Map<String, dynamic>) {
+                  updates['Plan.$date.$time.Approval'] = 'Approve';
+                }
+              });
+            }
           });
-          await firestore
-              .collection('WeeklyPlans')
-              .doc(doc.id)
-              .update(headApprovel);
-          await firestore.collection('WeeklyPlans').doc(doc.id).update(updates);
-          print('Approval field updated successfully for matching documents!');
-          return true;
+
+          if (updates.isNotEmpty) {
+            await firestore
+                .collection('WeeklyPlans')
+                .doc(doc.id)
+                .update(updates);
+            print(
+                'Approval field updated successfully for document ${doc.id}!');
+          } else {
+            print('No updates found for document ${doc.id}');
+          }
         } else {
           print('Plan field is null in document ${doc.id}');
-          return false;
         }
       }
       return true;

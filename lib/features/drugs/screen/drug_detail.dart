@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:mr_buddy/utils.dart';
 import 'package:simple_gradient_text/simple_gradient_text.dart';
 import '../../../widgets/custom_appbar.dart';
@@ -27,12 +28,15 @@ class DrugDetails extends StatelessWidget {
                   HexColor("2F52AC"),
                 ],
               ),
-              SizedBox(
-                height: Utils.deviceHeight * 0.4,
-                child: Center(
-                  child: FadeInImage.assetNetwork(
-                    placeholder: 'assets/image/placeholder_image.jpg',
-                    image: drug.image,
+              Hero(
+                tag: drug.name,
+                child: SizedBox(
+                  height: Utils.deviceHeight * 0.4,
+                  child: Center(
+                    child: FadeInImage.assetNetwork(
+                      placeholder: 'assets/image/placeholder_image.jpg',
+                      image: drug.image,
+                    ),
                   ),
                 ),
               ),

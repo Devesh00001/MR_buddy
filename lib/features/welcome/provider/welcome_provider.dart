@@ -6,6 +6,7 @@ import '../model/user.dart';
 class WelcomeProvider with ChangeNotifier {
   String selectedRole = "MR";
   List<String> roles = ["MR", "Manager"];
+  bool isLoading = false;
   String? userName;
   bool status = false;
   User? _user;
@@ -33,9 +34,20 @@ class WelcomeProvider with ChangeNotifier {
     userName = value;
   }
 
+  void setIsloading(bool value) {
+    isLoading = value;
+    notifyListeners();
+  }
+
+  bool getIsloading(){
+    return isLoading;
+  }
+
   submitUserDetails() async {
+    setIsloading(true);
     WelcomeService service = WelcomeService();
     setUser(await service.isUsernamePresent(userName!));
     status = true;
+    setIsloading(false);
   }
 }

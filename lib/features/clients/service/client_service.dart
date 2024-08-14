@@ -24,10 +24,11 @@ class ClientService {
     }
   }
 
-  Future<Map<String, PastVisit>> getPastVisit(String clientName) async {
+  Future<Map<String, Map<String, PastVisit>>> getPastVisit(
+      String clientName) async {
     final firestore = FirebaseFirestore.instance;
     try {
-      final querySnapshot = await firestore
+      QuerySnapshot querySnapshot = await firestore
           .collection('Past Visits')
           .where('Name', isEqualTo: clientName)
           .get();
@@ -35,10 +36,15 @@ class ClientService {
         final DocumentSnapshot document = querySnapshot.docs[0];
         final Map<String, dynamic> data =
             document.data() as Map<String, dynamic>;
-        Map<String, PastVisit> pastVisitList = {};
+        Map<String, Map<String, PastVisit>> pastVisitList = {};
 
-        data['Visits'].forEach((key, value) {
-          pastVisitList[key] = PastVisit.fromJson(value);
+        data['Visits'].forEach((date, timeMap) {
+          if (timeMap is Map<String, dynamic>) {
+            pastVisitList[date] = {};
+            timeMap.forEach((time, visitData) {
+              pastVisitList[date]![time] = PastVisit.fromJson(visitData);
+            });
+          }
         });
         return pastVisitList;
       } else {

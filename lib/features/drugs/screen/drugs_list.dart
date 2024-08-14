@@ -1,4 +1,7 @@
+import 'package:figma_squircle/figma_squircle.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 
@@ -51,39 +54,72 @@ class _DrugsListState extends State<DrugsList> {
                 : ListView.builder(
                     itemCount: drugsProvider.displayDrugList.length,
                     itemBuilder: (ctx, index) {
-                      return Container(
-                        height: Utils.deviceHeight * 0.1,
-                        margin: const EdgeInsets.all(10),
-                        decoration: BoxDecoration(
-                            color: HexColor("2F52AC"),
-                            borderRadius: BorderRadius.circular(10)),
-                        child: Center(
-                          child: ListTile(
-                            trailing: ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 10),
-                                    minimumSize: Size.zero,
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(5)),
-                                    backgroundColor: HexColor("00AE4D")),
-                                onPressed: () {
-                                  Navigator.of(context).push(MaterialPageRoute(
-                                      builder: (context) => DrugDetails(
-                                          drug: drugsProvider
-                                              .displayDrugList[0])));
-                                },
-                                child: const Text(
-                                  "View",
-                                  style: TextStyle(color: Colors.white),
-                                )),
-                            title: Text(
-                              drugsProvider.displayDrugList[index].name,
-                              style: const TextStyle(
-                                  color: Colors.white, fontSize: 16),
+                      return InkWell(
+                        onTap: () {
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) => DrugDetails(
+                                  drug: drugsProvider.displayDrugList[0])));
+                        },
+                        child: Container(
+                          height: Utils.deviceHeight * 0.1,
+                          width: Utils.deviceWidth * 0.9,
+                          padding: const EdgeInsets.symmetric(vertical: 5),
+                          margin: const EdgeInsets.symmetric(
+                              horizontal: 10, vertical: 8),
+                          decoration: ShapeDecoration(
+                            color: Colors.white,
+                            shape: SmoothRectangleBorder(
+                              borderRadius: SmoothBorderRadius(
+                                cornerRadius: 15,
+                                cornerSmoothing: 1,
+                              ),
                             ),
-                            subtitleTextStyle: const TextStyle(
-                                color: Colors.white, fontSize: 12, height: 2),
+                            shadows: [
+                              BoxShadow(
+                                color: Colors.grey.withOpacity(0.5),
+                                spreadRadius: 5,
+                                blurRadius: 7,
+                                offset: const Offset(0, 3),
+                              ),
+                            ],
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              Hero(
+                                tag: drugsProvider.displayDrugList[index].name,
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(10),
+                                  child: FadeInImage.assetNetwork(
+                                    placeholder:
+                                        'assets/image/placeholder_image.jpg',
+                                    image:
+                                        drugsProvider.displayDrugList[0].image,
+                                  ),
+                                ),
+                              ),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    drugsProvider.displayDrugList[index].name,
+                                    style: const TextStyle(fontSize: 20),
+                                  ),
+                                  SizedBox(
+                                    height: Utils.deviceHeight * 0.05,
+                                    width: Utils.deviceWidth * 0.7,
+                                    child: Text(
+                                      drugsProvider
+                                          .displayDrugList[0].description,
+                                      overflow: TextOverflow.clip,
+                                      style: const TextStyle(color: Colors.grey),
+                                    ),
+                                  ),
+                                ],
+                              )
+                            ],
                           ),
                         ),
                       );

@@ -10,7 +10,6 @@ import 'features/mr/provider/mr_detail_provider.dart';
 import 'features/visit_detail/provider/visitdetail_provider.dart';
 import 'features/weekly plan/provider/weekly_plan_provider.dart';
 import 'features/welcome/provider/welcome_provider.dart';
-import 'utils.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -34,10 +33,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      builder: (context, child) {
-        Utils.init(context);
-        return child!;
-      },
+      theme: ThemeData(fontFamily: 'SpaceGrotesk'),
       home: const WelcomeScreen(),
     );
   }

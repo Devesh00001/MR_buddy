@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:mr_buddy/features/dashboard/service/dashboard_service.dart';
 import 'package:mr_buddy/features/mr/service/mr_service.dart';
 import 'package:mr_buddy/features/welcome/model/user.dart';
@@ -14,10 +15,35 @@ class DashboardProvider with ChangeNotifier {
   Map<String, User> mrListMap = {};
   bool approve = false;
   bool isLoading = false;
+  DateTime focusDate = DateTime.now();
+  DateTime selectedDate = DateTime.now();
+  DateTime monday = DateTime.now()
+      .subtract(Duration(days: DateTime.now().weekday - DateTime.monday));
+  DateTime friday = DateTime.now()
+      .add(Duration(days: (DateTime.friday - DateTime.now().weekday)));
+
+  setFocusDate(DateTime value) {
+    focusDate = value;
+    notifyListeners();
+  }
+
+  setSelectedDate(DateTime value) {
+    selectedDate = value;
+    notifyListeners();
+  }
+
+  DateTime getFocusDate() {
+    return focusDate;
+  }
 
   void changeStatusOfLoading() {
     isLoading = !isLoading;
     notifyListeners();
+  }
+
+  Future<bool> getWeeklyPlanStatus(String mrname) async {
+    MRService service = MRService();
+    return approve = await service.isWeeklyPlanStatus(mrname);
   }
 
   isWeeklyPlanStatus(String mrname) async {
@@ -55,10 +81,12 @@ class DashboardProvider with ChangeNotifier {
     }
   }
 
-  Future<Map<String, Visit>> getWeeklyPlan(String username) async {
+  Future<Map<String, Visit>> getWeeklyPlan(
+      String username, DateTime date) async {
     DashboardService service = DashboardService();
+    String formattedDate = DateFormat('dd-MM-yyyy').format(date);
     weeklyPlan.clear();
-    weeklyPlan = await service.getWeekVisits(username);
+    weeklyPlan = await service.getWeekVisits(username, formattedDate);
     return weeklyPlan;
   }
 }

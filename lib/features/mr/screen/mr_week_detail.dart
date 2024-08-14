@@ -1,7 +1,11 @@
+import 'package:figma_squircle/figma_squircle.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
 import 'package:mr_buddy/features/welcome/model/user.dart';
 import 'package:provider/provider.dart';
+import 'package:table_calendar/table_calendar.dart';
 import '../../../utils.dart';
 import '../../../widgets/custom_appbar.dart';
 import '../../dashboard/provider/dashboard_provider.dart';
@@ -31,16 +35,74 @@ class _MRWeekDetailsState extends State<MRWeekDetails> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: const CustomAppBar(title: "MR Week Detail"),
-        body: Column(
-          children: [
-            UserInfoCard(user: widget.user),
-            Consumer<DashboardProvider>(
-                builder: (context, dashboardProvider, child) {
-              return Container(
-                  padding: const EdgeInsets.all(20),
+        appBar: const CustomAppBar(title: "MR Visit's Detail"),
+        body: Consumer<DashboardProvider>(
+            builder: (context, dashboardProvider, child) {
+          return Stack(
+            children: [
+              Positioned(
+                  child: Container(
+                height: Utils.deviceHeight * 0.3,
+                decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        colors: [
+                      HexColor("00AE4D"),
+                      HexColor("00AE4D").withOpacity(0.5)
+                    ])),
+              )),
+              Container(
+                  height: Utils.deviceHeight,
+                  margin: const EdgeInsets.all(20),
                   child: Column(
                     children: [
+                      UserInfoCard(user: widget.user),
+                      const SizedBox(height: 20),
+                      Container(
+                        padding: const EdgeInsets.all(10),
+                        decoration: ShapeDecoration(
+                          shape: SmoothRectangleBorder(
+                            borderRadius: SmoothBorderRadius(
+                              cornerRadius: 15,
+                              cornerSmoothing: 1,
+                            ),
+                          ),
+                          color: Colors.white,
+                          shadows: [
+                            BoxShadow(
+                              color: Colors.grey.withOpacity(0.5),
+                              spreadRadius: 5,
+                              blurRadius: 7,
+                              offset: const Offset(0, 3),
+                            ),
+                          ],
+                        ),
+                        child: TableCalendar(
+                          firstDay: DateTime.utc(2010, 10, 16),
+                          lastDay: DateTime.utc(2030, 3, 14),
+                          rowHeight: 30,
+                          focusedDay: dashboardProvider.focusDate,
+                          headerVisible: false,
+                          calendarStyle: const CalendarStyle(
+                              disabledTextStyle: TextStyle(fontSize: 12),
+                              todayTextStyle: TextStyle(fontSize: 12),
+                              selectedTextStyle:
+                                  TextStyle(fontSize: 12, color: Colors.white)),
+                          selectedDayPredicate: (day) {
+                            return isSameDay(
+                                dashboardProvider.selectedDate, day);
+                          },
+                          onDaySelected: (selectedDay, focusedDay) {
+                            if (!isSameDay(
+                                dashboardProvider.selectedDate, selectedDay)) {
+                              dashboardProvider.setSelectedDate(selectedDay);
+                              dashboardProvider.setFocusDate(focusedDay);
+                            }
+                          },
+                        ),
+                      ),
+                      const SizedBox(height: 10),
                       const Align(
                         alignment: Alignment.centerLeft,
                         child: Text(
@@ -49,11 +111,11 @@ class _MRWeekDetailsState extends State<MRWeekDetails> {
                               fontSize: 24, fontWeight: FontWeight.w500),
                         ),
                       ),
-                      SizedBox(
-                          height: Utils.deviceHeight * 0.61,
+                      Expanded(
                           child: FutureBuilder<Map<String, Visit>>(
-                              future: dashboardProvider
-                                  .getWeeklyPlan(widget.user.name),
+                              future: dashboardProvider.getWeeklyPlan(
+                                  widget.user.name,
+                                  dashboardProvider.selectedDate),
                               builder: (context, snapshot) {
                                 if (snapshot.connectionState ==
                                     ConnectionState.waiting) {
@@ -69,57 +131,131 @@ class _MRWeekDetailsState extends State<MRWeekDetails> {
                                   return const Center(
                                       child: Text('No Visits found'));
                                 } else {
-                                  return ListView(
-                                    children: dashboardProvider
-                                        .weeklyPlan.entries
-                                        .map((entry) {
-                                      String day = entry.key;
-                                      Visit visit = entry.value;
+                                  Map<String, Visit> data =
+                                      snapshot.data as Map<String, Visit>;
 
-                                      return InkWell(
-                                        onTap: () {
-                                          Navigator.of(context).push(
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      ManagerVisitDetail(
-                                                        visit: visit,
-                                                        user: widget.user,
-                                                      )));
-                                        },
-                                        child: Container(
-                                          margin: const EdgeInsets.symmetric(
-                                              vertical: 10),
-                                          decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(10),
-                                              gradient: LinearGradient(colors: [
-                                                HexColor("00AE4D"),
-                                                HexColor("00AE4D")
-                                                    .withOpacity(0.5)
-                                              ])),
-                                          child: ListTile(
-                                            title: Text(
-                                              day,
-                                              style: const TextStyle(
-                                                  color: Colors.white),
-                                            ),
-                                            subtitle: Text(
-                                              visit.address,
-                                              style: const TextStyle(
-                                                  color: Colors.white),
-                                            ),
+                                  DateFormat format = DateFormat('hh:mm a');
+
+                                  var sortedEntries = data.entries.toList()
+                                    ..sort((a, b) {
+                                      DateTime timeA = format.parse(a.key);
+                                      DateTime timeB = format.parse(b.key);
+                                      return timeA.compareTo(timeB);
+                                    });
+
+                                  Map<String, Visit> sortedData = {
+                                    for (var entry in sortedEntries)
+                                      entry.key: entry.value
+                                  };
+
+                                  return ListView(
+                                    children: sortedData.entries.map((entry) {
+                                      String time = entry.key;
+                                      Visit visit = entry.value;
+                                      return Column(
+                                        children: [
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Text(time),
+                                              InkWell(
+                                                onTap: () {
+                                                  Navigator.of(context).push(
+                                                      MaterialPageRoute(
+                                                          builder: (context) =>
+                                                              ManagerVisitDetail(
+                                                                  visit: visit,
+                                                                  user: widget
+                                                                      .user)));
+                                                },
+                                                child: Container(
+                                                    width: Utils.deviceWidth *
+                                                        0.7,
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            10),
+                                                    margin: const EdgeInsets
+                                                        .symmetric(
+                                                        vertical: 10),
+                                                    decoration: ShapeDecoration(
+                                                        shape:
+                                                            SmoothRectangleBorder(
+                                                          borderRadius:
+                                                              SmoothBorderRadius(
+                                                            cornerRadius: 15,
+                                                            cornerSmoothing: 1,
+                                                          ),
+                                                        ),
+                                                        gradient: visit
+                                                                    .status ==
+                                                                'Approve'
+                                                            ? LinearGradient(
+                                                                colors: [
+                                                                    HexColor(
+                                                                        "1B2E62"),
+                                                                    HexColor(
+                                                                        "365FC8")
+                                                                  ])
+                                                            : LinearGradient(
+                                                                colors: [
+                                                                    HexColor(
+                                                                        "00AE4D"),
+                                                                    HexColor(
+                                                                            "00AE4D")
+                                                                        .withOpacity(
+                                                                            0.5)
+                                                                  ])),
+                                                    child: Row(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .spaceBetween,
+                                                      children: [
+                                                        Column(
+                                                          crossAxisAlignment:
+                                                              CrossAxisAlignment
+                                                                  .start,
+                                                          children: [
+                                                            Text(
+                                                                visit
+                                                                    .clientName,
+                                                                style: const TextStyle(
+                                                                    color: Colors
+                                                                        .white)),
+                                                            Text(
+                                                              visit.address,
+                                                              style: const TextStyle(
+                                                                  color: Colors
+                                                                      .white),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                        Icon(
+                                                          visit.placeType ==
+                                                                  'Private Clinic'
+                                                              ? FontAwesomeIcons
+                                                                  .houseChimneyMedical
+                                                              : FontAwesomeIcons
+                                                                  .solidHospital,
+                                                          color: Colors.white,
+                                                        ),
+                                                      ],
+                                                    )),
+                                              ),
+                                            ],
                                           ),
-                                        ),
+                                          const Divider()
+                                        ],
                                       );
                                     }).toList(),
                                   );
                                 }
                               }))
                     ],
-                  ));
-            })
-          ],
-        ),
+                  )),
+            ],
+          );
+        }),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
         floatingActionButton:
             Consumer<DashboardProvider>(builder: (context, mrProvider, child) {
@@ -155,7 +291,7 @@ class _MRWeekDetailsState extends State<MRWeekDetails> {
             },
             label: Center(
                 child: mrProvider.isLoading
-                    ? const CircularProgressIndicator()
+                    ? const CircularProgressIndicator(color: Colors.white)
                     : Text(
                         mrProvider.approve
                             ? "Already Approve"
@@ -166,4 +302,37 @@ class _MRWeekDetailsState extends State<MRWeekDetails> {
           );
         }));
   }
+}
+
+class BottomCurveClipper extends CustomClipper<Path> {
+  final double curveHeight;
+
+  BottomCurveClipper({this.curveHeight = 30.0});
+
+  @override
+  Path getClip(Size size) {
+    var path = Path();
+    path.lineTo(0, size.height - curveHeight);
+
+    var firstControlPoint = Offset(size.width / 4, size.height + curveHeight);
+    var firstEndPoint = Offset(size.width / 2, size.height);
+
+    var secondControlPoint =
+        Offset(size.width * 3 / 4, size.height + curveHeight);
+    var secondEndPoint = Offset(size.width, size.height - curveHeight);
+
+    path.quadraticBezierTo(firstControlPoint.dx, firstControlPoint.dy,
+        firstEndPoint.dx, firstEndPoint.dy);
+
+    path.quadraticBezierTo(secondControlPoint.dx, secondControlPoint.dy,
+        secondEndPoint.dx, secondEndPoint.dy);
+
+    path.lineTo(size.width, 0);
+    path.close();
+
+    return path;
+  }
+
+  @override
+  bool shouldReclip(CustomClipper<Path> oldClipper) => false;
 }

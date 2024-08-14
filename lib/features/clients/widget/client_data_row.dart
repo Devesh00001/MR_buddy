@@ -12,11 +12,11 @@ class CilentDataRow extends StatelessWidget {
       children: [
         Text(
           "$title: ",
-          style: TextStyle(color: Colors.black.withOpacity(0.5), fontSize: 16),
+          style: TextStyle(color: Colors.white.withOpacity(0.8), fontSize: 16),
         ),
         Text(
           value,
-          style: const TextStyle(fontSize: 16),
+          style: const TextStyle(fontSize: 16, color: Colors.white),
         ),
       ],
     );
