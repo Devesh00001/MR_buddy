@@ -24,7 +24,7 @@ class _CheckInScreenState extends State<CheckInScreen> {
         child: Column(
           children: [
             VisitStatus(
-                visitStatus: widget.visit.status, visitDate: widget.visit.date),
+                visit: widget.visit),
             const SizedBox(height: 20),
             Column(
               children: [

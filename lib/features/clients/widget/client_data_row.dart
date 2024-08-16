@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../../utils.dart';
+
 class CilentDataRow extends StatelessWidget {
   const CilentDataRow({super.key, required this.title, required this.value});
 
@@ -12,11 +14,14 @@ class CilentDataRow extends StatelessWidget {
       children: [
         Text(
           "$title: ",
-          style: TextStyle(color: Colors.white.withOpacity(0.8), fontSize: 16),
+          style: TextStyle(
+              color: Colors.white.withOpacity(0.8),
+              fontSize: Utils.isTab ? 24 : 16),
         ),
         Text(
           value,
-          style: const TextStyle(fontSize: 16, color: Colors.white),
+          style:
+              TextStyle(fontSize: Utils.isTab ? 24 : 16, color: Colors.white),
         ),
       ],
     );

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:mr_buddy/features/visit_detail/widgets/check_in_screen.dart';
 import 'package:mr_buddy/utils.dart';
 import 'package:provider/provider.dart';
@@ -71,6 +72,10 @@ class _VisitDetailState extends State<VisitDetail> {
                       Container(
                         height: Utils.deviceHeight * 0.65,
                         padding: const EdgeInsets.all(10),
+                        constraints: BoxConstraints(
+                            maxWidth: Utils.isTab
+                                ? Utils.deviceWidth * 0.7
+                                : Utils.deviceWidth),
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10),
                             color: Colors.white,
@@ -84,10 +89,11 @@ class _VisitDetailState extends State<VisitDetail> {
                       ),
                       const SizedBox(height: 20),
                       Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Visibility(
                             visible: visitDetailProvider.getCurrectStep() > 1,
-                            child: Expanded(
+                            child: Flexible(
                               child: InkWell(
                                 onTap: () async {
                                   visitDetailProvider.decreaseStep();
@@ -108,7 +114,7 @@ class _VisitDetailState extends State<VisitDetail> {
                               ),
                             ),
                           ),
-                          Expanded(
+                          Flexible(
                             child: InkWell(
                               onTap: () async {
                                 if (visitDetailProvider.getCurrectStep() == 0) {
@@ -138,6 +144,10 @@ class _VisitDetailState extends State<VisitDetail> {
                                 }
                               },
                               child: Container(
+                                  constraints: BoxConstraints(
+                                      maxWidth: Utils.isTab
+                                          ? Utils.deviceWidth * 0.7
+                                          : Utils.deviceWidth),
                                   decoration: BoxDecoration(
                                       color: HexColor("00AE4D"),
                                       borderRadius: BorderRadius.circular(5)),

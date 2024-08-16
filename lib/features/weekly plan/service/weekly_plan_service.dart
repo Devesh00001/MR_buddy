@@ -32,16 +32,13 @@ class WeeklyPlanService {
 
         mapOfVisits.forEach((date, newVisitMap) {
           if (existingPlan.containsKey(date)) {
-            // If the date already exists, get the existing visits for that date
             Map<String, dynamic> existingVisitsForDate =
                 Map<String, dynamic>.from(existingPlan[date]);
-            // Merge the new visits with the existing visits
             newVisitMap.forEach((time, newVisit) {
               existingVisitsForDate[time] = newVisit;
             });
             existingPlan[date] = existingVisitsForDate;
           } else {
-            // If the date does not exist, simply add the new visits
             existingPlan[date] = newVisitMap;
           }
         });

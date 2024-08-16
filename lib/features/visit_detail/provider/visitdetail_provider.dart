@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:mr_buddy/features/visit_detail/model/past_visit.dart';
 import 'package:mr_buddy/features/visit_detail/service/visit_detail_service.dart';
+import 'package:mr_buddy/notifiction_service.dart';
 
 import '../../drugs/model/drug.dart';
 import '../../drugs/service/drug_service.dart';
@@ -31,6 +32,16 @@ class VisitDetailProvider with ChangeNotifier {
   String selctedDateAndTime = 'Select Date and Time';
   String? newVisitPurpose;
   bool isUploaded = true;
+  String? managerComment;
+
+  void setManagerComment(String value) {
+    managerComment = value;
+    notifyListeners();
+  }
+
+  String? getManagerComment() {
+    return managerComment;
+  }
 
   int getCurrectStep() {
     return currentStep;
@@ -139,7 +150,24 @@ class VisitDetailProvider with ChangeNotifier {
         checkOut: false);
     VisitDetailService service = VisitDetailService();
     isUploaded = await service.addPlanData(newVisit);
+    if (isUploaded) {
+      NotificationService notificationService = NotificationService();
+      notificationService.addNotificationToUser('Himanshu',
+          '${newVisit.mrName} add a visit to ${newVisit.clientName} on date ${newVisit.date}${newVisit.startTime}');
+    }
     return isUploaded;
+  }
+
+  Future<bool> deleteVisit(Visit visit) async {
+    VisitDetailService service = VisitDetailService();
+    bool status =
+        await service.deleteVisit(visit.mrName, visit.date, visit.startTime);
+    if (status) {
+      NotificationService notificationService = NotificationService();
+      notificationService.addNotificationToUser('Himanshu',
+          '${visit.mrName} cancel a visit of ${visit.clientName} on ${visit.date} ${visit.startTime}');
+    }
+    return status;
   }
 
   Future<bool> uploadData(Visit visit) async {
@@ -159,6 +187,10 @@ class VisitDetailProvider with ChangeNotifier {
           visitType: selectedVisitType,
           time: visit.startTime);
 
+      NotificationService notificationService = NotificationService();
+      notificationService.addNotificationToUser('Himanshu',
+          '${visit.mrName} check out from ${visit.clientName} give lead score ${pastVisit.leadScore}%');
+
       return await service.addPastVisit(pastVisit);
     }
     return false;
@@ -168,6 +200,12 @@ class VisitDetailProvider with ChangeNotifier {
     VisitDetailService service = VisitDetailService();
     return service.getPastVisitByDateTime(
         visit.clientName, visit.date, visit.startTime);
+  }
+
+  Future<bool> addManagerComment(
+      String mrName, String date, String time, String comment) {
+    VisitDetailService service = VisitDetailService();
+    return service.addManagerComment(mrName, date, time, comment);
   }
 
   setLeadSuggestion(String value) {

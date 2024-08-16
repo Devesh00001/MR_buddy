@@ -28,7 +28,7 @@ class _DrugInfoState extends State<DrugInfo> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           VisitStatus(
-              visitStatus: widget.visit.status, visitDate: widget.visit.date),
+                visit: widget.visit),
           const SizedBox(height: 20),
           VisitTextField(
             hintText: "Location",

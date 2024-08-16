@@ -62,7 +62,9 @@ class _CustomFormFieldState extends State<CustomFormField> {
       children: [
         Text(
           widget.hintText,
-          style: TextStyle(color: HexColor("1F1F1F").withOpacity(0.5)),
+          style: TextStyle(
+              color: HexColor("1F1F1F").withOpacity(0.5),
+              fontSize: Utils.isTab ? 18 : 14),
         ),
         SizedBox(
           height: widget.size,

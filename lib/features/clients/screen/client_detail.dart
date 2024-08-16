@@ -39,8 +39,8 @@ class ClientDetail extends StatelessWidget {
               children: [
                 Text(
                   client.name,
-                  style: const TextStyle(
-                      fontSize: 24,
+                  style: TextStyle(
+                      fontSize: Utils.isTab ? 28 : 24,
                       fontWeight: FontWeight.w600,
                       color: Colors.white),
                 ),
@@ -60,10 +60,10 @@ class ClientDetail extends StatelessWidget {
                   value: client.address,
                 ),
                 const SizedBox(height: 20),
-                const Text(
+                Text(
                   "Visit's",
                   style: TextStyle(
-                      fontSize: 20,
+                      fontSize: Utils.isTab ? 24 : 20,
                       fontWeight: FontWeight.w500,
                       color: Colors.white),
                 ),
@@ -121,14 +121,14 @@ class ClientDetail extends StatelessWidget {
                                       child: ListTile(
                                         title: Text(
                                           pastVisit.mrName,
-                                          style: const TextStyle(
+                                          style: TextStyle(
                                               color: Colors.black,
-                                              fontSize: 16),
+                                              fontSize: Utils.isTab ? 24 : 16),
                                         ),
                                         subtitle: Text('$date - $time'),
-                                        subtitleTextStyle: const TextStyle(
+                                        subtitleTextStyle: TextStyle(
                                             color: Colors.black,
-                                            fontSize: 14,
+                                            fontSize: Utils.isTab ? 20 : 14,
                                             height: 2),
                                         trailing: Container(
                                           margin: const EdgeInsets.symmetric(

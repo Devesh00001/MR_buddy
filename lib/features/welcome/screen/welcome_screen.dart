@@ -41,6 +41,9 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
       body: Consumer<WelcomeProvider>(builder: (context, provider, child) {
         return Center(
           child: Container(
+            constraints: BoxConstraints(
+                maxWidth:
+                    Utils.isTab ? Utils.deviceWidth * 0.7 : Utils.deviceWidth),
             margin: const EdgeInsets.symmetric(horizontal: 20),
             child: Column(
               children: [

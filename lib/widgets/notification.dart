@@ -1,4 +1,11 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:mr_buddy/features/welcome/provider/welcome_provider.dart';
+import 'package:mr_buddy/notifiction_service.dart';
+import 'package:provider/provider.dart';
+
+import '../features/welcome/model/user.dart';
 
 class Notifications extends StatefulWidget {
   const Notifications({super.key});
@@ -8,15 +15,28 @@ class Notifications extends StatefulWidget {
 }
 
 class _NotificationsState extends State<Notifications> {
-  List<String> notifications = [
-    "Manager Apprvoe Your Weekly Plan",
-    "Manager add comment to your visit",
-    "Manager create a visit for you",
-    "Other Updates",
-  ];
+  List<String> notifications = [];
 
   void handleNotificationTap(String notification) {
-    print("Tapped on notification: $notification");
+    final provider = Provider.of<WelcomeProvider>(context, listen: false);
+    User currentUser = provider.user!;
+    NotificationService service = NotificationService();
+    service.deleteNotificationForUser(currentUser.name, notification);
+    log("Delete: $notification");
+  }
+
+  getNotifictions() async {
+    final provider = Provider.of<WelcomeProvider>(context, listen: false);
+    User currentUser = provider.user!;
+    NotificationService service = NotificationService();
+    notifications =
+        (await service.getNotificationsForUser(currentUser.name)) ?? [];
+  }
+
+  @override
+  void initState() {
+    getNotifictions();
+    super.initState();
   }
 
   @override
@@ -27,7 +47,7 @@ class _NotificationsState extends State<Notifications> {
         size: 25,
         color: Colors.white,
       ),
-      offset: const Offset(0, 60), // Adjust offset to control menu size
+      offset: const Offset(0, 60),
       itemBuilder: (BuildContext context) {
         return notifications.asMap().entries.map((entry) {
           int index = entry.key;

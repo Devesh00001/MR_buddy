@@ -1,38 +1,112 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:mr_buddy/features/weekly%20plan/model/visit.dart';
+import 'package:provider/provider.dart';
+
+import '../../weekly plan/screen/success_screen_weeklplan.dart';
+import '../provider/visitdetail_provider.dart';
 
 class VisitStatus extends StatelessWidget {
-  const VisitStatus(
-      {super.key, required this.visitStatus, required this.visitDate});
+  const VisitStatus({super.key, required this.visit});
 
-  final String visitStatus;
-  final String visitDate;
+  final Visit visit;
+
+  Future<bool?> showSubmitPopup(BuildContext context) async {
+    return await showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: Colors.white,
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10.0)),
+          ),
+          title: const Text("Do you want to cancel this visit"),
+          content: const Text("Press yes if you want cancel this visit"),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(false);
+              },
+              child: const Text(
+                "No",
+                style: TextStyle(color: Colors.black),
+              ),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(true);
+              },
+              child: const Text(
+                'Yes',
+                style: TextStyle(color: Colors.black),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: [
-        Container(
-            padding: const EdgeInsets.all(4),
-            child: Icon(
-              visitStatus == 'Approve'
-                  ? Icons.check_circle_outline_outlined
-                  : FontAwesomeIcons.circleExclamation,
-              size: 40,
-              color: visitStatus == 'Approve' ? Colors.green : Colors.yellow,
-            )),
-        Container(
-            padding: const EdgeInsets.all(4),
-            child: Row(
-              children: [
-                Text(
-                  visitStatus == 'Approve' ? "Approve" : "Pending for approvel",
-                  style: const TextStyle(fontSize: 16),
-                ),
-              ],
-            ))
-      ],
-    );
+    return Consumer<VisitDetailProvider>(
+        builder: (context, visitDetailProvider, child) {
+      return Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Wrap(
+            crossAxisAlignment: WrapCrossAlignment.center,
+            children: [
+              Container(
+                  padding: const EdgeInsets.all(4),
+                  child: Icon(
+                    visit.status == 'Approve'
+                        ? Icons.check_circle_outline_outlined
+                        : FontAwesomeIcons.circleExclamation,
+                    size: 40,
+                    color: visit.status == 'Approve'
+                        ? Colors.green
+                        : Colors.yellow,
+                  )),
+              Container(
+                  padding: const EdgeInsets.all(4),
+                  child: Row(
+                    children: [
+                      Text(
+                        visit.status == 'Approve'
+                            ? "Approve"
+                            : "Pending for approval",
+                        style: const TextStyle(fontSize: 16),
+                      ),
+                    ],
+                  ))
+            ],
+          ),
+          Container(
+            decoration: BoxDecoration(
+                shape: BoxShape.circle, color: Colors.red.shade100),
+            child: IconButton(
+              onPressed: () async {
+                bool? status = await showSubmitPopup(context);
+                if (status == true) {
+                  bool goToSuccessScreen =
+                      await visitDetailProvider.deleteVisit(visit);
+                  if (goToSuccessScreen) {
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => const SuccessScreenWeeklyPlan(
+                              heading: 'Successfully Cancel Your Visit',
+                              subHeading: 'Send notification to your manager',
+                            )));
+                  }
+                }
+              },
+              icon: const Icon(Icons.delete),
+              color: Colors.redAccent,
+            ),
+          )
+        ],
+      );
+    });
   }
 }

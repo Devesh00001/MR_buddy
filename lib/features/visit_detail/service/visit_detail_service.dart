@@ -150,7 +150,6 @@ class VisitDetailService {
       final docId = querySnapshot.docs.first.id;
       final docRef = firestore.collection('WeeklyPlans').doc(docId);
 
-      // Fetch the current plan
       final docSnapshot = await docRef.get();
       final existingData = docSnapshot.data() as Map<String, dynamic>;
       final existingPlan = existingData['Plan'] ?? {};
@@ -160,18 +159,15 @@ class VisitDetailService {
       final startTime = visit.startTime;
 
       if (existingPlan.containsKey(date)) {
-        // If the date exists, update or add the visit for the specific start time
         Map<String, dynamic> visitsForDate =
             Map<String, dynamic>.from(existingPlan[date]);
 
         visitsForDate[startTime] = visitMap;
         existingPlan[date] = visitsForDate;
       } else {
-        // If the date does not exist, create a new entry with the visit
         existingPlan[date] = {startTime: visitMap};
       }
 
-      // Update the plan in Firestore
       await docRef.update({
         'Plan': existingPlan,
         'Approval': "Pending",
@@ -181,6 +177,63 @@ class VisitDetailService {
       return true;
     } catch (e) {
       log('Error adding plan data: $e');
+      return false;
+    }
+  }
+
+  Future<bool> addManagerComment(
+      String username, String date, String time, String comment) async {
+    CollectionReference weeklyPlans =
+        FirebaseFirestore.instance.collection('WeeklyPlans');
+
+    QuerySnapshot querySnapshot =
+        await weeklyPlans.where('Name', isEqualTo: username).limit(1).get();
+
+    if (querySnapshot.docs.isNotEmpty) {
+      DocumentReference docRef = querySnapshot.docs.first.reference;
+
+      Map<String, dynamic> plan = querySnapshot.docs.first.get('Plan');
+
+      if (plan[date] != null && plan[date][time] != null) {
+        plan[date][time]['Manager Comments'] = comment;
+
+        await docRef.update({'Plan': plan});
+        log('Manager comment added successfully');
+        return true;
+      } else {
+        log('No visit detail found for the specified date and time');
+        return false;
+      }
+    } else {
+      log('No document found for the specified username');
+      return false;
+    }
+  }
+
+  Future<bool> deleteVisit(String username, String date, String time) async {
+    CollectionReference weeklyPlans =
+        FirebaseFirestore.instance.collection('WeeklyPlans');
+    QuerySnapshot querySnapshot =
+        await weeklyPlans.where('Name', isEqualTo: username).limit(1).get();
+
+    if (querySnapshot.docs.isNotEmpty) {
+      DocumentReference docRef = querySnapshot.docs.first.reference;
+      Map<String, dynamic> plan = querySnapshot.docs.first.get('Plan');
+
+      if (plan[date] != null && plan[date][time] != null) {
+        plan[date].remove(time);
+
+        if (plan[date].isEmpty) {
+          plan.remove(date);
+        }
+
+        await docRef.update({'Plan': plan});
+        log("cancel the visit for $date $time");
+        return true;
+      } else {
+        return false;
+      }
+    } else {
       return false;
     }
   }

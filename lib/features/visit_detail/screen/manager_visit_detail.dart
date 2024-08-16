@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mr_buddy/features/mr/widget/user_info_card.dart';
 import 'package:mr_buddy/features/welcome/model/user.dart';
 import 'package:mr_buddy/utils.dart';
+import 'package:provider/provider.dart';
 
 import '../../../widgets/custom_appbar.dart';
 
 import '../../weekly plan/model/visit.dart';
+import '../provider/visitdetail_provider.dart';
 import '../widgets/visit_text_field.dart';
 import 'summary_page.dart';
 
@@ -44,9 +47,9 @@ class _ManagerVisitDetailState extends State<ManagerVisitDetail> {
             margin: const EdgeInsets.all(20),
             child: Column(
               children: [
-                Expanded(flex: 2, child: UserInfoCard(user: widget.user)),
+                Flexible(flex: 2, child: UserInfoCard(user: widget.user)),
                 const SizedBox(height: 10),
-                Expanded(flex: 5, child: ClientInfoCard(visit: widget.visit)),
+                Flexible(flex: 5, child: ClientInfoCard(visit: widget.visit)),
               ],
             ),
           ),
@@ -64,97 +67,119 @@ class ClientInfoCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final _formKey = GlobalKey<FormState>();
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10),
-          color: Colors.white,
-          boxShadow: [
-            BoxShadow(
-                color: Colors.black.withOpacity(0.3),
-                blurRadius: 50,
-                offset: const Offset(10, 10))
-          ]),
-      child: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            const Text(
-              "Client Info",
-              style: TextStyle(fontSize: 20),
-            ),
-            const SizedBox(height: 20),
-            Row(
-              // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                UserDetailFiled(
-                  icon: FontAwesomeIcons.userDoctor,
-                  title: "Client Name",
-                  value: visit.clientName,
-                ),
-                const Spacer(),
-                UserDetailFiled(
-                  icon: FontAwesomeIcons.hospitalUser,
-                  title: "Hospital",
-                  value: visit.address,
-                ),
-                const SizedBox(height: 10),
-              ],
-            ),
-            const SizedBox(height: 10),
-            UserDetailFiled(
-              icon: Icons.location_on_rounded,
-              title: "Address",
-              value: visit.address,
-            ),
-            const SizedBox(height: 10),
-            const SummaryCardTile(
-                title: "Purpose",
-                value:
-                    "The doctor suggested connecting with a fellow specialist who might be interested in our"),
-            const SizedBox(height: 10),
-            Form(
-              key: _formKey,
-              child: Column(
+    return Consumer<VisitDetailProvider>(
+        builder: (context, visitDetailProvider, child) {
+      return Container(
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10),
+            color: Colors.white,
+            boxShadow: [
+              BoxShadow(
+                  color: Colors.black.withOpacity(0.3),
+                  blurRadius: 50,
+                  offset: const Offset(10, 10))
+            ]),
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Text(
+                "Client Info",
+                style: TextStyle(fontSize: 20),
+              ),
+              const SizedBox(height: 20),
+              Row(
+                // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  VisitTextField(
-                    hintText: 'Add Comments',
-                    size: 100,
-                    validateFunction: (value) {
-                      if (value == null || value.isEmpty) {
-                        return "Plase enter Value";
-                      }
-                      return null;
-                    },
+                  UserDetailFiled(
+                    icon: FontAwesomeIcons.userDoctor,
+                    title: "Client Name",
+                    value: visit.clientName,
+                    fontSize: Utils.isTab ? 20 : 14,
+                  ),
+                  const Spacer(),
+                  UserDetailFiled(
+                    icon: FontAwesomeIcons.hospitalUser,
+                    title: "Hospital",
+                    value: visit.address,
+                    fontSize: Utils.isTab ? 20 : 14,
                   ),
                   const SizedBox(height: 10),
-                  InkWell(
-                    onTap: () {
-                      if (_formKey.currentState!.validate()) {
-                        var snackBar =
-                            const SnackBar(content: Text('Your Comment added'));
-                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                      }
-                    },
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 40, vertical: 10),
-                      decoration: BoxDecoration(
-                          color: HexColor("2FBD6E"),
-                          borderRadius: BorderRadius.circular(10)),
-                      child: const Text(
-                        "Submit",
-                        style: TextStyle(color: Colors.white, fontSize: 16),
-                      ),
-                    ),
-                  )
                 ],
               ),
-            )
-          ],
+              const SizedBox(height: 10),
+              UserDetailFiled(
+                icon: Icons.location_on_rounded,
+                title: "Address",
+                value: visit.address,
+                fontSize: Utils.isTab ? 20 : 14,
+              ),
+              const SizedBox(height: 10),
+              const SummaryCardTile(
+                  title: "Purpose",
+                  value:
+                      "The doctor suggested connecting with a fellow specialist who might be interested in our"),
+              const SizedBox(height: 10),
+              Form(
+                key: _formKey,
+                child: Column(
+                  children: [
+                    VisitTextField(
+                      hintText: 'Add Comments',
+                      size: Utils.isTab ? 200 : 100,
+                      setFunction: visitDetailProvider.setManagerComment,
+                      validateFunction: (value) {
+                        if (value == null || value.isEmpty) {
+                          return "Plase enter Value";
+                        }
+                        return null;
+                      },
+                    ),
+                    const SizedBox(height: 10),
+                    InkWell(
+                      onTap: () async {
+                        if (_formKey.currentState!.validate()) {
+                          bool status =
+                              await visitDetailProvider.addManagerComment(
+                                  visit.mrName,
+                                  visit.date,
+                                  visit.startTime,
+                                  visitDetailProvider.getManagerComment()!);
+                          if (status) {
+                            var snackBar = const SnackBar(
+                                content: Text('Your Comment added'));
+                            ScaffoldMessenger.of(context)
+                                .showSnackBar(snackBar);
+                          } else {
+                            var snackBar = const SnackBar(
+                                content: Text(
+                                    'There is some problem in adding comment'));
+                            ScaffoldMessenger.of(context)
+                                .showSnackBar(snackBar);
+                          }
+                        }
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 40, vertical: 10),
+                        decoration: BoxDecoration(
+                            color: HexColor("2FBD6E"),
+                            borderRadius: BorderRadius.circular(10)),
+                        child: const Text(
+                          "Submit",
+                          style: TextStyle(color: Colors.white, fontSize: 16),
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+              )
+            ],
+          ),
         ),
-      ),
-    );
+      );
+    });
   }
 }

@@ -14,7 +14,8 @@ class UserInfoCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
+      padding:
+          EdgeInsets.symmetric(horizontal: Utils.isTab ? 30 : 10, vertical: 20),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
         color: Colors.white,
@@ -32,19 +33,22 @@ class UserInfoCard extends StatelessWidget {
                   icon: FontAwesomeIcons.user,
                   title: 'Name',
                   value: user.name,
+                  fontSize: Utils.isTab ? 20 : 14,
                 ),
-                const UserDetailFiled(
+                UserDetailFiled(
                   icon: Icons.location_on_rounded,
                   title: 'Location',
                   value: 'Noida sector 62',
+                  fontSize: Utils.isTab ? 20 : 14,
                 ),
               ],
             ),
             const SizedBox(height: 10),
-            const UserDetailFiled(
+            UserDetailFiled(
               icon: FontAwesomeIcons.userTie,
               title: 'Clients',
               value: 'Dr. Reddy, Dr. Trehan',
+              fontSize: Utils.isTab ? 20 : 14,
             ),
           ],
         ),
@@ -104,6 +108,7 @@ class UserDetailFiled extends StatelessWidget {
           Icon(
             icon,
             color: HexColor("2F52AC"),
+            size: Utils.isTab ? 36 : 20,
           ),
           SizedBox(width: 5),
           Column(

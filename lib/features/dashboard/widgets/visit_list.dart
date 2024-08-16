@@ -26,7 +26,7 @@ class VisitList extends StatelessWidget {
             children: [
               const Align(
                   alignment: Alignment.centerLeft,
-                  child: Text("Your todays visits",
+                  child: Text("Your Visits",
                       style: TextStyle(
                           fontSize: 24, fontWeight: FontWeight.w500))),
               SizedBox(
@@ -74,7 +74,11 @@ class VisitList extends StatelessWidget {
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
                                     children: [
-                                      Text(time),
+                                      Text(
+                                        time,
+                                        style: TextStyle(
+                                            fontSize: Utils.isTab ? 20 : 14),
+                                      ),
                                       InkWell(
                                         onTap: () {
                                           if (visit.checkOut == false) {
@@ -126,13 +130,19 @@ class VisitList extends StatelessWidget {
                                                       CrossAxisAlignment.start,
                                                   children: [
                                                     Text(visit.clientName,
-                                                        style: const TextStyle(
-                                                            color:
-                                                                Colors.white)),
+                                                        style: TextStyle(
+                                                            color: Colors.white,
+                                                            fontSize:
+                                                                Utils.isTab
+                                                                    ? 18
+                                                                    : 14)),
                                                     Text(
                                                       visit.address,
-                                                      style: const TextStyle(
-                                                          color: Colors.white),
+                                                      style: TextStyle(
+                                                          color: Colors.white,
+                                                          fontSize: Utils.isTab
+                                                              ? 18
+                                                              : 14),
                                                     ),
                                                   ],
                                                 ),
@@ -144,6 +154,7 @@ class VisitList extends StatelessWidget {
                                                       : FontAwesomeIcons
                                                           .solidHospital,
                                                   color: Colors.white,
+                                                  size: Utils.isTab ? 30 : 24,
                                                 ),
                                               ],
                                             )),

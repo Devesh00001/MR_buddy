@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:mr_buddy/features/weekly%20plan/service/weekly_plan_service.dart';
+import 'package:mr_buddy/notifiction_service.dart';
 
 import '../model/visit.dart';
 
@@ -28,16 +29,19 @@ class WeeklyProviderPlan with ChangeNotifier {
   String? mrName;
   Map<String, dynamic> dayVisits = {};
 
-  void uploadData(String mrName) {
+  void uploadData(String mrName, {bool uploaded = false}) {
     String weekday = getWeekdayName(DateFormat('dd-MM-yyyy').format(focusDate));
     addDataInSingleDayVisit(mrName);
 
     weekdayPlans[DateFormat('dd-MM-yyyy').format(focusDate)] =
         Map.from(dayVisits);
 
-    if (weekday == 'Friday') {
+    if (weekday == 'Friday' || uploaded == true) {
       WeeklyPlanService service = WeeklyPlanService();
       service.uploadWeeklyPlan(weekdayPlans, mrName);
+      NotificationService notificationService = NotificationService();
+      notificationService.addNotificationToUser(
+          'Himanshu', '$mrName add a weekly plan for your approval');
     }
     focusDate = focusDate.add(const Duration(days: 1));
     resetProvider(allReset: false);
@@ -102,8 +106,12 @@ class WeeklyProviderPlan with ChangeNotifier {
         checkOut: false);
 
     WeeklyPlanService service = WeeklyPlanService();
-    bool status =
-        await service.addOrUpdateWeekDayPlan(visit);
+    bool status = await service.addOrUpdateWeekDayPlan(visit);
+    if (status) {
+      NotificationService notificationService = NotificationService();
+      notificationService.addNotificationToUser(visit.mrName,
+          "Add a Visit for ${visit.clientName} at ${visit.date} ${visit.startTime}");
+    }
 
     resetProvider(allReset: false);
     notifyListeners();

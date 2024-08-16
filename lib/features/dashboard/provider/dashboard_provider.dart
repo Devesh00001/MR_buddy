@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:mr_buddy/features/dashboard/service/dashboard_service.dart';
 import 'package:mr_buddy/features/mr/service/mr_service.dart';
 import 'package:mr_buddy/features/welcome/model/user.dart';
+import 'package:mr_buddy/notifiction_service.dart';
 
 import '../../weekly plan/model/visit.dart';
 import '../../welcome/service/welcome_service.dart';
@@ -56,6 +57,11 @@ class DashboardProvider with ChangeNotifier {
     changeStatusOfLoading();
     MRService service = MRService();
     approve = await service.approveWeeklyPlanStatus(mrName);
+    if (approve == true) {
+      NotificationService notificationService = NotificationService();
+      notificationService.addNotificationToUser(
+          mrName, 'Manager approve Your weekly plan');
+    }
     changeStatusOfLoading();
     notifyListeners();
   }

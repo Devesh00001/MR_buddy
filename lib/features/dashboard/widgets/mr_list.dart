@@ -19,11 +19,12 @@ class MRList extends StatelessWidget {
           padding: const EdgeInsets.all(20),
           child: Column(
             children: [
-              const Align(
+              Align(
                   alignment: Alignment.centerLeft,
                   child: Text("Your MR",
                       style: TextStyle(
-                          fontSize: 24, fontWeight: FontWeight.w500))),
+                          fontSize: Utils.isTab ? 30 : 24,
+                          fontWeight: FontWeight.w500))),
               SizedBox(
                   height: Utils.deviceHeight * 0.4,
                   child: FutureBuilder<Map<String, dynamic>>(
@@ -71,12 +72,15 @@ class MRList extends StatelessWidget {
                                   child: ListTile(
                                     title: Text(
                                       name,
-                                      style:
-                                          const TextStyle(color: Colors.white),
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: Utils.isTab ? 24 : 16),
                                     ),
-                                    subtitle: const Text(
+                                    subtitle: Text(
                                       "Noida sector 62",
-                                      style: TextStyle(color: Colors.white),
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: Utils.isTab ? 20 : 14),
                                     ),
                                   ),
                                 ),

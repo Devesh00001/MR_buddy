@@ -31,14 +31,14 @@ class Calendar extends StatelessWidget {
           child: TableCalendar(
               firstDay: DateTime.utc(2010, 10, 16),
               lastDay: DateTime.utc(2030, 3, 14),
-              rowHeight: 30,
+              rowHeight: Utils.isTab ? 50 : 30,
               focusedDay: dashboardProvider.focusDate,
               headerVisible: false,
-              calendarStyle: const CalendarStyle(
-                  disabledTextStyle: TextStyle(fontSize: 12),
-                  todayTextStyle: TextStyle(fontSize: 12),
-                  selectedTextStyle:
-                      TextStyle(fontSize: 12, color: Colors.white)),
+              calendarStyle: CalendarStyle(
+                  disabledTextStyle: TextStyle(fontSize: Utils.isTab ? 18 : 12),
+                  todayTextStyle: TextStyle(fontSize: Utils.isTab ? 18 : 12),
+                  selectedTextStyle: TextStyle(
+                      fontSize: Utils.isTab ? 18 : 12, color: Colors.white)),
               selectedDayPredicate: (day) {
                 return isSameDay(dashboardProvider.selectedDate, day);
               },

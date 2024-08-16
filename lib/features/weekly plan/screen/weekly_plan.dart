@@ -1,5 +1,6 @@
 import 'package:easy_date_timeline/easy_date_timeline.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
 import 'package:mr_buddy/utils.dart';
 import 'package:provider/provider.dart';
@@ -68,6 +69,44 @@ class _WeeklyPlanState extends State<WeeklyPlan> {
               },
               child: Text(
                 lastDayOfWeek() ? 'Submit' : "Next Date",
+                style: const TextStyle(color: Colors.black),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future<bool?> showSubmitPopup(BuildContext context) async {
+    return await showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: Colors.white,
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10.0)),
+          ),
+          title: const Text("Submit your added visits"),
+          content:
+              const Text("Press ok if you wanted to submit your added visit"),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(false);
+              },
+              child: const Text(
+                "Cancel",
+                style: TextStyle(color: Colors.black),
+              ),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(true);
+              },
+              child: const Text(
+                'Ok',
                 style: TextStyle(color: Colors.black),
               ),
             ),
@@ -161,6 +200,9 @@ class _WeeklyPlanState extends State<WeeklyPlan> {
     return Consumer<WeeklyProviderPlan>(
         builder: (context, weeklyProvider, child) {
       return Container(
+        constraints: BoxConstraints(
+            maxWidth:
+                Utils.isTab ? Utils.deviceWidth * 0.7 : Utils.deviceWidth),
         decoration: BoxDecoration(
             color: HexColor("FFFFFF"),
             borderRadius: BorderRadius.circular(10),
@@ -256,8 +298,10 @@ class _WeeklyPlanState extends State<WeeklyPlan> {
                             )),
                         const CustomFormField(hintText: "Address", maxLine: 1),
                         const SizedBox(height: 10),
-                        const CustomFormField(
-                            hintText: "Visit Purpose/Plan", maxLine: 1),
+                        CustomFormField(
+                            size: Utils.isTab ? 200 : 60,
+                            hintText: "Visit Purpose/Plan",
+                            maxLine: Utils.isTab ? 10 : 1),
                         const SizedBox(height: 10),
                         const CustomFormField(
                             hintText: "Point of Contact/Doctor", maxLine: 1),
@@ -275,12 +319,61 @@ class _WeeklyPlanState extends State<WeeklyPlan> {
                   ),
                 ),
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 10),
+              Visibility(
+                visible: user.role != 'Manager',
+                child: Center(
+                  child: SizedBox(
+                    width: Utils.deviceWidth,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10)),
+                          backgroundColor: HexColor("39C075"),
+                          foregroundColor: Colors.white,
+                          elevation: 5,
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 10, vertical: 5),
+                          textStyle: const TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white)),
+                      onPressed: () async {
+                        if (_formKey.currentState!.validate()) {
+                          bool? newVisitToday = await _showPopup(context);
+                          if (newVisitToday == false) {
+                            if (lastDayOfWeek()) {
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (context) =>
+                                      const SuccessScreenWeeklyPlan(
+                                        heading:
+                                            'Successfully Created Your Visit',
+                                        subHeading:
+                                            'Send notification to your manager to approve for weekly plan',
+                                      )));
+                            }
+                            weeklyProvider.uploadData('Devesh');
+                          } else {
+                            weeklyProvider.addDataInSingleDayVisit(user.name,
+                                reset: true);
+                          }
+                        }
+                      },
+                      child: const Text(
+                        "Add Visit",
+                        style: TextStyle(fontSize: 16),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
               Center(
                 child: SizedBox(
-                  width: 300,
+                  width: Utils.deviceWidth,
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10)),
                         backgroundColor: HexColor("39C075"),
                         foregroundColor: Colors.white,
                         elevation: 5,
@@ -305,33 +398,26 @@ class _WeeklyPlanState extends State<WeeklyPlan> {
                                     )));
                           }
                         } else {
-                          bool? newVisitToday = await _showPopup(context);
-                          if (newVisitToday == false) {
-                            if (lastDayOfWeek()) {
-                              Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (context) =>
-                                      const SuccessScreenWeeklyPlan(
-                                        heading:
-                                            'Successfully Created Your Visit',
-                                        subHeading:
-                                            'Send notification to your manager to approve for weekly plan',
-                                      )));
-                            }
-                            weeklyProvider.uploadData('Devesh');
+                          bool? status = await showSubmitPopup(context);
+                          if (status == true) {
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) =>
+                                    const SuccessScreenWeeklyPlan(
+                                      heading:
+                                          'Successfully Created Your Visit',
+                                      subHeading:
+                                          'Send notification to your manager to approve for weekly plan',
+                                    )));
+                            weeklyProvider.uploadData('Devesh', uploaded: true);
                           } else {
-                            weeklyProvider.addDataInSingleDayVisit(user.name,
-                                reset: true);
+                            
                           }
                         }
                       }
                     },
-                    child: Text(
-                      user.role == 'Manager'
-                          ? 'Submit'
-                          : lastDayOfWeek()
-                              ? 'Submit'
-                              : "Submit & Next",
-                      style: const TextStyle(fontSize: 16),
+                    child: const Text(
+                      'Submit',
+                      style: TextStyle(fontSize: 16),
                     ),
                   ),
                 ),

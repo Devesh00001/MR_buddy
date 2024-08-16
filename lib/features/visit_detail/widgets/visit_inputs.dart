@@ -19,7 +19,7 @@ class VisitInputs extends StatelessWidget {
       return SingleChildScrollView(
         child: Column(
           children: [
-            VisitStatus(visitStatus: visit.status, visitDate: visit.date),
+            VisitStatus(visit: visit),
             const SizedBox(height: 20),
             VisitTextField(
               hintText: "Location",

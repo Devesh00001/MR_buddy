@@ -1,6 +1,5 @@
 import 'package:figma_squircle/figma_squircle.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
 import 'package:mr_buddy/features/welcome/model/user.dart';
@@ -81,14 +80,17 @@ class _MRWeekDetailsState extends State<MRWeekDetails> {
                         child: TableCalendar(
                           firstDay: DateTime.utc(2010, 10, 16),
                           lastDay: DateTime.utc(2030, 3, 14),
-                          rowHeight: 30,
+                          rowHeight: Utils.isTab ? 50 : 30,
                           focusedDay: dashboardProvider.focusDate,
                           headerVisible: false,
-                          calendarStyle: const CalendarStyle(
-                              disabledTextStyle: TextStyle(fontSize: 12),
-                              todayTextStyle: TextStyle(fontSize: 12),
-                              selectedTextStyle:
-                                  TextStyle(fontSize: 12, color: Colors.white)),
+                          calendarStyle: CalendarStyle(
+                              disabledTextStyle:
+                                  TextStyle(fontSize: Utils.isTab ? 18 : 12),
+                              todayTextStyle:
+                                  TextStyle(fontSize: Utils.isTab ? 18 : 12),
+                              selectedTextStyle: TextStyle(
+                                  fontSize: Utils.isTab ? 18 : 12,
+                                  color: Colors.white)),
                           selectedDayPredicate: (day) {
                             return isSameDay(
                                 dashboardProvider.selectedDate, day);
@@ -158,7 +160,12 @@ class _MRWeekDetailsState extends State<MRWeekDetails> {
                                             mainAxisAlignment:
                                                 MainAxisAlignment.spaceBetween,
                                             children: [
-                                              Text(time),
+                                              Text(
+                                                time,
+                                                style: TextStyle(
+                                                    fontSize:
+                                                        Utils.isTab ? 20 : 14),
+                                              ),
                                               InkWell(
                                                 onTap: () {
                                                   Navigator.of(context).push(
@@ -174,7 +181,7 @@ class _MRWeekDetailsState extends State<MRWeekDetails> {
                                                         0.7,
                                                     padding:
                                                         const EdgeInsets.all(
-                                                            10),
+                                                            15),
                                                     margin: const EdgeInsets
                                                         .symmetric(
                                                         vertical: 10),
@@ -219,26 +226,36 @@ class _MRWeekDetailsState extends State<MRWeekDetails> {
                                                             Text(
                                                                 visit
                                                                     .clientName,
-                                                                style: const TextStyle(
+                                                                style: TextStyle(
                                                                     color: Colors
-                                                                        .white)),
+                                                                        .white,
+                                                                    fontSize: Utils
+                                                                            .isTab
+                                                                        ? 18
+                                                                        : 14)),
                                                             Text(
                                                               visit.address,
-                                                              style: const TextStyle(
+                                                              style: TextStyle(
                                                                   color: Colors
-                                                                      .white),
+                                                                      .white,
+                                                                  fontSize:
+                                                                      Utils.isTab
+                                                                          ? 18
+                                                                          : 14),
                                                             ),
                                                           ],
                                                         ),
                                                         Icon(
-                                                          visit.placeType ==
-                                                                  'Private Clinic'
-                                                              ? FontAwesomeIcons
-                                                                  .houseChimneyMedical
-                                                              : FontAwesomeIcons
-                                                                  .solidHospital,
-                                                          color: Colors.white,
-                                                        ),
+                                                            visit.checkOut ==
+                                                                    true
+                                                                ? Icons
+                                                                    .location_on
+                                                                : Icons
+                                                                    .location_off,
+                                                            color: Colors.white,
+                                                            size: Utils.isTab
+                                                                ? 30
+                                                                : 24),
                                                       ],
                                                     )),
                                               ),
@@ -296,8 +313,9 @@ class _MRWeekDetailsState extends State<MRWeekDetails> {
                         mrProvider.approve
                             ? "Already Approve"
                             : "Approve Weekly Plan",
-                        style:
-                            const TextStyle(color: Colors.white, fontSize: 16),
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: Utils.isTab ? 20 : 16),
                       )),
           );
         }));

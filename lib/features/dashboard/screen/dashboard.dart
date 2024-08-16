@@ -34,7 +34,11 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
 List<Widget> _getWidgetsForRole(User user) {
   switch (user.role) {
     case 'Manager':
-      return [const SizedBox(height: 20), const VisitsInfoCard(), MRList(user: user)];
+      return [
+        const SizedBox(height: 20),
+        const VisitsInfoCard(),
+        MRList(user: user)
+      ];
     case 'MR':
       return [const VisitsInfoCard(), const Calendar(), VisitList(user: user)];
 

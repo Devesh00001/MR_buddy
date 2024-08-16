@@ -18,6 +18,8 @@ class Utils {
     });
   }
 
+  static bool isTab = _deviceWidth>600? true:false;
+
   static void _updateDimensions() {
     _deviceWidth = ui.window.physicalSize.width / ui.window.devicePixelRatio;
     _deviceHeight = ui.window.physicalSize.height / ui.window.devicePixelRatio;

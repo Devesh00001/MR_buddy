@@ -16,6 +16,22 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   int _currentIndex = 0;
+  bool isTab = true;
+  double _scaleFactor = 1.0;
+
+  void _onTap(int index) {
+    setState(() {
+      _scaleFactor = 1.3;
+      _currentIndex = index;
+    });
+
+    Future.delayed(Duration(milliseconds: 200), () {
+      setState(() {
+        _scaleFactor = 1.0;
+      });
+    });
+  }
+
   final List<Widget> _screens = [
     const DashBoardScreen(),
     const AllClientScreen(),
@@ -78,123 +94,45 @@ class _HomeState extends State<Home> {
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  InkWell(
-                    onTap: () {
-                      setState(() {
-                        _currentIndex = 0;
-                      });
-                    },
-                    child: Icon(
-                      Icons.home,
-                      size: isTab ? 32 : 32,
-                      color: _currentIndex == 0
-                          ? HexColor("2F52AC")
-                          : Colors.black,
-                    ),
-                  ),
-                  Text(
-                    "Home",
-                    style: TextStyle(
-                      fontSize: isTab ? 12 : 12,
-                      color: _currentIndex == 0
-                          ? HexColor("2F52AC")
-                          : Colors.black,
-                    ),
-                  )
-                ],
-              ),
-              Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  InkWell(
-                    onTap: () {
-                      setState(() {
-                        _currentIndex = 1;
-                      });
-                    },
-                    child: Icon(
-                      Icons.people,
-                      size: isTab ? 32 : 32,
-                      color: _currentIndex == 1
-                          ? HexColor("2F52AC")
-                          : Colors.black,
-                    ),
-                  ),
-                  Text(
-                    "Client",
-                    style: TextStyle(
-                      fontSize: isTab ? 12 : 12,
-                      color: _currentIndex == 1
-                          ? HexColor("2F52AC")
-                          : Colors.black,
-                    ),
-                  )
-                ],
-              ),
+              buildIconColumn(Icons.home, "Home", 0),
+              buildIconColumn(Icons.people, "Client", 1),
               const SizedBox(width: 20),
-              Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  InkWell(
-                    onTap: () {
-                      setState(() {
-                        _currentIndex = 2;
-                      });
-                    },
-                    child: Icon(
-                      Icons.medication,
-                      size: isTab ? 32 : 32,
-                      color: _currentIndex == 2
-                          ? HexColor("2F52AC")
-                          : Colors.black,
-                    ),
-                  ),
-                  Text(
-                    "Drugs",
-                    style: TextStyle(
-                      fontSize: isTab ? 12 : 12,
-                      color: _currentIndex == 2
-                          ? HexColor("2F52AC")
-                          : Colors.black,
-                    ),
-                  )
-                ],
-              ),
-              Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  InkWell(
-                    onTap: () {
-                      setState(() {
-                        _currentIndex = 3;
-                      });
-                    },
-                    child: Icon(
-                      Icons.calendar_month,
-                      size: isTab ? 32 : 32,
-                      color: _currentIndex == 3
-                          ? HexColor("2F52AC")
-                          : Colors.black,
-                    ),
-                  ),
-                  Text(
-                    "HRMS",
-                    style: TextStyle(
-                      fontSize: isTab ? 12 : 12,
-                      color: _currentIndex == 3
-                          ? HexColor("2F52AC")
-                          : Colors.black,
-                    ),
-                  )
-                ],
-              ),
+              buildIconColumn(Icons.medication, "Drugs", 2),
+              buildIconColumn(Icons.calendar_month, "HRMS", 3),
             ],
           ),
         ),
       ),
+    );
+  }
+
+  Widget buildIconColumn(IconData icon, String label, int index) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        InkWell(
+          onTap: () {
+            _onTap(index);
+          },
+          child: AnimatedScale(
+            scale: _currentIndex == index ? _scaleFactor : 1.0,
+            duration: Duration(milliseconds: 200),
+            curve: Curves.bounceIn,
+            child: Icon(
+              icon,
+              size: isTab ? 32 : 32,
+              color: _currentIndex == index ? HexColor("2F52AC") : Colors.black,
+            ),
+          ),
+        ),
+        Text(
+          label,
+          style: TextStyle(
+            fontSize: isTab ? 12 : 12,
+            color: _currentIndex == index ? HexColor("2F52AC") : Colors.black,
+          ),
+        ),
+      ],
     );
   }
 }
