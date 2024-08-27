@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:mr_buddy/features/visit_detail/widgets/check_in_screen.dart';
 import 'package:mr_buddy/utils.dart';
 import 'package:provider/provider.dart';
@@ -118,7 +117,12 @@ class _VisitDetailState extends State<VisitDetail> {
                             child: InkWell(
                               onTap: () async {
                                 if (visitDetailProvider.getCurrectStep() == 0) {
-                                  visitDetailProvider.increaseStep();
+                                  if (visitDetailProvider.imagePath != null) {
+                                    visitDetailProvider.increaseStep();
+                                  } else {
+                                    visitDetailProvider
+                                        .statusChangeOfImageClick(false);
+                                  }
                                 } else if (formKeys[
                                         visitDetailProvider.getCurrectStep()]
                                     .currentState!

@@ -12,6 +12,8 @@ import 'package:provider/provider.dart';
 import '../../../utils.dart';
 import '../../../widgets/custom_appbar.dart';
 import '../../home/screen/home_screen.dart';
+import '../../welcome/model/user.dart';
+import '../../welcome/provider/welcome_provider.dart';
 import '../provider/visitdetail_provider.dart';
 
 class SummaryPage extends StatefulWidget {
@@ -164,15 +166,20 @@ class _SummaryPageState extends State<SummaryPage> {
     return PopScope(
       canPop: false,
       onPopInvoked: (didPop) async {
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          Navigator.pushAndRemoveUntil(
-              context,
-              MaterialPageRoute(
-                  builder: (BuildContext context) => const Home()),
-              (r) => false);
-          Provider.of<VisitDetailProvider>(context, listen: false)
-              .resetProvider();
-        });
+        User? user = Provider.of<WelcomeProvider>(context, listen: false).user;
+        if (user!.role == 'Manager') {
+          Navigator.of(context).pop();
+        } else {
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(
+                    builder: (BuildContext context) => const Home()),
+                (r) => false);
+            Provider.of<VisitDetailProvider>(context, listen: false)
+                .resetProvider();
+          });
+        }
       },
       child: Scaffold(
         appBar: const CustomAppBar(title: "Visit Detail"),
@@ -308,6 +315,26 @@ class _SummaryPageState extends State<SummaryPage> {
                                           title: "Feedback",
                                           value: pastVisit.additionalNotes),
                                       SizedBox(height: Utils.isTab ? 20 : 12),
+                                      Container(
+                                        padding: const EdgeInsets.symmetric(
+                                            vertical: 8),
+                                        height: Utils.deviceWidth * 0.5,
+                                        width: Utils.deviceWidth * 0.9,
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(8),
+                                          color: HexColor('#EEEEEE'),
+                                        ),
+                                        child: SizedBox(
+                                          height: Utils.deviceWidth * 0.25,
+                                          width: Utils.deviceWidth * 0.15,
+                                          child: FadeInImage.assetNetwork(
+                                            placeholder:
+                                                'assets/image/placeholder_image.jpg',
+                                            image: pastVisit.imageUrl,
+                                          ),
+                                        ),
+                                      ),
                                     ],
                                   ),
                                 ],
@@ -533,7 +560,7 @@ class SummaryCardTile extends StatelessWidget {
     return Container(
         width: Utils.deviceWidth,
         constraints:
-            BoxConstraints(maxHeight: Utils.deviceHeight * 0.3, minHeight: 50),
+            BoxConstraints(maxHeight: Utils.deviceHeight * 0.4, minHeight: 50),
         padding: const EdgeInsets.all(15),
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(12),

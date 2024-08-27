@@ -9,6 +9,7 @@ import '../../../utils.dart';
 import '../../../widgets/custom_appbar.dart';
 import '../../dashboard/provider/dashboard_provider.dart';
 import '../../visit_detail/screen/manager_visit_detail.dart';
+import '../../visit_detail/screen/summary_page.dart';
 import '../../weekly plan/model/visit.dart';
 import '../widget/button_click.dart';
 import '../widget/user_info_card.dart';
@@ -168,13 +169,25 @@ class _MRWeekDetailsState extends State<MRWeekDetails> {
                                               ),
                                               InkWell(
                                                 onTap: () {
-                                                  Navigator.of(context).push(
-                                                      MaterialPageRoute(
-                                                          builder: (context) =>
-                                                              ManagerVisitDetail(
-                                                                  visit: visit,
-                                                                  user: widget
-                                                                      .user)));
+                                                  if (visit.checkOut == false) {
+                                                    Navigator.of(context).push(
+                                                        MaterialPageRoute(
+                                                            builder: (context) =>
+                                                                ManagerVisitDetail(
+                                                                    visit:
+                                                                        visit,
+                                                                    user: widget
+                                                                        .user)));
+                                                  } else {
+                                                    Navigator.of(context).push(
+                                                        MaterialPageRoute(
+                                                            builder: (context) =>
+                                                                SummaryPage(
+                                                                    visit:
+                                                                        visit,
+                                                                    showNewVisitBtn:
+                                                                        false)));
+                                                  }
                                                 },
                                                 child: Container(
                                                     width: Utils.deviceWidth *

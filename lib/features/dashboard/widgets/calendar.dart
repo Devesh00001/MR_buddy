@@ -34,11 +34,25 @@ class Calendar extends StatelessWidget {
               rowHeight: Utils.isTab ? 50 : 30,
               focusedDay: dashboardProvider.focusDate,
               headerVisible: false,
+              daysOfWeekHeight: Utils.isTab ? 50 : 30,
+              daysOfWeekStyle: DaysOfWeekStyle(
+                weekdayStyle: TextStyle(fontSize: Utils.isTab ? 20.0 : 12),
+                weekendStyle: TextStyle(
+                    fontSize: Utils.isTab ? 20.0 : 12,
+                    color: Colors.grey.shade400),
+              ),
               calendarStyle: CalendarStyle(
-                  disabledTextStyle: TextStyle(fontSize: Utils.isTab ? 18 : 12),
-                  todayTextStyle: TextStyle(fontSize: Utils.isTab ? 18 : 12),
+                  outsideTextStyle: TextStyle(
+                      fontSize: Utils.isTab ? 20 : 12,
+                      color: Colors.grey.shade400),
+                  weekendTextStyle: TextStyle(
+                      fontSize: Utils.isTab ? 20 : 12,
+                      color: Colors.grey.shade400),
+                  defaultTextStyle: TextStyle(fontSize: Utils.isTab ? 20 : 12),
+                  disabledTextStyle: TextStyle(fontSize: Utils.isTab ? 20 : 12),
+                  todayTextStyle: TextStyle(fontSize: Utils.isTab ? 20 : 12),
                   selectedTextStyle: TextStyle(
-                      fontSize: Utils.isTab ? 18 : 12, color: Colors.white)),
+                      fontSize: Utils.isTab ? 20 : 12, color: Colors.white)),
               selectedDayPredicate: (day) {
                 return isSameDay(dashboardProvider.selectedDate, day);
               },

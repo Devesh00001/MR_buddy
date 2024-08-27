@@ -16,7 +16,6 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   int _currentIndex = 0;
-  bool isTab = true;
   double _scaleFactor = 1.0;
 
   void _onTap(int index) {
@@ -25,7 +24,7 @@ class _HomeState extends State<Home> {
       _currentIndex = index;
     });
 
-    Future.delayed(Duration(milliseconds: 200), () {
+    Future.delayed(const Duration(milliseconds: 200), () {
       setState(() {
         _scaleFactor = 1.0;
       });
@@ -47,7 +46,6 @@ class _HomeState extends State<Home> {
   ];
   @override
   Widget build(BuildContext context) {
-    bool isTab = Utils.deviceWidth > 600 ? true : false;
     return Scaffold(
       extendBody: true,
       resizeToAvoidBottomInset: false,
@@ -55,7 +53,7 @@ class _HomeState extends State<Home> {
       body: _screens[_currentIndex],
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: SizedBox(
-        height: 80,
+        height: Utils.isTab ? 100 : 80,
         child: FittedBox(
           child: FloatingActionButton(
               backgroundColor: HexColor("2F52AC"),
@@ -87,7 +85,7 @@ class _HomeState extends State<Home> {
           elevation: 20,
           shadowColor: Colors.black,
           padding: const EdgeInsets.symmetric(horizontal: 20),
-          height: isTab ? 60 : 60,
+          height: Utils.isTab ? 80 : 60,
           color: Colors.white,
           shape: const CircularNotchedRectangle(),
           child: Row(
@@ -116,11 +114,11 @@ class _HomeState extends State<Home> {
           },
           child: AnimatedScale(
             scale: _currentIndex == index ? _scaleFactor : 1.0,
-            duration: Duration(milliseconds: 200),
+            duration: const Duration(milliseconds: 200),
             curve: Curves.bounceIn,
             child: Icon(
               icon,
-              size: isTab ? 32 : 32,
+              size: Utils.isTab ? 40 : 32,
               color: _currentIndex == index ? HexColor("2F52AC") : Colors.black,
             ),
           ),
@@ -128,7 +126,7 @@ class _HomeState extends State<Home> {
         Text(
           label,
           style: TextStyle(
-            fontSize: isTab ? 12 : 12,
+            fontSize: Utils.isTab ? 18 : 12,
             color: _currentIndex == index ? HexColor("2F52AC") : Colors.black,
           ),
         ),

@@ -1,5 +1,6 @@
 import 'package:easy_date_timeline/easy_date_timeline.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
 import 'package:mr_buddy/utils.dart';
@@ -52,7 +53,7 @@ class _WeeklyPlanState extends State<WeeklyPlan> {
           ),
           title: const Text("Create a New Visit"),
           content: const Text(
-              "Do you want to create a new visit for today's date or the next date?"),
+              "Do you want to create a new visit for today's date or the next date? If you want to create a visit for any other date, please click on the date tab above."),
           actions: <Widget>[
             TextButton(
               onPressed: () {
@@ -118,8 +119,6 @@ class _WeeklyPlanState extends State<WeeklyPlan> {
 
   @override
   Widget build(BuildContext context) {
-    double width = MediaQuery.sizeOf(context).width;
-    bool bigScreen = width >= 600 ? true : false;
     return PopScope(
       canPop: false,
       onPopInvoked: (didPop) {
@@ -159,12 +158,24 @@ class _WeeklyPlanState extends State<WeeklyPlan> {
                         },
                         activeColor: HexColor("1A5319"),
                         dayProps: EasyDayProps(
-                            height: 70,
-                            width: bigScreen ? 120 : 70,
+                            height: Utils.isTab ? 70 : 70,
+                            width: Utils.isTab ? Utils.deviceWidth / 5 : 70,
                             todayHighlightStyle:
                                 TodayHighlightStyle.withBackground,
                             todayHighlightColor: const Color(0xffE1ECC8),
+                            activeDayStyle: DayStyle(
+                              dayStrStyle: TextStyle(
+                                  fontSize: Utils.isTab ? 20 : 12,
+                                  color: Colors.white),
+                              monthStrStyle: TextStyle(
+                                  fontSize: Utils.isTab ? 20 : 12,
+                                  color: Colors.white),
+                            ),
                             inactiveDayStyle: DayStyle(
+                                dayStrStyle:
+                                    TextStyle(fontSize: Utils.isTab ? 20 : 12),
+                                monthStrStyle:
+                                    TextStyle(fontSize: Utils.isTab ? 20 : 12),
                                 decoration: BoxDecoration(
                                     color: Colors.white,
                                     borderRadius: BorderRadius.circular(10)))),
@@ -183,6 +194,52 @@ class _WeeklyPlanState extends State<WeeklyPlan> {
   }
 
   TimeOfDay? selectDate;
+
+  Future<void> selectTime(BuildContext context) async {
+    TimeOfDay? selectedTime = await showTimePicker(
+      // ignore: use_build_context_synchronously
+      context: context,
+      initialTime: TimeOfDay.now(),
+      initialEntryMode: TimePickerEntryMode.inputOnly,
+      builder: (context, child) {
+        return Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Theme(
+              data: Theme.of(context).copyWith(
+                materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                timePickerTheme: TimePickerThemeData(
+                    dayPeriodColor: HexColor("2F52AC"),
+                    dayPeriodTextStyle: const TextStyle(fontSize: 20),
+                    hourMinuteTextStyle: const TextStyle(fontSize: 50),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10))),
+                colorScheme: ColorScheme.light(
+                    primary: HexColor("96C9F4"),
+                    onPrimary: Colors.black,
+                    onSurface: Colors.black,
+                    surfaceTint: Colors.transparent),
+                textButtonTheme: TextButtonThemeData(
+                  style: TextButton.styleFrom(
+                    foregroundColor: HexColor("4AB97B"),
+                  ),
+                ),
+              ),
+              child: child!,
+            ),
+          ],
+        );
+      },
+    );
+    if (selectedTime != null) {
+      final now = DateTime.now();
+      final formattedTime = DateFormat('hh:mm a').format(DateTime(now.year,
+          now.month, now.day, selectedTime.hour, selectedTime.minute));
+      final provider = Provider.of<WeeklyProviderPlan>(context, listen: false);
+
+      provider.setTime(formattedTime);
+    }
+  }
 
   Widget dayForm(DateTime date) {
     bool lastDayOfWeek() {
@@ -288,6 +345,38 @@ class _WeeklyPlanState extends State<WeeklyPlan> {
                           validateFunction: weeklyProvider.validateInput,
                         ),
                         const SizedBox(height: 20),
+                        Text(
+                          "Time",
+                          style: TextStyle(
+                              color: HexColor("1F1F1F").withOpacity(0.5),
+                              fontSize: Utils.isTab ? 18 : 14),
+                        ),
+                        Center(
+                          child: GestureDetector(
+                            onTap: () => selectTime(context),
+                            child: Container(
+                              padding: const EdgeInsets.all(12.0),
+                              decoration: BoxDecoration(
+                                border: Border.all(color: Colors.grey),
+                                borderRadius: BorderRadius.circular(4.0),
+                              ),
+                              child: Row(
+                                children: [
+                                  const Icon(
+                                    Icons.access_time_filled,
+                                    color: Colors.black,
+                                  ),
+                                  const SizedBox(width: 8.0),
+                                  Text(
+                                    weeklyProvider.time ?? 'Select Time',
+                                    style: const TextStyle(color: Colors.black),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 10),
                         Visibility(
                             visible: weeklyProvider.clientType == "New Client",
                             child: const Column(
@@ -352,7 +441,7 @@ class _WeeklyPlanState extends State<WeeklyPlan> {
                                             'Send notification to your manager to approve for weekly plan',
                                       )));
                             }
-                            weeklyProvider.uploadData('Devesh');
+                            weeklyProvider.uploadData(user.name);
                           } else {
                             weeklyProvider.addDataInSingleDayVisit(user.name,
                                 reset: true);
@@ -408,10 +497,9 @@ class _WeeklyPlanState extends State<WeeklyPlan> {
                                       subHeading:
                                           'Send notification to your manager to approve for weekly plan',
                                     )));
-                            weeklyProvider.uploadData('Devesh', uploaded: true);
-                          } else {
-                            
-                          }
+                            weeklyProvider.uploadData(user.name,
+                                uploaded: true);
+                          } else {}
                         }
                       }
                     },

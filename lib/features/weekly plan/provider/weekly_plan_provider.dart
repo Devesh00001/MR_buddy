@@ -28,6 +28,16 @@ class WeeklyProviderPlan with ChangeNotifier {
   Map<String, dynamic> weekdayPlans = {};
   String? mrName;
   Map<String, dynamic> dayVisits = {};
+  String? time;
+
+  void setTime(String value) {
+    time = value;
+    notifyListeners();
+  }
+
+  String? getTime() {
+    return time;
+  }
 
   void uploadData(String mrName, {bool uploaded = false}) {
     String weekday = getWeekdayName(DateFormat('dd-MM-yyyy').format(focusDate));
@@ -64,7 +74,7 @@ class WeeklyProviderPlan with ChangeNotifier {
 
   addDataInSingleDayVisit(String mrName, {bool reset = false}) {
     String weekday = getWeekdayName(DateFormat('dd-MM-yyyy').format(focusDate));
-    String time = getRandomTime();
+    // String time = getRandomTime();
 
     Visit visit = Visit(
         clientName: client ?? clientName!,
@@ -78,9 +88,9 @@ class WeeklyProviderPlan with ChangeNotifier {
         day: weekday,
         comments: ' ',
         status: 'Pending',
-        startTime: time,
+        startTime: time!,
         checkOut: false);
-    dayVisits[time] = Map.from(visit.toMap());
+    dayVisits[time!] = Map.from(visit.toMap());
     if (reset) {
       resetProvider(allReset: false);
     }
@@ -88,7 +98,6 @@ class WeeklyProviderPlan with ChangeNotifier {
 
   Future<bool> uploadWeekDayPlan() async {
     String weekday = getWeekdayName(DateFormat('dd-MM-yyyy').format(focusDate));
-    String time = getRandomTime();
 
     Visit visit = Visit(
         clientName: client ?? clientName!,
@@ -102,7 +111,7 @@ class WeeklyProviderPlan with ChangeNotifier {
         day: weekday,
         comments: ' ',
         status: 'Pending',
-        startTime: time,
+        startTime: time!,
         checkOut: false);
 
     WeeklyPlanService service = WeeklyPlanService();
@@ -204,6 +213,7 @@ class WeeklyProviderPlan with ChangeNotifier {
     clientType = null;
     client = null;
     clientList.clear();
+    time = null;
     notifyListeners();
   }
 }

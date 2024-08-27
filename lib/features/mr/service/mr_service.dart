@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class MRService {
@@ -22,7 +24,7 @@ class MRService {
         return false;
       }
     } catch (e) {
-      print('Error checking approval field: $e');
+      log('Error checking approval field: $e');
       return false;
     }
   }
@@ -44,36 +46,33 @@ class MRService {
         if (plan != null) {
           Map<String, dynamic> updates = {};
 
-         
           plan.forEach((date, timeMap) {
-            
             if (timeMap is Map<String, dynamic>) {
               timeMap.forEach((time, lastMap) {
-              
                 if (lastMap is Map<String, dynamic>) {
                   updates['Plan.$date.$time.Approval'] = 'Approve';
                 }
               });
             }
           });
+          updates['Approval'] = 'Approve';
 
           if (updates.isNotEmpty) {
             await firestore
                 .collection('WeeklyPlans')
                 .doc(doc.id)
                 .update(updates);
-            print(
-                'Approval field updated successfully for document ${doc.id}!');
+            log('Approval field updated successfully for document ${doc.id}!');
           } else {
-            print('No updates found for document ${doc.id}');
+            log('No updates found for document ${doc.id}');
           }
         } else {
-          print('Plan field is null in document ${doc.id}');
+          log('Plan field is null in document ${doc.id}');
         }
       }
       return true;
     } catch (e) {
-      print('Error updating approval field: $e');
+      log('Error updating approval field: $e');
       return false;
     }
   }

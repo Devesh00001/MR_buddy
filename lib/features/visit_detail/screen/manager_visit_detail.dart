@@ -117,10 +117,7 @@ class ClientInfoCard extends StatelessWidget {
                 fontSize: Utils.isTab ? 20 : 14,
               ),
               const SizedBox(height: 10),
-              const SummaryCardTile(
-                  title: "Purpose",
-                  value:
-                      "The doctor suggested connecting with a fellow specialist who might be interested in our"),
+              SummaryCardTile(title: "Purpose", value: visit.purpose),
               const SizedBox(height: 10),
               Form(
                 key: _formKey,

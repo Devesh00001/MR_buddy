@@ -1,9 +1,11 @@
+import 'package:blinking_text/blinking_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 
 import '../../../utils.dart';
+import '../../drugs/screen/drug_detail.dart';
 import '../../weekly plan/model/visit.dart';
 import '../../weekly plan/widgets/custom_dropdown.dart';
 import '../provider/visitdetail_provider.dart';
@@ -27,8 +29,7 @@ class _DrugInfoState extends State<DrugInfo> {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          VisitStatus(
-                visit: widget.visit),
+          VisitStatus(visit: widget.visit),
           const SizedBox(height: 20),
           VisitTextField(
             hintText: "Location",
@@ -62,20 +63,51 @@ class _DrugInfoState extends State<DrugInfo> {
                     CheckboxListTile(
                       title: Row(
                         children: [
-                          SizedBox(
-                            height: 40,
-                            child: Center(
-                              child: FadeInImage.assetNetwork(
-                                placeholder:
-                                    'assets/image/placeholder_image.jpg',
-                                image:
-                                    'https://www.solcohealthcare.com/wp-content/uploads/2023/05/Pregabalin-25mg90ct-1.jpg',
+                          Hero(
+                            tag: item.name,
+                            child: SizedBox(
+                              height: 40,
+                              child: Center(
+                                child: FadeInImage.assetNetwork(
+                                  placeholder:
+                                      'assets/image/placeholder_image.jpg',
+                                  image:
+                                      'https://www.solcohealthcare.com/wp-content/uploads/2023/05/Pregabalin-25mg90ct-1.jpg',
+                                ),
                               ),
                             ),
                           ),
-                          Text(
-                            item.name,
-                            style: TextStyle(fontSize: 14),
+                          const SizedBox(width: 10),
+                          Expanded(
+                            child: Row(
+                              children: [
+                                Text(
+                                  item.name,
+                                  style: const TextStyle(fontSize: 14),
+                                ),
+                                const SizedBox(width: 5),
+                                item.newDrug
+                                    ? const BlinkText(
+                                        "New",
+                                        style: TextStyle(
+                                            fontSize: 10, color: Colors.red),
+                                      )
+                                    : SizedBox.shrink()
+                              ],
+                            ),
+                          ),
+                          const SizedBox(width: 10),
+                          TextButton(
+                            style: TextButton.styleFrom(
+                                foregroundColor: Colors.black,
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(5))),
+                            onPressed: () {
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (context) =>
+                                      DrugDetails(drug: item)));
+                            },
+                            child: const Text('View'),
                           ),
                         ],
                       ),

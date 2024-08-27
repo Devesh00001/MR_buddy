@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:mr_buddy/features/visit_detail/model/past_visit.dart';
 import 'package:mr_buddy/features/weekly%20plan/model/visit.dart';
+import 'package:mr_buddy/utils.dart';
 import 'package:provider/provider.dart';
 
 import '../../weekly plan/screen/success_screen_weeklplan.dart';
@@ -18,6 +20,7 @@ class VisitStatus extends StatelessWidget {
       builder: (BuildContext context) {
         return AlertDialog(
           backgroundColor: Colors.white,
+          surfaceTintColor: Colors.white,
           shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.all(Radius.circular(10.0)),
           ),
@@ -39,6 +42,82 @@ class VisitStatus extends StatelessWidget {
               },
               child: const Text(
                 'Yes',
+                style: TextStyle(color: Colors.black),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future<void> showPastVisitPopup(
+      BuildContext context, PastVisit pastVisit) async {
+    return await showDialog(
+      context: context,
+      // barrierDismissible: false,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          surfaceTintColor: Colors.white,
+          backgroundColor: Colors.white,
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10.0)),
+          ),
+          title: Text("Last visit ${pastVisit.clientName} details"),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              RichText(
+                text: TextSpan(children: <TextSpan>[
+                  const TextSpan(
+                      text: 'Date: ',
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                          color: Colors.black)),
+                  TextSpan(
+                      text: pastVisit.date,
+                      style: const TextStyle(color: Colors.black))
+                ]),
+              ),
+              const SizedBox(height: 10),
+              RichText(
+                text: TextSpan(children: <TextSpan>[
+                  const TextSpan(
+                      text: 'Queries Encountered: ',
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                          color: Colors.black)),
+                  TextSpan(
+                      text: pastVisit.queriesEncountered,
+                      style: const TextStyle(color: Colors.black))
+                ]),
+              ),
+              const SizedBox(height: 10),
+              RichText(
+                text: TextSpan(children: <TextSpan>[
+                  const TextSpan(
+                      text: 'Lead Suggestion: ',
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                          color: Colors.black)),
+                  TextSpan(
+                      text: pastVisit.leadSuggestion,
+                      style: const TextStyle(color: Colors.black))
+                ]),
+              ),
+            ],
+          ),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text(
+                'Ohk',
                 style: TextStyle(color: Colors.black),
               ),
             ),
@@ -83,28 +162,48 @@ class VisitStatus extends StatelessWidget {
                   ))
             ],
           ),
-          Container(
-            decoration: BoxDecoration(
-                shape: BoxShape.circle, color: Colors.red.shade100),
-            child: IconButton(
-              onPressed: () async {
-                bool? status = await showSubmitPopup(context);
-                if (status == true) {
-                  bool goToSuccessScreen =
-                      await visitDetailProvider.deleteVisit(visit);
-                  if (goToSuccessScreen) {
-                    Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => const SuccessScreenWeeklyPlan(
-                              heading: 'Successfully Cancel Your Visit',
-                              subHeading: 'Send notification to your manager',
-                            )));
+          Row(
+            children: [
+              TextButton(
+                onPressed: () async {
+                  PastVisit? pastVisit =
+                      await visitDetailProvider.getPastVisitOfVisit(visit);
+                  if (pastVisit != null) {
+                    showPastVisitPopup(context, pastVisit);
                   }
-                }
-              },
-              icon: const Icon(Icons.delete),
-              color: Colors.redAccent,
-            ),
-          )
+                },
+                style: TextButton.styleFrom(
+                    foregroundColor: Colors.black,
+                    backgroundColor: HexColor("D1E9F6"),
+                    shadowColor: Colors.grey,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(5))),
+                child: const Text(
+                  "Last Visit",
+                  style: TextStyle(color: Colors.black),
+                ),
+              ),
+              const SizedBox(width: 10),
+              IconButton(
+                onPressed: () async {
+                  bool? status = await showSubmitPopup(context);
+                  if (status == true) {
+                    bool goToSuccessScreen =
+                        await visitDetailProvider.deleteVisit(visit);
+                    if (goToSuccessScreen) {
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => const SuccessScreenWeeklyPlan(
+                                heading: 'Successfully Cancel Your Visit',
+                                subHeading: 'Send notification to your manager',
+                              )));
+                    }
+                  }
+                },
+                icon: const Icon(Icons.delete),
+                color: Colors.redAccent,
+              ),
+            ],
+          ),
         ],
       );
     });

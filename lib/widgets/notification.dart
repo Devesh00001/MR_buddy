@@ -53,7 +53,7 @@ class _NotificationsState extends State<Notifications> {
           int index = entry.key;
           String notification = entry.value;
           Color? backgroundColor =
-              index % 2 == 0 ? Colors.white : Colors.pink[50];
+              index % 2 == 0 ? Colors.white : Colors.green[50];
           return PopupMenuItem(
             child: Container(
               color: backgroundColor,

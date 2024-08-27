@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:mr_buddy/utils.dart';
 import 'package:simple_gradient_text/simple_gradient_text.dart';
 import '../../../widgets/custom_appbar.dart';
@@ -14,13 +13,13 @@ class DrugDetails extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: const CustomAppBar(title: "Drug Detail"),
-      body: Container(
-        padding: const EdgeInsets.all(20),
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              GradientText(
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              child: GradientText(
                 drug.name,
                 style: const TextStyle(fontSize: 24),
                 colors: [
@@ -28,77 +27,105 @@ class DrugDetails extends StatelessWidget {
                   HexColor("2F52AC"),
                 ],
               ),
-              Hero(
-                tag: drug.name,
-                child: SizedBox(
-                  height: Utils.deviceHeight * 0.4,
-                  child: Center(
-                    child: FadeInImage.assetNetwork(
-                      placeholder: 'assets/image/placeholder_image.jpg',
-                      image: drug.image,
-                    ),
+            ),
+            Hero(
+              tag: drug.name,
+              child: SizedBox(
+                height: Utils.deviceHeight * 0.4,
+                child: Center(
+                  child: FadeInImage.assetNetwork(
+                    placeholder: 'assets/image/placeholder_image.jpg',
+                    image: drug.image,
                   ),
                 ),
               ),
-              Text(drug.description),
-              const Divider(height: 20),
-              const Text(
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Text(drug.description),
+            ),
+            const SizedBox(height: 10),
+            ExpansionTile(
+              collapsedIconColor: Colors.black,
+              iconColor: Colors.black,
+              shape: const Border(top: BorderSide(color: Colors.grey)),
+              collapsedShape:
+                  const Border(top: BorderSide(color: Colors.grey)),
+              title: const Text(
                 "Promotional Detail",
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
               ),
-              PromotionalDetail(drug: drug),
-              const Divider(height: 20),
-              const Text(
+              children: [
+                PromotionalDetail(drug: drug),
+              ],
+            ),
+            ExpansionTile(
+              collapsedIconColor: Colors.black,
+              iconColor: Colors.black,
+              shape: const Border(top: BorderSide(color: Colors.grey)),
+              collapsedShape:
+                  const Border(top: BorderSide(color: Colors.grey)),
+              title: const Text(
                 "Efficacy Data",
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
               ),
-              const SizedBox(height: 10),
-              DrugDetailCard(
-                heading: "Clinical Trial Results",
-                value: drug.clinicalTrialResults,
-              ),
-              const SizedBox(height: 10),
-              DrugDetailCard(
-                heading: "Real World Effectiveness",
-                value: drug.realWorldEffectiveness,
-              ),
-              const Divider(height: 20),
-              const Text(
+              children: [
+                DrugDetailCard(
+                  heading: "Clinical Trial Results",
+                  value: drug.clinicalTrialResults,
+                ),
+                const SizedBox(height: 10),
+                DrugDetailCard(
+                  heading: "Real World Effectiveness",
+                  value: drug.realWorldEffectiveness,
+                ),
+              ],
+            ),
+            ExpansionTile(
+              collapsedIconColor: Colors.black,
+              iconColor: Colors.black,
+              shape: const Border(top: BorderSide(color: Colors.grey)),
+              collapsedShape:
+                  const Border(top: BorderSide(color: Colors.grey)),
+              title: const Text(
                 "Safety Data",
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
               ),
-              const SizedBox(height: 10),
-              DrugDetailCard(
-                heading: "Side Effects",
-                value: drug.sideEffects,
-              ),
-              const SizedBox(height: 10),
-              DrugDetailCard(
-                heading: "Drug Interactions",
-                value: drug.drugInteractions,
-              ),
-              const Divider(height: 20),
-              const Text(
+              children: [
+                DrugDetailCard(
+                  heading: "Side Effects",
+                  value: drug.sideEffects,
+                ),
+                const SizedBox(height: 10),
+                DrugDetailCard(
+                  heading: "Drug Interactions",
+                  value: drug.drugInteractions,
+                ),
+              ],
+            ),
+            ExpansionTile(
+              collapsedIconColor: Colors.black,
+              iconColor: Colors.black,
+              shape: const Border(top: BorderSide(color: Colors.grey)),
+              collapsedShape:
+                  const Border(top: BorderSide(color: Colors.grey)),
+              title: const Text(
                 "Dosage Information",
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
               ),
-              const SizedBox(height: 10),
-              DrugDetailCard(
-                heading: "Recommended Doses",
-                value: drug.recommendedDoses,
-              ),
-              const SizedBox(height: 10),
-              DrugDetailCard(
-                heading: "Frequency",
-                value: drug.frequency,
-              ),
-              const SizedBox(height: 10),
-              DrugDetailCard(
-                heading: "Administration Methods",
-                value: drug.administrationMethods,
-              ),
-            ],
-          ),
+              children: [
+                DrugDetailCard(
+                  heading: "Side Effects",
+                  value: drug.sideEffects,
+                ),
+                const SizedBox(height: 10),
+                DrugDetailCard(
+                  heading: "Drug Interactions",
+                  value: drug.drugInteractions,
+                ),
+              ],
+            ),
+          ],
         ),
       ),
     );
@@ -113,7 +140,7 @@ class PromotionalDetail extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.only(left: 10),
+      padding: const EdgeInsets.only(left: 20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -141,9 +168,12 @@ class PromotionalDetail extends StatelessWidget {
                           ]),
                       child: Row(
                         children: [
-                          Text(
-                            drug.offers[index]['Discount'] ?? "",
-                            style: const TextStyle(color: Colors.green),
+                          SizedBox(
+                            width: 30,
+                            child: Text(
+                              drug.offers[index]['Discount'] ?? "",
+                              style: const TextStyle(color: Colors.green),
+                            ),
                           ),
                           const VerticalDivider(
                             thickness: 2,

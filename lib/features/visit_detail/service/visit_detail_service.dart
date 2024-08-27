@@ -1,6 +1,10 @@
 import 'dart:developer';
+import 'dart:io';
 
+import 'package:camera/camera.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:intl/intl.dart';
 import 'package:mr_buddy/features/visit_detail/model/past_visit.dart';
 
 import '../../weekly plan/model/visit.dart';
@@ -60,7 +64,6 @@ class VisitDetailService {
 
         await documentReference.update({
           'Plan': existingPlan,
-          'Approval': "Pending",
         });
 
         log("Visit on $date at $startTime updated successfully.");
@@ -75,12 +78,29 @@ class VisitDetailService {
     }
   }
 
-  Future<bool> addPastVisit(PastVisit pastVisit) async {
+  Future<bool> addPastVisit(PastVisit pastVisit, XFile image) async {
     try {
+      final storageRef = FirebaseStorage.instance.ref();
+      final imageRef = storageRef.child(
+          'past_visits_images/${DateTime.now().millisecondsSinceEpoch}.jpg');
+      final file = File(image.path);
+
+      final uploadTask = imageRef.putFile(file);
+      uploadTask.snapshotEvents.listen((taskSnapshot) {
+        log('Upload progress: ${taskSnapshot.bytesTransferred / taskSnapshot.totalBytes * 100}%');
+      }).onError((error) {
+        log('Upload error: $error');
+      });
+
+      final snapshot = await uploadTask;
+
+      final imageUrl = await snapshot.ref.getDownloadURL();
+
       QuerySnapshot querySnapshot = await FirebaseFirestore.instance
           .collection('Past Visits')
           .where('Name', isEqualTo: pastVisit.clientName)
           .get();
+      pastVisit.imageUrl = imageUrl;
 
       if (querySnapshot.docs.isNotEmpty) {
         DocumentReference documentReference =
@@ -236,5 +256,58 @@ class VisitDetailService {
     } else {
       return false;
     }
+  }
+
+  Future<Visit?> getPastVisitBeforeDate(Visit visit) async {
+    final FirebaseFirestore firestore = FirebaseFirestore.instance;
+
+    try {
+      QuerySnapshot querySnapshot = await firestore
+          .collection('WeeklyPlans')
+          .where('Name', isEqualTo: visit.mrName)
+          .limit(1)
+          .get();
+
+      if (querySnapshot.docs.isNotEmpty) {
+        Map<String, dynamic> docData =
+            querySnapshot.docs.first.data() as Map<String, dynamic>;
+
+        Map<String, dynamic> plans = docData['Plan'] as Map<String, dynamic>;
+        List<String> sortedDates = plans.keys.toList()
+          ..sort((a, b) => DateFormat('yyyy-MM-dd')
+              .parse(b)
+              .compareTo(DateFormat('yyyy-MM-dd').parse(a)));
+        Map<String, dynamic>? pastVisit;
+
+        for (String visitDate in sortedDates) {
+          if (visitDate.compareTo(visit.date) < 0) {
+            Map<String, dynamic> times =
+                plans[visitDate] as Map<String, dynamic>;
+
+            for (String time in times.keys) {
+              Map<String, dynamic> visitDetail =
+                  times[time] as Map<String, dynamic>;
+
+              // Check if the client name matches and 'check Out' is true
+              if (visitDetail['Client'] == visit.clientName &&
+                  visitDetail['Check Out'] == true) {
+                pastVisit = visitDetail;
+                break;
+              }
+            }
+
+            if (pastVisit != null) {
+              break;
+            }
+          }
+        }
+
+        return Visit.fromJson(pastVisit!);
+      }
+    } catch (e) {
+      log("Error getting past visit: $e");
+    }
+
+    return null;
   }
 }

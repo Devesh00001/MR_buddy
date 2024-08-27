@@ -9,6 +9,7 @@ class PastVisit {
   String leadSuggestion;
   String visitType;
   String time;
+  String imageUrl;
 
   PastVisit(
       {required this.mrName,
@@ -20,7 +21,8 @@ class PastVisit {
       required this.leadScore,
       required this.leadSuggestion,
       required this.visitType,
-      required this.time});
+      required this.time,
+      required this.imageUrl});
 
   factory PastVisit.fromJson(Map<String, dynamic> data) {
     return PastVisit(
@@ -33,7 +35,8 @@ class PastVisit {
         leadScore: data['Lead Score'],
         leadSuggestion: data['Lead Suggestion'],
         visitType: data['Visit Type'] ?? "",
-        time: data['Time'] ?? '');
+        time: data['Time'] ?? '',
+        imageUrl: data['image URL'] ?? '');
   }
 
   Map<String, dynamic> toMap() {
@@ -48,7 +51,8 @@ class PastVisit {
       'Lead Suggestion': leadSuggestion,
       'Physical Visit': leadSuggestion,
       'Visit Type': visitType,
-      'Time': time
+      'Time': time,
+      'image URL': imageUrl
     };
   }
 }

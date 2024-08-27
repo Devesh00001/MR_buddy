@@ -11,6 +11,7 @@ class Drug {
   String recommendedDoses;
   String frequency;
   String administrationMethods;
+  bool newDrug;
 
   Drug(
       {required this.name,
@@ -24,7 +25,8 @@ class Drug {
       required this.drugInteractions,
       required this.recommendedDoses,
       required this.frequency,
-      required this.administrationMethods});
+      required this.administrationMethods,
+      required this.newDrug});
 
   factory Drug.fromJson(Map<String, dynamic> data) {
     return Drug(
@@ -39,7 +41,8 @@ class Drug {
         drugInteractions: data['Drug Interactions'] ?? "",
         recommendedDoses: data['Recommended Doses'] ?? "",
         frequency: data['Frequency'] ?? "",
-        administrationMethods: data['Administration Methods'] ?? "");
+        administrationMethods: data['Administration Methods'] ?? "",
+        newDrug: data['New Drug'] ?? false);
   }
 
   Map<String, dynamic> toMap() {
@@ -55,7 +58,8 @@ class Drug {
       'Drug Interactions': drugInteractions,
       'Recommended Doses': recommendedDoses,
       'Frequency': frequency,
-      'Administration Methods': administrationMethods
+      'Administration Methods': administrationMethods,
+      'New Drug': newDrug
     };
   }
 }

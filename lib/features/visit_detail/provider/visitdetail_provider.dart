@@ -1,3 +1,4 @@
+import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:mr_buddy/features/visit_detail/model/past_visit.dart';
@@ -33,6 +34,26 @@ class VisitDetailProvider with ChangeNotifier {
   String? newVisitPurpose;
   bool isUploaded = true;
   String? managerComment;
+  XFile? imagePath;
+  bool isImageClick = true;
+
+  void statusChangeOfImageClick(bool value) {
+    isImageClick = value;
+    notifyListeners();
+  }
+
+  bool getImageClickStatus() {
+    return isImageClick;
+  }
+
+  void setImagePath(XFile value) {
+    imagePath = value;
+    notifyListeners();
+  }
+
+  XFile? getImage() {
+    return imagePath;
+  }
 
   void setManagerComment(String value) {
     managerComment = value;
@@ -122,6 +143,16 @@ class VisitDetailProvider with ChangeNotifier {
     medicineName.clear();
     drugs.clear();
     selectedDrugs.clear();
+    imagePath = null;
+    isImageClick = true;
+  }
+
+  Future<PastVisit?> getPastVisitOfVisit(Visit visit) async {
+    VisitDetailService service = VisitDetailService();
+    Visit? resultVisit = await service.getPastVisitBeforeDate(visit);
+    PastVisit? pastVisit = await service.getPastVisitByDateTime(
+        resultVisit!.clientName, resultVisit.date, resultVisit.startTime);
+    return pastVisit;
   }
 
   Future<bool> createVisitOfClient(Visit visit) async {
@@ -185,13 +216,14 @@ class VisitDetailProvider with ChangeNotifier {
           leadScore: leadScore!,
           leadSuggestion: leadSuggestion!,
           visitType: selectedVisitType,
-          time: visit.startTime);
+          time: visit.startTime,
+          imageUrl: '');
 
       NotificationService notificationService = NotificationService();
       notificationService.addNotificationToUser('Himanshu',
           '${visit.mrName} check out from ${visit.clientName} give lead score ${pastVisit.leadScore}%');
 
-      return await service.addPastVisit(pastVisit);
+      return await service.addPastVisit(pastVisit, imagePath!);
     }
     return false;
   }
