@@ -5,6 +5,7 @@ import 'package:mr_buddy/widgets/comman_appbar.dart';
 
 import '../../clients/screen/all_client.dart';
 import '../../drugs/screen/drugs_list.dart';
+import '../../mr_detail_visualization/screen/mr_detail_visualization.dart';
 import '../../weekly plan/screen/weekly_plan.dart';
 
 class Home extends StatefulWidget {
@@ -35,15 +36,10 @@ class _HomeState extends State<Home> {
     const DashBoardScreen(),
     const AllClientScreen(),
     const DrugsList(),
-    const DashBoardScreen(),
+    const MrDetailVisualization(),
   ];
 
-  final List<String> titleList = [
-    'DashBoard',
-    'Clients',
-    'Drugs',
-    'Past Visits'
-  ];
+  final List<String> titleList = ['DashBoard', 'Clients', 'Drugs', 'Data'];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -96,7 +92,7 @@ class _HomeState extends State<Home> {
               buildIconColumn(Icons.people, "Client", 1),
               const SizedBox(width: 20),
               buildIconColumn(Icons.medication, "Drugs", 2),
-              buildIconColumn(Icons.calendar_month, "HRMS", 3),
+              buildIconColumn(Icons.bar_chart, "Data", 3),
             ],
           ),
         ),

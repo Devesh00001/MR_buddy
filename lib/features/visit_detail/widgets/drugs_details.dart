@@ -72,7 +72,7 @@ class _DrugInfoState extends State<DrugInfo> {
                                   placeholder:
                                       'assets/image/placeholder_image.jpg',
                                   image:
-                                      'https://www.solcohealthcare.com/wp-content/uploads/2023/05/Pregabalin-25mg90ct-1.jpg',
+                                      'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTK7_sxxNSHR3PuZwILx0tQMu-YfiRNWInW5A&s',
                                 ),
                               ),
                             ),
@@ -90,7 +90,7 @@ class _DrugInfoState extends State<DrugInfo> {
                                     ? const BlinkText(
                                         "New",
                                         style: TextStyle(
-                                            fontSize: 10, color: Colors.red),
+                                            fontSize: 12, color: Colors.red),
                                       )
                                     : SizedBox.shrink()
                               ],

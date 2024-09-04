@@ -15,12 +15,13 @@ class DrugDetailCard extends StatelessWidget {
         children: [
           Text(
             heading,
-            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+            style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
           ),
           const SizedBox(height: 5),
           Padding(
             padding: const EdgeInsets.only(left: 10),
-            child: Text(value),
+            child: Text(value,
+                style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500)),
           )
         ],
       ),

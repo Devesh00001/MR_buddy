@@ -117,7 +117,7 @@ class VisitStatus extends StatelessWidget {
                 Navigator.of(context).pop();
               },
               child: const Text(
-                'Ohk',
+                'OK',
                 style: TextStyle(color: Colors.black),
               ),
             ),
@@ -164,7 +164,11 @@ class VisitStatus extends StatelessWidget {
           ),
           Row(
             children: [
-              TextButton(
+              IconButton(
+                icon: Icon(
+                  FontAwesomeIcons.mapLocationDot,
+                  color: HexColor("3572EF"),
+                ),
                 onPressed: () async {
                   PastVisit? pastVisit =
                       await visitDetailProvider.getPastVisitOfVisit(visit);
@@ -172,18 +176,7 @@ class VisitStatus extends StatelessWidget {
                     showPastVisitPopup(context, pastVisit);
                   }
                 },
-                style: TextButton.styleFrom(
-                    foregroundColor: Colors.black,
-                    backgroundColor: HexColor("D1E9F6"),
-                    shadowColor: Colors.grey,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(5))),
-                child: const Text(
-                  "Last Visit",
-                  style: TextStyle(color: Colors.black),
-                ),
               ),
-              const SizedBox(width: 10),
               IconButton(
                 onPressed: () async {
                   bool? status = await showSubmitPopup(context);

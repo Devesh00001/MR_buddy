@@ -46,28 +46,30 @@ class DrugDetails extends StatelessWidget {
             ),
             const SizedBox(height: 10),
             ExpansionTile(
+              collapsedBackgroundColor:
+                  const Color.fromARGB(255, 226, 241, 255),
               collapsedIconColor: Colors.black,
               iconColor: Colors.black,
               shape: const Border(top: BorderSide(color: Colors.grey)),
-              collapsedShape:
-                  const Border(top: BorderSide(color: Colors.grey)),
+              collapsedShape: const Border(top: BorderSide(color: Colors.grey)),
               title: const Text(
                 "Promotional Detail",
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
               ),
               children: [
                 PromotionalDetail(drug: drug),
               ],
             ),
             ExpansionTile(
+              collapsedBackgroundColor:
+                  const Color.fromARGB(255, 226, 241, 255),
               collapsedIconColor: Colors.black,
               iconColor: Colors.black,
               shape: const Border(top: BorderSide(color: Colors.grey)),
-              collapsedShape:
-                  const Border(top: BorderSide(color: Colors.grey)),
+              collapsedShape: const Border(top: BorderSide(color: Colors.grey)),
               title: const Text(
                 "Efficacy Data",
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
               ),
               children: [
                 DrugDetailCard(
@@ -82,14 +84,15 @@ class DrugDetails extends StatelessWidget {
               ],
             ),
             ExpansionTile(
+              collapsedBackgroundColor:
+                  const Color.fromARGB(255, 226, 241, 255),
               collapsedIconColor: Colors.black,
               iconColor: Colors.black,
               shape: const Border(top: BorderSide(color: Colors.grey)),
-              collapsedShape:
-                  const Border(top: BorderSide(color: Colors.grey)),
+              collapsedShape: const Border(top: BorderSide(color: Colors.grey)),
               title: const Text(
                 "Safety Data",
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
               ),
               children: [
                 DrugDetailCard(
@@ -104,14 +107,15 @@ class DrugDetails extends StatelessWidget {
               ],
             ),
             ExpansionTile(
+              collapsedBackgroundColor:
+                  const Color.fromARGB(255, 226, 241, 255),
               collapsedIconColor: Colors.black,
               iconColor: Colors.black,
               shape: const Border(top: BorderSide(color: Colors.grey)),
-              collapsedShape:
-                  const Border(top: BorderSide(color: Colors.grey)),
+              collapsedShape: const Border(top: BorderSide(color: Colors.grey)),
               title: const Text(
                 "Dosage Information",
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
               ),
               children: [
                 DrugDetailCard(
@@ -146,7 +150,7 @@ class PromotionalDetail extends StatelessWidget {
         children: [
           const Text(
             "Offers and Discount",
-            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+            style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
           ),
           SizedBox(
             height: Utils.deviceHeight * 0.2,
@@ -172,14 +176,18 @@ class PromotionalDetail extends StatelessWidget {
                             width: 30,
                             child: Text(
                               drug.offers[index]['Discount'] ?? "",
-                              style: const TextStyle(color: Colors.green),
+                              style: const TextStyle(
+                                  color: Colors.green, fontSize: 14),
                             ),
                           ),
                           const VerticalDivider(
                             thickness: 2,
                             color: Colors.black,
                           ),
-                          Text(drug.offers[index]['Summary'] ?? "")
+                          Text(
+                            drug.offers[index]['Summary'] ?? "",
+                            style: const TextStyle(fontSize: 13),
+                          )
                         ],
                       ));
                 }),
@@ -189,7 +197,7 @@ class PromotionalDetail extends StatelessWidget {
             children: [
               const Text(
                 "Product Literature",
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
               ),
               TextButton(onPressed: () {}, child: const Text("Download PDF"))
             ],

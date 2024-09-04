@@ -112,13 +112,13 @@ class VisitList extends StatelessWidget {
                                                 ),
                                                 gradient: visit.checkOut
                                                     ? LinearGradient(colors: [
-                                                        HexColor("1B2E62"),
-                                                        HexColor("365FC8")
-                                                      ])
-                                                    : LinearGradient(colors: [
                                                         HexColor("00AE4D"),
                                                         HexColor("00AE4D")
                                                             .withOpacity(0.5)
+                                                      ])
+                                                    : LinearGradient(colors: [
+                                                        HexColor("1B2E62"),
+                                                        HexColor("365FC8")
                                                       ])),
                                             child: Row(
                                               mainAxisAlignment:

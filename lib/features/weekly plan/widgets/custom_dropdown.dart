@@ -11,9 +11,11 @@ class CustomDropdown extends StatefulWidget {
       required this.setFunction,
       required this.selectedValue,
       required this.validateFunction,
+      this.textStyle = const TextStyle(fontSize: 14),
       this.isRequired = true});
   final String hintText;
   final String placeHolder;
+  final TextStyle textStyle;
   final List<String> values;
   final String? selectedValue;
   final Function(String) setFunction;
@@ -50,7 +52,7 @@ class _CustomDropdownState extends State<CustomDropdown> {
             isExpanded: true,
             isDense: true,
             borderRadius: BorderRadius.circular(10),
-            hint: Text(widget.placeHolder),
+            hint: Text(widget.placeHolder, style: widget.textStyle),
             value: widget.selectedValue,
             onChanged: (newValue) {
               widget.setFunction(newValue.toString());
@@ -58,7 +60,7 @@ class _CustomDropdownState extends State<CustomDropdown> {
             items: widget.values.map((location) {
               return DropdownMenuItem(
                 value: location,
-                child: Text(location),
+                child: Text(location, style: widget.textStyle),
               );
             }).toList(),
             validator: (value) {
