@@ -1,4 +1,6 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:mr_buddy/utils.dart';
 import 'package:simple_gradient_text/simple_gradient_text.dart';
 import '../../../widgets/custom_appbar.dart';
@@ -184,9 +186,13 @@ class PromotionalDetail extends StatelessWidget {
                             thickness: 2,
                             color: Colors.black,
                           ),
-                          Text(
-                            drug.offers[index]['Summary'] ?? "",
-                            style: const TextStyle(fontSize: 13),
+                          Expanded(
+                            child: AutoSizeText(
+                              drug.offers[index]['Summary'] ?? "",
+                              maxFontSize: 13,
+                              minFontSize: 10,
+                              // style: const TextStyle(fontSize: 13),
+                            ),
                           )
                         ],
                       ));

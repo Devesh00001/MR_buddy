@@ -84,7 +84,7 @@ class _CheckInScreenState extends State<CheckInScreen> {
                     )),
                 const SizedBox(height: 12),
                 SummaryCardTile(
-                  title: "Client",
+                  title: "Health Associate",
                   value: widget.visit.clientName,
                 ),
                 const SizedBox(height: 12),

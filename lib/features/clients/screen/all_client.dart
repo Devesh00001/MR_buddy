@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:figma_squircle/figma_squircle.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -23,7 +24,7 @@ class _AllClientScreenState extends State<AllClientScreen> {
 
   @override
   Widget build(BuildContext context) {
-    bool isTab = Utils.deviceWidth > 600 ? true : false;
+    // bool isTab = Utils.deviceWidth > 600 ? true : false;
     return Consumer<ClinetProvider>(builder: (context, clinetProvider, child) {
       return Column(
         children: [
@@ -55,6 +56,7 @@ class _AllClientScreenState extends State<AllClientScreen> {
                     },
                     child: Container(
                       height: Utils.deviceHeight * 0.09,
+                      constraints: BoxConstraints(minHeight: 70),
                       padding: const EdgeInsets.symmetric(
                           vertical: 12, horizontal: 20),
                       margin: const EdgeInsets.symmetric(
@@ -84,18 +86,22 @@ class _AllClientScreenState extends State<AllClientScreen> {
                             children: [
                               const Icon(FontAwesomeIcons.userMd, size: 25),
                               const SizedBox(width: 10),
-                              Text(
+                              AutoSizeText(
                                 clinetProvider.displayClientList[index].name,
+                                minFontSize: 12,
+                                maxFontSize: 16,
                                 style: TextStyle(
-                                    fontSize: isTab ? 20 : 16,
+                                    // fontSize: isTab ? 20 : 16,
                                     fontWeight: FontWeight.w600,
                                     color: HexColor("2F52AC")),
                               ),
                             ],
                           ),
-                          Text(
+                          AutoSizeText(
                             "Hospital: ${clinetProvider.displayClientList[index].hospital}",
-                            style: TextStyle(fontSize: isTab ? 20 : 16),
+                            minFontSize: 12,
+                            maxFontSize: 16,
+                            // style: TextStyle(fontSize: isTab ? 20 : 16),
                           ),
                         ],
                       ),

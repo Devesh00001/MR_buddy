@@ -162,7 +162,7 @@ class _VisitDetailState extends State<VisitDetail> {
                                       visitDetailProvider.currentStep == 0
                                           ? "CHECK IN"
                                           : visitDetailProvider.currentStep == 3
-                                              ? 'CHECK OUT'
+                                              ? 'Submit'
                                               : 'Next',
                                       style: const TextStyle(
                                           color: Colors.white, fontSize: 15),

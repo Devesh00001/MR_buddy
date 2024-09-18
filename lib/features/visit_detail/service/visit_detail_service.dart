@@ -274,13 +274,16 @@ class VisitDetailService {
 
         Map<String, dynamic> plans = docData['Plan'] as Map<String, dynamic>;
         List<String> sortedDates = plans.keys.toList()
-          ..sort((a, b) => DateFormat('yyyy-MM-dd')
+          ..sort((a, b) => DateFormat('dd-MM-yyyy')
               .parse(b)
-              .compareTo(DateFormat('yyyy-MM-dd').parse(a)));
+              .compareTo(DateFormat('dd-MM-yyyy').parse(a)));
         Map<String, dynamic>? pastVisit;
 
         for (String visitDate in sortedDates) {
-          if (visitDate.compareTo(visit.date) < 0) {
+          if (DateFormat('dd-MM-yyyy')
+                  .parse(visitDate)
+                  .compareTo(DateFormat('dd-MM-yyyy').parse(visit.date)) <
+              0) {
             Map<String, dynamic> times =
                 plans[visitDate] as Map<String, dynamic>;
 

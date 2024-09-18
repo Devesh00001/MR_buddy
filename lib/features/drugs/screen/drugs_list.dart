@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:figma_squircle/figma_squircle.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -63,6 +64,7 @@ class _DrugsListState extends State<DrugsList> {
                         child: Container(
                           height: Utils.deviceHeight * 0.1,
                           width: Utils.deviceWidth * 0.9,
+                          constraints: BoxConstraints(minHeight: 70),
                           padding: const EdgeInsets.symmetric(vertical: 5),
                           margin: const EdgeInsets.symmetric(
                               horizontal: 10, vertical: 8),
@@ -103,18 +105,28 @@ class _DrugsListState extends State<DrugsList> {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Text(
-                                    drugsProvider.displayDrugList[index].name,
-                                    style: const TextStyle(fontSize: 20),
+                                  Expanded(
+                                    child: AutoSizeText(
+                                      drugsProvider.displayDrugList[index].name,
+                                      minFontSize: 16,
+                                      maxFontSize: 20,
+                                      maxLines: 1,
+                                      // style: const TextStyle(fontSize: 20),
+                                    ),
                                   ),
-                                  SizedBox(
-                                    height: Utils.deviceHeight * 0.05,
-                                    width: Utils.deviceWidth * 0.7,
-                                    child: Text(
-                                      drugsProvider
-                                          .displayDrugList[0].description,
-                                      overflow: TextOverflow.clip,
-                                      style: const TextStyle(color: Colors.grey),
+                                  Expanded(
+                                    child: SizedBox(
+                                      height: Utils.deviceHeight * 0.05,
+                                      width: Utils.deviceWidth * 0.7,
+                                      child: AutoSizeText(
+                                        drugsProvider
+                                            .displayDrugList[0].description,
+                                        overflow: TextOverflow.clip,
+                                        minFontSize: 12,
+                                        maxFontSize: 16,
+                                        style:
+                                            const TextStyle(color: Colors.grey),
+                                      ),
                                     ),
                                   ),
                                 ],

@@ -21,7 +21,9 @@ class _VisitsInfoCardState extends State<VisitsInfoCard> {
       return Container(
         height: Utils.deviceHeight * 0.15,
         width: Utils.deviceWidth * 0.90,
-        padding: const EdgeInsets.all(15),
+        padding: const EdgeInsets.all(10),
+        margin: EdgeInsets.symmetric(vertical: 10),
+        constraints: BoxConstraints(minHeight: 120),
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(20),
             gradient: LinearGradient(
@@ -37,7 +39,7 @@ class _VisitsInfoCardState extends State<VisitsInfoCard> {
                 Row(
                   children: [
                     DateTile(date: dashboardProvider.fromDate),
-                    const SizedBox(width: 10),
+                    const SizedBox(width: 5),
                     DateTile(date: dashboardProvider.fromDate),
                   ],
                 ),

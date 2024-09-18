@@ -306,8 +306,8 @@ class _WeeklyPlanState extends State<WeeklyPlan> {
                         const SizedBox(height: 20),
                         CustomDropdown(
                           selectedValue: weeklyProvider.clientType,
-                          hintText: "Client type",
-                          placeHolder: "Select client type",
+                          hintText: "Health Associate type",
+                          placeHolder: "Select Health Associate type",
                           values: weeklyProvider.typeOfClient,
                           setFunction: weeklyProvider.setClientType,
                           isRequired: true,
@@ -315,18 +315,18 @@ class _WeeklyPlanState extends State<WeeklyPlan> {
                         ),
                         const SizedBox(height: 20),
                         Visibility(
-                          visible:
-                              weeklyProvider.clientType == "Existing Client",
+                          visible: weeklyProvider.clientType ==
+                              "Existing Health Associate",
                           child: Column(
                             children: [
                               CustomDropdown(
                                 selectedValue: weeklyProvider.client,
-                                hintText: "Client",
-                                placeHolder: "Select client",
+                                hintText: "Health Associate",
+                                placeHolder: "Select Health Associate",
                                 values: weeklyProvider.clientList,
                                 setFunction: weeklyProvider.setClient,
                                 isRequired: weeklyProvider.clientType ==
-                                        "Existing Client"
+                                        "Existing Health Associate"
                                     ? true
                                     : false,
                                 validateFunction: weeklyProvider.validateInput,
@@ -378,19 +378,22 @@ class _WeeklyPlanState extends State<WeeklyPlan> {
                         ),
                         const SizedBox(height: 10),
                         Visibility(
-                            visible: weeklyProvider.clientType == "New Client",
+                            visible: weeklyProvider.clientType ==
+                                "New Health Associate",
                             child: const Column(
                               children: [
                                 CustomFormField(hintText: "Name", maxLine: 1),
-                                SizedBox(height: 10),
+                                CustomFormField(
+                                    hintText: "Specialization", maxLine: 1),
                               ],
                             )),
+                        const SizedBox(height: 10),
                         const CustomFormField(hintText: "Address", maxLine: 1),
                         const SizedBox(height: 10),
                         CustomFormField(
-                            size: Utils.isTab ? 200 : 60,
+                            size: Utils.isTab ? 200 : 100,
                             hintText: "Visit Purpose/Plan",
-                            maxLine: Utils.isTab ? 10 : 1),
+                            maxLine: Utils.isTab ? 10 : 3),
                         const SizedBox(height: 10),
                         const CustomFormField(
                             hintText: "Point of Contact/Doctor", maxLine: 1),
@@ -515,5 +518,6 @@ class _WeeklyPlanState extends State<WeeklyPlan> {
         ),
       );
     });
+  
   }
 }

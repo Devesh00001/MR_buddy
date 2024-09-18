@@ -10,7 +10,6 @@ import '../../weekly plan/model/visit.dart';
 import '../../weekly plan/widgets/custom_dropdown.dart';
 import '../provider/visitdetail_provider.dart';
 import 'visit_status.dart';
-import 'visit_text_field.dart';
 import '../screen/visit_detail.dart';
 
 class DrugInfo extends StatefulWidget {
@@ -31,11 +30,11 @@ class _DrugInfoState extends State<DrugInfo> {
         children: [
           VisitStatus(visit: widget.visit),
           const SizedBox(height: 20),
-          VisitTextField(
-            hintText: "Location",
-            value: visitDetailProvider.getLocation(),
-            validateFunction: visitDetailProvider.validateInput,
-          ),
+          // VisitTextField(
+          //   hintText: "Location",
+          //   value: visitDetailProvider.getLocation(),
+          //   validateFunction: visitDetailProvider.validateInput,
+          // ),
           const SizedBox(height: 10),
           Form(
             key: formKeys[visitDetailProvider.getCurrectStep()],
@@ -50,12 +49,12 @@ class _DrugInfoState extends State<DrugInfo> {
           ),
           const SizedBox(height: 10),
           Text(
-            "Drugs Prescribed",
+            "Suggested Medication",
             style: TextStyle(color: HexColor("1F1F1F").withOpacity(0.5)),
           ),
           const SizedBox(height: 5),
           SizedBox(
-            height: Utils.deviceHeight * 0.3,
+            height: Utils.deviceHeight * 0.4,
             child: ListView(
               children: visitDetailProvider.drugs.map((item) {
                 return Column(

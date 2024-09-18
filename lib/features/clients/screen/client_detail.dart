@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:figma_squircle/figma_squircle.dart';
 import 'package:flutter/material.dart';
 import 'package:mr_buddy/features/clients/model/clients.dart';
@@ -99,6 +100,7 @@ class ClientDetail extends StatelessWidget {
                                   },
                                   child: Container(
                                     height: Utils.deviceHeight * 0.09,
+                                    constraints: BoxConstraints(minHeight: 70),
                                     margin: const EdgeInsets.all(10),
                                     decoration: ShapeDecoration(
                                       shadows: [
@@ -119,13 +121,17 @@ class ClientDetail extends StatelessWidget {
                                     ),
                                     child: Center(
                                       child: ListTile(
-                                        title: Text(
+                                        title: AutoSizeText(
                                           pastVisit.mrName,
-                                          style: TextStyle(
-                                              color: Colors.black,
-                                              fontSize: Utils.isTab ? 24 : 16),
+                                          minFontSize: 12,
+                                          maxFontSize: 16,
+                                          style: TextStyle(color: Colors.black),
                                         ),
-                                        subtitle: Text('$date - $time'),
+                                        subtitle: AutoSizeText(
+                                          '$date - $time',
+                                          minFontSize: 12,
+                                          maxFontSize: 16,
+                                        ),
                                         subtitleTextStyle: TextStyle(
                                             color: Colors.black,
                                             fontSize: Utils.isTab ? 20 : 14,

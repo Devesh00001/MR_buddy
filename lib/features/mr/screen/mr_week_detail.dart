@@ -54,235 +54,254 @@ class _MRWeekDetailsState extends State<MRWeekDetails> {
               )),
               Container(
                   height: Utils.deviceHeight,
-                  margin: const EdgeInsets.all(20),
-                  child: Column(
-                    children: [
-                      UserInfoCard(user: widget.user),
-                      const SizedBox(height: 20),
-                      Container(
-                        padding: const EdgeInsets.all(10),
-                        decoration: ShapeDecoration(
-                          shape: SmoothRectangleBorder(
-                            borderRadius: SmoothBorderRadius(
-                              cornerRadius: 15,
-                              cornerSmoothing: 1,
+                  margin: const EdgeInsets.all(10),
+                  child: ListView(
+                      padding: EdgeInsets.symmetric(horizontal: 10),
+                      shrinkWrap: true,
+                      children: [
+                        Column(
+                          children: [
+                            UserInfoCard(user: widget.user),
+                            const SizedBox(height: 20),
+                            Container(
+                              padding: const EdgeInsets.all(10),
+                              decoration: ShapeDecoration(
+                                shape: SmoothRectangleBorder(
+                                  borderRadius: SmoothBorderRadius(
+                                    cornerRadius: 15,
+                                    cornerSmoothing: 1,
+                                  ),
+                                ),
+                                color: Colors.white,
+                                shadows: [
+                                  BoxShadow(
+                                    color: Colors.grey.withOpacity(0.5),
+                                    spreadRadius: 5,
+                                    blurRadius: 7,
+                                    offset: const Offset(0, 3),
+                                  ),
+                                ],
+                              ),
+                              child: TableCalendar(
+                                firstDay: DateTime.utc(2010, 10, 16),
+                                lastDay: DateTime.utc(2030, 3, 14),
+                                rowHeight: Utils.isTab ? 50 : 30,
+                                focusedDay: dashboardProvider.focusDate,
+                                headerVisible: false,
+                                calendarStyle: CalendarStyle(
+                                    disabledTextStyle: TextStyle(
+                                        fontSize: Utils.isTab ? 18 : 12),
+                                    todayTextStyle: TextStyle(
+                                        fontSize: Utils.isTab ? 18 : 12),
+                                    selectedTextStyle: TextStyle(
+                                        fontSize: Utils.isTab ? 18 : 12,
+                                        color: Colors.white)),
+                                selectedDayPredicate: (day) {
+                                  return isSameDay(
+                                      dashboardProvider.selectedDate, day);
+                                },
+                                onDaySelected: (selectedDay, focusedDay) {
+                                  if (!isSameDay(dashboardProvider.selectedDate,
+                                      selectedDay)) {
+                                    dashboardProvider
+                                        .setSelectedDate(selectedDay);
+                                    dashboardProvider.setFocusDate(focusedDay);
+                                  }
+                                },
+                              ),
                             ),
-                          ),
-                          color: Colors.white,
-                          shadows: [
-                            BoxShadow(
-                              color: Colors.grey.withOpacity(0.5),
-                              spreadRadius: 5,
-                              blurRadius: 7,
-                              offset: const Offset(0, 3),
+                            const SizedBox(height: 10),
+                            const Align(
+                              alignment: Alignment.centerLeft,
+                              child: Text(
+                                "Your MR Visits",
+                                style: TextStyle(
+                                    fontSize: 24, fontWeight: FontWeight.w500),
+                              ),
                             ),
-                          ],
-                        ),
-                        child: TableCalendar(
-                          firstDay: DateTime.utc(2010, 10, 16),
-                          lastDay: DateTime.utc(2030, 3, 14),
-                          rowHeight: Utils.isTab ? 50 : 30,
-                          focusedDay: dashboardProvider.focusDate,
-                          headerVisible: false,
-                          calendarStyle: CalendarStyle(
-                              disabledTextStyle:
-                                  TextStyle(fontSize: Utils.isTab ? 18 : 12),
-                              todayTextStyle:
-                                  TextStyle(fontSize: Utils.isTab ? 18 : 12),
-                              selectedTextStyle: TextStyle(
-                                  fontSize: Utils.isTab ? 18 : 12,
-                                  color: Colors.white)),
-                          selectedDayPredicate: (day) {
-                            return isSameDay(
-                                dashboardProvider.selectedDate, day);
-                          },
-                          onDaySelected: (selectedDay, focusedDay) {
-                            if (!isSameDay(
-                                dashboardProvider.selectedDate, selectedDay)) {
-                              dashboardProvider.setSelectedDate(selectedDay);
-                              dashboardProvider.setFocusDate(focusedDay);
-                            }
-                          },
-                        ),
-                      ),
-                      const SizedBox(height: 10),
-                      const Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text(
-                          "Your MR Visits",
-                          style: TextStyle(
-                              fontSize: 24, fontWeight: FontWeight.w500),
-                        ),
-                      ),
-                      Expanded(
-                          child: FutureBuilder<Map<String, Visit>>(
-                              future: dashboardProvider.getWeeklyPlan(
-                                  widget.user.name,
-                                  dashboardProvider.selectedDate),
-                              builder: (context, snapshot) {
-                                if (snapshot.connectionState ==
-                                    ConnectionState.waiting) {
-                                  return Center(
-                                      child: Lottie.asset(
-                                          "assets/lottie/loading.json",
-                                          height: 100));
-                                } else if (snapshot.hasError) {
-                                  return Center(
-                                      child: Text('Error: ${snapshot.error}'));
-                                } else if (!snapshot.hasData ||
-                                    snapshot.data!.isEmpty) {
-                                  return const Center(
-                                      child: Text('No Visits found'));
-                                } else {
-                                  Map<String, Visit> data =
-                                      snapshot.data as Map<String, Visit>;
+                            FutureBuilder<Map<String, Visit>>(
+                                future: dashboardProvider.getWeeklyPlan(
+                                    widget.user.name,
+                                    dashboardProvider.selectedDate),
+                                builder: (context, snapshot) {
+                                  if (snapshot.connectionState ==
+                                      ConnectionState.waiting) {
+                                    return Center(
+                                        child: Lottie.asset(
+                                            "assets/lottie/loading.json",
+                                            height: 100));
+                                  } else if (snapshot.hasError) {
+                                    return Center(
+                                        child:
+                                            Text('Error: ${snapshot.error}'));
+                                  } else if (!snapshot.hasData ||
+                                      snapshot.data!.isEmpty) {
+                                    return const Center(
+                                        child: Text('No Visits found'));
+                                  } else {
+                                    Map<String, Visit> data =
+                                        snapshot.data as Map<String, Visit>;
 
-                                  DateFormat format = DateFormat('hh:mm a');
+                                    DateFormat format = DateFormat('hh:mm a');
 
-                                  var sortedEntries = data.entries.toList()
-                                    ..sort((a, b) {
-                                      DateTime timeA = format.parse(a.key);
-                                      DateTime timeB = format.parse(b.key);
-                                      return timeA.compareTo(timeB);
-                                    });
+                                    var sortedEntries = data.entries.toList()
+                                      ..sort((a, b) {
+                                        DateTime timeA = format.parse(a.key);
+                                        DateTime timeB = format.parse(b.key);
+                                        return timeA.compareTo(timeB);
+                                      });
 
-                                  Map<String, Visit> sortedData = {
-                                    for (var entry in sortedEntries)
-                                      entry.key: entry.value
-                                  };
+                                    Map<String, Visit> sortedData = {
+                                      for (var entry in sortedEntries)
+                                        entry.key: entry.value
+                                    };
 
-                                  return ListView(
-                                    children: sortedData.entries.map((entry) {
-                                      String time = entry.key;
-                                      Visit visit = entry.value;
-                                      return Column(
-                                        children: [
-                                          Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              Text(
-                                                time,
-                                                style: TextStyle(
-                                                    fontSize:
-                                                        Utils.isTab ? 20 : 14),
-                                              ),
-                                              InkWell(
-                                                onTap: () {
-                                                  if (visit.checkOut == false) {
-                                                    Navigator.of(context).push(
-                                                        MaterialPageRoute(
-                                                            builder: (context) =>
-                                                                ManagerVisitDetail(
-                                                                    visit:
-                                                                        visit,
-                                                                    user: widget
-                                                                        .user)));
-                                                  } else {
-                                                    Navigator.of(context).push(
-                                                        MaterialPageRoute(
-                                                            builder: (context) =>
-                                                                SummaryPage(
-                                                                    visit:
-                                                                        visit,
-                                                                    showNewVisitBtn:
-                                                                        false)));
-                                                  }
-                                                },
-                                                child: Container(
-                                                    width: Utils.deviceWidth *
-                                                        0.7,
-                                                    padding:
-                                                        const EdgeInsets.all(
-                                                            15),
-                                                    margin: const EdgeInsets
-                                                        .symmetric(
-                                                        vertical: 10),
-                                                    decoration: ShapeDecoration(
-                                                        shape:
-                                                            SmoothRectangleBorder(
-                                                          borderRadius:
-                                                              SmoothBorderRadius(
-                                                            cornerRadius: 15,
-                                                            cornerSmoothing: 1,
-                                                          ),
-                                                        ),
-                                                        gradient: visit
-                                                                    .status ==
-                                                                'Approve'
-                                                            ? LinearGradient(
-                                                                colors: [
-                                                                    HexColor(
-                                                                        "1B2E62"),
-                                                                    HexColor(
-                                                                        "365FC8")
-                                                                  ])
-                                                            : LinearGradient(
-                                                                colors: [
-                                                                    HexColor(
-                                                                        "00AE4D"),
-                                                                    HexColor(
-                                                                            "00AE4D")
-                                                                        .withOpacity(
-                                                                            0.5)
-                                                                  ])),
-                                                    child: Row(
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .spaceBetween,
-                                                      children: [
-                                                        Column(
-                                                          crossAxisAlignment:
-                                                              CrossAxisAlignment
-                                                                  .start,
-                                                          children: [
-                                                            Text(
-                                                                visit
-                                                                    .clientName,
-                                                                style: TextStyle(
-                                                                    color: Colors
-                                                                        .white,
-                                                                    fontSize: Utils
-                                                                            .isTab
-                                                                        ? 18
-                                                                        : 14)),
-                                                            Text(
-                                                              visit.address,
-                                                              style: TextStyle(
-                                                                  color: Colors
-                                                                      .white,
-                                                                  fontSize:
-                                                                      Utils.isTab
+                                    return ListView(
+                                      physics: NeverScrollableScrollPhysics(),
+                                      shrinkWrap: true,
+                                      children: sortedData.entries.map((entry) {
+                                        String time = entry.key;
+                                        Visit visit = entry.value;
+                                        return Column(
+                                          children: [
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                Text(
+                                                  time,
+                                                  style: TextStyle(
+                                                      fontSize: Utils.isTab
+                                                          ? 20
+                                                          : 14),
+                                                ),
+                                                InkWell(
+                                                  onTap: () {
+                                                    if (visit.checkOut ==
+                                                        false) {
+                                                      Navigator.of(context).push(
+                                                          MaterialPageRoute(
+                                                              builder: (context) =>
+                                                                  ManagerVisitDetail(
+                                                                      visit:
+                                                                          visit,
+                                                                      user: widget
+                                                                          .user)));
+                                                    } else {
+                                                      Navigator.of(context).push(
+                                                          MaterialPageRoute(
+                                                              builder: (context) =>
+                                                                  SummaryPage(
+                                                                      visit:
+                                                                          visit,
+                                                                      showNewVisitBtn:
+                                                                          false)));
+                                                    }
+                                                  },
+                                                  child: Container(
+                                                      width: Utils.deviceWidth *
+                                                          0.6,
+                                                      padding:
+                                                          const EdgeInsets.all(
+                                                              10),
+                                                      margin: const EdgeInsets
+                                                          .symmetric(
+                                                          vertical: 10),
+                                                      decoration:
+                                                          ShapeDecoration(
+                                                              shape:
+                                                                  SmoothRectangleBorder(
+                                                                borderRadius:
+                                                                    SmoothBorderRadius(
+                                                                  cornerRadius:
+                                                                      15,
+                                                                  cornerSmoothing:
+                                                                      1,
+                                                                ),
+                                                              ),
+                                                              gradient: visit
+                                                                          .status ==
+                                                                      'Approve'
+                                                                  ? LinearGradient(
+                                                                      colors: [
+                                                                          HexColor(
+                                                                              "00AE4D"),
+                                                                          HexColor("00AE4D")
+                                                                              .withOpacity(0.5)
+                                                                        ])
+                                                                  : LinearGradient(
+                                                                      colors: [
+                                                                          HexColor(
+                                                                              "1B2E62"),
+                                                                          HexColor(
+                                                                              "365FC8")
+                                                                        ])),
+                                                      child: Row(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .spaceBetween,
+                                                        children: [
+                                                          Column(
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .start,
+                                                            children: [
+                                                              Text(
+                                                                  visit
+                                                                      .clientName,
+                                                                  style: TextStyle(
+                                                                      color: Colors
+                                                                          .white,
+                                                                      fontSize: Utils
+                                                                              .isTab
+                                                                          ? 18
+                                                                          : 14)),
+                                                              SizedBox(
+                                                                width: 120,
+                                                                child: Text(
+                                                                  visit.address,
+                                                                  style: TextStyle(
+                                                                      color: Colors
+                                                                          .white,
+                                                                      overflow:
+                                                                          TextOverflow
+                                                                              .ellipsis,
+                                                                      fontSize: Utils
+                                                                              .isTab
                                                                           ? 18
                                                                           : 14),
-                                                            ),
-                                                          ],
-                                                        ),
-                                                        Icon(
-                                                            visit.checkOut ==
-                                                                    true
-                                                                ? Icons
-                                                                    .location_on
-                                                                : Icons
-                                                                    .location_off,
-                                                            color: Colors.white,
-                                                            size: Utils.isTab
-                                                                ? 30
-                                                                : 24),
-                                                      ],
-                                                    )),
-                                              ),
-                                            ],
-                                          ),
-                                          const Divider()
-                                        ],
-                                      );
-                                    }).toList(),
-                                  );
-                                }
-                              }))
-                    ],
-                  )),
+                                                                ),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                          Icon(
+                                                              visit.checkOut ==
+                                                                      true
+                                                                  ? Icons
+                                                                      .location_on
+                                                                  : Icons
+                                                                      .location_off,
+                                                              color:
+                                                                  Colors.white,
+                                                              size: Utils.isTab
+                                                                  ? 30
+                                                                  : 24),
+                                                        ],
+                                                      )),
+                                                ),
+                                              ],
+                                            ),
+                                            const Divider()
+                                          ],
+                                        );
+                                      }).toList(),
+                                    );
+                                  }
+                                })
+                          ],
+                        ),
+                      ])),
             ],
           );
         }),

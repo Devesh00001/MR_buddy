@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:figma_squircle/figma_squircle.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -29,145 +30,145 @@ class VisitList extends StatelessWidget {
                   child: Text("Your Visits",
                       style: TextStyle(
                           fontSize: 24, fontWeight: FontWeight.w500))),
-              SizedBox(
-                  height: Utils.deviceHeight * 0.4,
-                  child: FutureBuilder<Map<String, dynamic>>(
-                      future: dashboardProvider.getWeeklyPlan(
-                          user.name, dashboardProvider.selectedDate),
-                      builder: (context, snapshot) {
-                        if (snapshot.connectionState ==
-                            ConnectionState.waiting) {
-                          return Center(
-                              child: Lottie.asset("assets/lottie/loading.json",
-                                  height: 100));
-                        } else if (snapshot.hasError) {
-                          return Center(
-                              child: Text('Error: ${snapshot.error}'));
-                        } else if (!snapshot.hasData ||
-                            snapshot.data!.isEmpty) {
-                          return const Center(child: Text('No Visits found'));
-                        } else {
-                          Map<String, Visit> data =
-                              snapshot.data as Map<String, Visit>;
+              FutureBuilder<Map<String, dynamic>>(
+                  future: dashboardProvider.getWeeklyPlan(
+                      user.name, dashboardProvider.selectedDate),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return Center(
+                          child: Lottie.asset("assets/lottie/loading.json",
+                              height: 100));
+                    } else if (snapshot.hasError) {
+                      return Center(child: Text('Error: ${snapshot.error}'));
+                    } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                      return const Center(child: Text('No Visits found'));
+                    } else {
+                      Map<String, Visit> data =
+                          snapshot.data as Map<String, Visit>;
 
-                          DateFormat format = DateFormat('hh:mm a');
+                      DateFormat format = DateFormat('hh:mm a');
 
-                          var sortedEntries = data.entries.toList()
-                            ..sort((a, b) {
-                              DateTime timeA = format.parse(a.key);
-                              DateTime timeB = format.parse(b.key);
-                              return timeA.compareTo(timeB);
-                            });
+                      var sortedEntries = data.entries.toList()
+                        ..sort((a, b) {
+                          DateTime timeA = format.parse(a.key);
+                          DateTime timeB = format.parse(b.key);
+                          return timeA.compareTo(timeB);
+                        });
 
-                          Map<String, Visit> sortedData = {
-                            for (var entry in sortedEntries)
-                              entry.key: entry.value
-                          };
+                      Map<String, Visit> sortedData = {
+                        for (var entry in sortedEntries) entry.key: entry.value
+                      };
 
-                          return ListView(
-                            children: sortedData.entries.map((entry) {
-                              String time = entry.key;
-                              Visit visit = entry.value;
-                              return Column(
+                      return ListView(
+                        physics: const NeverScrollableScrollPhysics(),
+                        shrinkWrap: true,
+                        children: sortedData.entries.map((entry) {
+                          String time = entry.key;
+                          Visit visit = entry.value;
+                          return Column(
+                            children: [
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text(
-                                        time,
-                                        style: TextStyle(
-                                            fontSize: Utils.isTab ? 20 : 14),
-                                      ),
-                                      InkWell(
-                                        onTap: () {
-                                          if (visit.checkOut == false) {
-                                            Navigator.of(context).push(
-                                                MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        VisitDetail(
-                                                            visit: visit)));
-                                          } else {
-                                            Navigator.of(context).push(
-                                                MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        SummaryPage(
-                                                            visit: visit,
-                                                            showNewVisitBtn:
-                                                                false)));
-                                          }
-                                        },
-                                        child: Container(
-                                            width: Utils.deviceWidth * 0.7,
-                                            padding: const EdgeInsets.all(15),
-                                            margin: const EdgeInsets.symmetric(
-                                                vertical: 10),
-                                            decoration: ShapeDecoration(
-                                                shape: SmoothRectangleBorder(
-                                                  borderRadius:
-                                                      SmoothBorderRadius(
-                                                    cornerRadius: 15,
-                                                    cornerSmoothing: 1,
-                                                  ),
-                                                ),
-                                                gradient: visit.checkOut
-                                                    ? LinearGradient(colors: [
-                                                        HexColor("00AE4D"),
-                                                        HexColor("00AE4D")
-                                                            .withOpacity(0.5)
-                                                      ])
-                                                    : LinearGradient(colors: [
-                                                        HexColor("1B2E62"),
-                                                        HexColor("365FC8")
-                                                      ])),
-                                            child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
+                                  Text(
+                                    time,
+                                    style: TextStyle(
+                                        fontSize: Utils.isTab ? 20 : 14),
+                                  ),
+                                  InkWell(
+                                    onTap: () {
+                                      if (visit.checkOut == false) {
+                                        Navigator.of(context).push(
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    VisitDetail(visit: visit)));
+                                      } else {
+                                        Navigator.of(context).push(
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    SummaryPage(
+                                                        visit: visit,
+                                                        showNewVisitBtn:
+                                                            false)));
+                                      }
+                                    },
+                                    child: Container(
+                                        width: Utils.deviceWidth * 0.6,
+                                        padding: const EdgeInsets.all(10),
+                                        margin: const EdgeInsets.symmetric(
+                                            vertical: 10),
+                                        decoration: ShapeDecoration(
+                                            shape: SmoothRectangleBorder(
+                                              borderRadius: SmoothBorderRadius(
+                                                cornerRadius: 15,
+                                                cornerSmoothing: 1,
+                                              ),
+                                            ),
+                                            gradient: visit.checkOut
+                                                ? LinearGradient(colors: [
+                                                    HexColor("00AE4D"),
+                                                    HexColor("00AE4D")
+                                                        .withOpacity(0.5)
+                                                  ])
+                                                : LinearGradient(colors: [
+                                                    HexColor("1B2E62"),
+                                                    HexColor("365FC8")
+                                                  ])),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
                                               children: [
-                                                Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  children: [
-                                                    Text(visit.clientName,
-                                                        style: TextStyle(
-                                                            color: Colors.white,
-                                                            fontSize:
-                                                                Utils.isTab
-                                                                    ? 18
-                                                                    : 14)),
-                                                    Text(
-                                                      visit.address,
+                                                SizedBox(
+                                                  width: 200,
+                                                  child: Text(visit.clientName,
                                                       style: TextStyle(
                                                           color: Colors.white,
                                                           fontSize: Utils.isTab
                                                               ? 18
-                                                              : 14),
-                                                    ),
-                                                  ],
+                                                              : 14)),
                                                 ),
-                                                Icon(
-                                                  visit.placeType ==
-                                                          'Private Clinic'
-                                                      ? FontAwesomeIcons
-                                                          .houseChimneyMedical
-                                                      : FontAwesomeIcons
-                                                          .solidHospital,
-                                                  color: Colors.white,
-                                                  size: Utils.isTab ? 30 : 24,
+                                                SizedBox(
+                                                  width: 200,
+                                                  child: AutoSizeText(
+                                                    visit.address,
+                                                    style: TextStyle(
+                                                        color: Colors.white,
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
+                                                        fontSize: Utils.isTab
+                                                            ? 18
+                                                            : 14),
+                                                  ),
                                                 ),
                                               ],
-                                            )),
-                                      ),
-                                    ],
+                                            ),
+                                            Icon(
+                                              visit.placeType ==
+                                                      'Private Clinic'
+                                                  ? FontAwesomeIcons
+                                                      .houseChimneyMedical
+                                                  : FontAwesomeIcons
+                                                      .solidHospital,
+                                              color: Colors.white,
+                                              size: Utils.isTab ? 30 : 24,
+                                            ),
+                                          ],
+                                        )),
                                   ),
-                                  const Divider()
                                 ],
-                              );
-                            }).toList(),
+                              ),
+                              const Divider()
+                            ],
                           );
-                        }
-                      }))
+                        }).toList(),
+                      );
+                    }
+                  })
             ],
           ));
     });

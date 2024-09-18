@@ -17,7 +17,10 @@ class WeeklyProviderPlan with ChangeNotifier {
   String? placeType;
   List<String> typeOfPlace = ["Private Clinic", "Hospital"];
   String? clientType;
-  List<String> typeOfClient = ["New Client", "Existing Client"];
+  List<String> typeOfClient = [
+    "New Health Associate",
+    "Existing Health Associate"
+  ];
   String? client;
   String? clientName;
   List<String> clientList = [];
@@ -145,7 +148,6 @@ class WeeklyProviderPlan with ChangeNotifier {
 
   setMRName(String value) {
     mrName = value;
-    notifyListeners();
   }
 
   setClientName(String value) {
@@ -154,7 +156,6 @@ class WeeklyProviderPlan with ChangeNotifier {
 
   setClient(String value) {
     client = value;
-    notifyListeners();
   }
 
   getClientName() async {
@@ -166,7 +167,6 @@ class WeeklyProviderPlan with ChangeNotifier {
   setClientType(String value) {
     clientType = value;
     getClientName();
-    notifyListeners();
   }
 
   setFocusDate(DateTime value) {
@@ -174,9 +174,12 @@ class WeeklyProviderPlan with ChangeNotifier {
     notifyListeners();
   }
 
+  getFocusDate() {
+    return focusDate;
+  }
+
   setPlaceType(String value) {
     placeType = value;
-    notifyListeners();
   }
 
   String? validateInput(String? value) {

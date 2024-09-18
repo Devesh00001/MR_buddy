@@ -1,12 +1,20 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mr_buddy/features/dashboard/screen/dashboard.dart';
 import 'package:mr_buddy/utils.dart';
 import 'package:mr_buddy/widgets/comman_appbar.dart';
+import 'package:provider/provider.dart';
 
 import '../../clients/screen/all_client.dart';
 import '../../drugs/screen/drugs_list.dart';
 import '../../mr_detail_visualization/screen/mr_detail_visualization.dart';
+import '../../weekly plan/screen/single_visit_screen.dart';
 import '../../weekly plan/screen/weekly_plan.dart';
+import '../../welcome/model/user.dart';
+import '../../welcome/provider/welcome_provider.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -32,38 +40,78 @@ class _HomeState extends State<Home> {
     });
   }
 
-  final List<Widget> _screens = [
+  final List<Widget> _mrScreens = [
+    const DashBoardScreen(),
+    const AllClientScreen(),
+    const DrugsList(),
+    const DashBoardScreen(),
+  ];
+
+  final List<Widget> _supervisorScreens = [
     const DashBoardScreen(),
     const AllClientScreen(),
     const DrugsList(),
     const MrDetailVisualization(),
   ];
 
-  final List<String> titleList = ['DashBoard', 'Clients', 'Drugs', 'Data'];
+  final List<String> supervisorTitleList = [
+    'DashBoard',
+    'Clients',
+    'Drugs',
+    'Analytics'
+  ];
+
+  final List<String> mrTitleList = ['DashBoard', 'Clients', 'Drugs', 'HRMS'];
   @override
   Widget build(BuildContext context) {
+    User? user = Provider.of<WelcomeProvider>(context).user;
+    List<SpeedDialChild> mrWidget = [
+      SpeedDialChild(
+        child: const Icon(Icons.assignment_rounded),
+        label: 'Create Weekly Plan',
+        shape: const CircleBorder(),
+        onTap: () {
+          Navigator.of(context).push(
+              MaterialPageRoute(builder: (context) => const WeeklyPlan()));
+        },
+      ),
+      SpeedDialChild(
+        child: const Icon(FontAwesomeIcons.userDoctor),
+        label: 'Add a single visit',
+        shape: const CircleBorder(),
+        onTap: () {
+          Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) => const SingleVisitScreen()));
+        },
+      )
+    ];
     return Scaffold(
       extendBody: true,
       resizeToAvoidBottomInset: false,
-      appBar: CommonAppBar(showIcons: true, title: titleList[_currentIndex]),
-      body: _screens[_currentIndex],
+      appBar: CommonAppBar(
+          showIcons: _currentIndex == 0 ? true : false,
+          title: user!.role == 'MR'
+              ? mrTitleList[_currentIndex]
+              : supervisorTitleList[_currentIndex]),
+      body: user.role == 'MR'
+          ? _mrScreens[_currentIndex]
+          : _supervisorScreens[_currentIndex],
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      floatingActionButton: SizedBox(
-        height: Utils.isTab ? 100 : 80,
-        child: FittedBox(
-          child: FloatingActionButton(
-              backgroundColor: HexColor("2F52AC"),
-              shape: const CircleBorder(),
-              onPressed: () {
-                Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => const WeeklyPlan()));
-              },
-              child: const Icon(
-                Icons.add_rounded,
-                size: 30,
-                color: Colors.white,
-              )),
-        ),
+      floatingActionButton: SpeedDial(
+        icon: Icons.add,
+        activeIcon: Icons.clear_outlined,
+        iconTheme: const IconThemeData(color: Colors.white),
+        overlayColor: Colors.black,
+        backgroundColor: HexColor("2F52AC"),
+        overlayOpacity: 0.4,
+        spaceBetweenChildren: 8,
+        onOpen: () {
+          if (user.role != 'MR') {
+            Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => const SingleVisitScreen()));
+          }
+        },
+        children: user.role == 'MR' ? mrWidget : [],
       ),
       bottomNavigationBar: Container(
         decoration: BoxDecoration(
@@ -92,7 +140,9 @@ class _HomeState extends State<Home> {
               buildIconColumn(Icons.people, "Client", 1),
               const SizedBox(width: 20),
               buildIconColumn(Icons.medication, "Drugs", 2),
-              buildIconColumn(Icons.bar_chart, "Data", 3),
+              user.role == 'MR'
+                  ? buildIconColumn(Icons.calendar_month, "HRMS", 3)
+                  : buildIconColumn(Icons.bar_chart, "Analytics", 3),
             ],
           ),
         ),

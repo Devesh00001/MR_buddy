@@ -22,11 +22,16 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
     User? user = Provider.of<WelcomeProvider>(context).user;
     return Consumer<DashboardProvider>(
         builder: (context, dashboardProvider, child) {
-      return Column(
-          mainAxisAlignment: user!.role == "MR"
-              ? MainAxisAlignment.spaceAround
-              : MainAxisAlignment.start,
-          children: _getWidgetsForRole(user));
+      return ListView(
+        shrinkWrap: true,
+        children: [
+          Column(
+              mainAxisAlignment: user!.role == "MR"
+                  ? MainAxisAlignment.spaceAround
+                  : MainAxisAlignment.start,
+              children: _getWidgetsForRole(user)),
+        ],
+      );
     });
   }
 }
