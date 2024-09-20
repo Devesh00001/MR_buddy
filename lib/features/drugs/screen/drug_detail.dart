@@ -243,7 +243,7 @@ class PromotionalDetail extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.only(left: 20),
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -304,10 +304,34 @@ class PromotionalDetail extends StatelessWidget {
               ),
               Consumer<DrugsProvider>(builder: (context, drugProvider, child) {
                 return TextButton(
+                    style: TextButton.styleFrom(
+                        backgroundColor: HexColor("00AE4D"),
+                        foregroundColor: Colors.white,
+                        shape: const RoundedRectangleBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(5))),
+                        visualDensity: const VisualDensity(vertical: -2)),
                     onPressed: () {
                       drugProvider.openPDf(drug.name, context);
                     },
-                    child: const Text("View PDF"));
+                    child: drugProvider.getPdfButtonStatus() == true
+                        ? const SizedBox(
+                            height: 15,
+                            width: 15,
+                            child: CircularProgressIndicator(
+                              color: Colors.white,
+                              strokeWidth: 2.0,
+                            ),
+                          )
+                        : const Wrap(
+                            children: [
+                              Icon(
+                                Icons.remove_red_eye,
+                                size: 20,
+                              ),
+                              SizedBox(width: 5),
+                              Text("PDF"),
+                            ],
+                          ));
               })
             ],
           ),

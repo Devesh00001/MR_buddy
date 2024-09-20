@@ -16,6 +16,7 @@ class DrugsProvider with ChangeNotifier {
   bool efficacyDataFlag = true;
   bool promotionalDetailFlag = true;
   String? mrName;
+  bool isPdfLoading = false;
 
   changeStatusDosageInfoFlag() {
     dosageInfoFlag = !dosageInfoFlag;
@@ -64,6 +65,15 @@ class DrugsProvider with ChangeNotifier {
 
   resetMRName() {
     mrName = null;
+  }
+
+  changeStatusOfPdfButton(bool value) {
+    isPdfLoading = value;
+    notifyListeners();
+  }
+
+  getPdfButtonStatus() {
+    return isPdfLoading;
   }
 
   resetProvider() {
@@ -122,8 +132,10 @@ class DrugsProvider with ChangeNotifier {
   }
 
   openPDf(String medicineName, BuildContext context) async {
+    changeStatusOfPdfButton(true);
     DrugService service = DrugService();
     String filePath = await service.downloadPdf(medicineName) ?? '';
+    changeStatusOfPdfButton(false);
     log(filePath);
     Navigator.of(context).push(MaterialPageRoute(
         builder: (context) => PDFScreen(
