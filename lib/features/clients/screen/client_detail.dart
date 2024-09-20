@@ -46,19 +46,42 @@ class ClientDetail extends StatelessWidget {
                       color: Colors.white),
                 ),
                 const SizedBox(height: 20),
-                const CilentDataRow(
-                  title: "Position",
-                  value: "Cardiologist",
-                ),
-                const SizedBox(height: 10),
-                CilentDataRow(
-                  title: "Hospital",
-                  value: client.hospital,
-                ),
-                const SizedBox(height: 10),
-                CilentDataRow(
-                  title: "Address",
-                  value: client.address,
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const CilentDataRow(
+                          title: "Position",
+                          value: "Cardiologist",
+                        ),
+                        const SizedBox(height: 10),
+                        CilentDataRow(
+                          title: "Hospital",
+                          value: client.hospital,
+                        ),
+                        const SizedBox(height: 10),
+                        CilentDataRow(
+                          title: "Address",
+                          value: client.address,
+                        ),
+                      ],
+                    ),
+                    ElevatedButton(
+                        onPressed: () {},
+                        style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.white,
+                            foregroundColor: Colors.black,
+                            shape: const SmoothRectangleBorder(
+                                borderRadius: SmoothBorderRadius.all(
+                                    SmoothRadius(
+                                        cornerRadius: 10, cornerSmoothing: 1))),
+                            textStyle: const TextStyle(
+                                fontSize: 16, fontWeight: FontWeight.bold)),
+                        child: const Text("MR"))
+                  ],
                 ),
                 const SizedBox(height: 20),
                 Text(
@@ -100,7 +123,8 @@ class ClientDetail extends StatelessWidget {
                                   },
                                   child: Container(
                                     height: Utils.deviceHeight * 0.09,
-                                    constraints: BoxConstraints(minHeight: 70),
+                                    constraints:
+                                        const BoxConstraints(minHeight: 70),
                                     margin: const EdgeInsets.all(10),
                                     decoration: ShapeDecoration(
                                       shadows: [
@@ -125,7 +149,8 @@ class ClientDetail extends StatelessWidget {
                                           pastVisit.mrName,
                                           minFontSize: 12,
                                           maxFontSize: 16,
-                                          style: TextStyle(color: Colors.black),
+                                          style: const TextStyle(
+                                              color: Colors.black),
                                         ),
                                         subtitle: AutoSizeText(
                                           '$date - $time',

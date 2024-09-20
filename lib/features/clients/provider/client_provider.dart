@@ -37,4 +37,5 @@ class ClinetProvider with ChangeNotifier {
     pastVisit = await service.getPastVisit(clientName);
     return pastVisit;
   }
+
 }

@@ -24,6 +24,8 @@ class ClientService {
     }
   }
 
+  
+
   Future<Map<String, Map<String, PastVisit>>> getPastVisit(
       String clientName) async {
     final firestore = FirebaseFirestore.instance;

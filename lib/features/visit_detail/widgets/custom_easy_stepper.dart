@@ -148,6 +148,7 @@ class CustomEasyStepper extends StatelessWidget {
         // onStepReached: (index) =>
         //     setState(() => activeStep = index),
       ),
+    
     );
   }
 }
