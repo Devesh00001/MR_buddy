@@ -1,7 +1,11 @@
+import 'dart:developer';
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
 import 'package:mr_buddy/features/drugs/model/drug.dart';
-
+import 'package:http/http.dart' as http;
+import 'package:path_provider/path_provider.dart';
 import '../model/logs.dart';
 
 class DrugService {
@@ -21,7 +25,7 @@ class DrugService {
         return [];
       }
     } catch (e) {
-      print('Error fetching Drugs: $e');
+      log('Error fetching Drugs: $e');
       return [];
     }
   }
@@ -47,12 +51,12 @@ class DrugService {
           '$logPath.$fieldName': FieldValue.increment(1),
         });
 
-        print('Field value incremented successfully!');
+        log('Field value incremented successfully!');
       } else {
-        print('No medicine found with the name: $medicineName');
+        log('No medicine found with the name: $medicineName');
       }
     } catch (e) {
-      print('Error incrementing field: $e');
+      log('Error incrementing field: $e');
     }
   }
 
@@ -79,15 +83,57 @@ class DrugService {
             }
           });
         } else {
-          print('No logs found for MR: $mrName');
+          log('No logs found for MR: $mrName');
         }
       } else {
-        print('No medicine found with the name: $medicineName');
+        log('No medicine found with the name: $medicineName');
       }
     } catch (e) {
-      print('Error fetching logs: $e');
+      log('Error fetching logs: $e');
     }
 
     return logsList;
+  }
+
+  Future<String?> downloadPdf(String medicineName) async {
+    try {
+      CollectionReference medicineCollection =
+          FirebaseFirestore.instance.collection('Medicine');
+
+      QuerySnapshot querySnapshot =
+          await medicineCollection.where('Name', isEqualTo: medicineName).get();
+
+      if (querySnapshot.docs.isEmpty) {
+        log('No document found for the given medicine name');
+        return null;
+      }
+
+      DocumentSnapshot medicineDoc = querySnapshot.docs.first;
+
+      String pdfUrl = medicineDoc['pdf'];
+
+      if (pdfUrl.isEmpty) {
+        log('PDF URL is not available');
+        return null;
+      }
+
+      final response = await http.get(Uri.parse(pdfUrl));
+
+      if (response.statusCode == 200) {
+        Directory appDocDir = await getApplicationDocumentsDirectory();
+        String filePath = '${appDocDir.path}/$medicineName.pdf';
+
+        File file = File(filePath);
+        await file.writeAsBytes(response.bodyBytes);
+
+        log('PDF downloaded successfully to $filePath');
+        return filePath;
+      } else {
+        log('Failed to download PDF');
+      }
+    } catch (e) {
+      log('Error downloading PDF: $e');
+    }
+    return null;
   }
 }

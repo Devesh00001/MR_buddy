@@ -1,7 +1,10 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:mr_buddy/features/drugs/model/drug.dart';
 import 'package:stepper_list_view/stepper_list_view.dart';
 
+import '../screen/pdf_screen.dart';
 import '../service/drug_service.dart';
 
 class DrugsProvider with ChangeNotifier {
@@ -116,5 +119,15 @@ class DrugsProvider with ChangeNotifier {
       },
     );
     return stepperList;
+  }
+
+  openPDf(String medicineName, BuildContext context) async {
+    DrugService service = DrugService();
+    String filePath = await service.downloadPdf(medicineName) ?? '';
+    log(filePath);
+    Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) => PDFScreen(
+              filePath: filePath,
+            )));
   }
 }

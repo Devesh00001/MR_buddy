@@ -1,7 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:figma_squircle/figma_squircle.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:mr_buddy/utils.dart';
 import 'package:provider/provider.dart';
 import 'package:simple_gradient_text/simple_gradient_text.dart';
@@ -303,7 +302,13 @@ class PromotionalDetail extends StatelessWidget {
                 "Product Literature",
                 style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
               ),
-              TextButton(onPressed: () {}, child: const Text("Download PDF"))
+              Consumer<DrugsProvider>(builder: (context, drugProvider, child) {
+                return TextButton(
+                    onPressed: () {
+                      drugProvider.openPDf(drug.name, context);
+                    },
+                    child: const Text("View PDF"));
+              })
             ],
           ),
         ],
