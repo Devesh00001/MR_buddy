@@ -54,7 +54,7 @@ class ClientDetail extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         const CilentDataRow(
-                          title: "Position",
+                          title: "Specialization",
                           value: "Cardiologist",
                         ),
                         const SizedBox(height: 10),

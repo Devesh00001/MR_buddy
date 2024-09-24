@@ -56,7 +56,7 @@ class _MRWeekDetailsState extends State<MRWeekDetails> {
                   height: Utils.deviceHeight,
                   margin: const EdgeInsets.all(10),
                   child: ListView(
-                      padding: EdgeInsets.symmetric(horizontal: 10),
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
                       shrinkWrap: true,
                       children: [
                         Column(
@@ -87,7 +87,10 @@ class _MRWeekDetailsState extends State<MRWeekDetails> {
                                 lastDay: DateTime.utc(2030, 3, 14),
                                 rowHeight: Utils.isTab ? 50 : 30,
                                 focusedDay: dashboardProvider.focusDate,
-                                headerVisible: false,
+                                headerVisible: true,
+                                headerStyle: const HeaderStyle(
+                                    titleCentered: true,
+                                    formatButtonVisible: false),
                                 calendarStyle: CalendarStyle(
                                     disabledTextStyle: TextStyle(
                                         fontSize: Utils.isTab ? 18 : 12),
@@ -157,7 +160,7 @@ class _MRWeekDetailsState extends State<MRWeekDetails> {
                                     };
 
                                     return ListView(
-                                      physics: NeverScrollableScrollPhysics(),
+                                      physics: const NeverScrollableScrollPhysics(),
                                       shrinkWrap: true,
                                       children: sortedData.entries.map((entry) {
                                         String time = entry.key;

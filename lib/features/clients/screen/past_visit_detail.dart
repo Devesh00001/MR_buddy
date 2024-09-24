@@ -93,7 +93,7 @@ class PastVisitDetail extends StatelessWidget {
                     Column(
                       children: [
                         SummaryCardTile(
-                            title: "Drugs Prescribed",
+                            title: "Suggested Medication",
                             value: pastVisit.drugsPrescribed.substring(
                                 1, pastVisit.drugsPrescribed.length - 1)),
                         const SizedBox(height: 12),

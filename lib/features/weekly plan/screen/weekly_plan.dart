@@ -368,7 +368,7 @@ class _WeeklyPlanState extends State<WeeklyPlan> {
                                   ),
                                   const SizedBox(width: 8.0),
                                   Text(
-                                    weeklyProvider.time ?? 'Select Time',
+                                    weeklyProvider.time,
                                     style: const TextStyle(color: Colors.black),
                                   ),
                                 ],
@@ -518,6 +518,5 @@ class _WeeklyPlanState extends State<WeeklyPlan> {
         ),
       );
     });
-  
   }
 }

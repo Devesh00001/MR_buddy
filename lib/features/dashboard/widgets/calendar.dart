@@ -33,7 +33,11 @@ class Calendar extends StatelessWidget {
               lastDay: DateTime.utc(2030, 3, 14),
               rowHeight: Utils.isTab ? 50 : 30,
               focusedDay: dashboardProvider.focusDate,
-              headerVisible: false,
+              headerVisible: true,
+              headerStyle: const HeaderStyle(
+                titleCentered: true,
+                formatButtonVisible: false,
+              ),
               daysOfWeekHeight: Utils.isTab ? 50 : 30,
               daysOfWeekStyle: DaysOfWeekStyle(
                 weekdayStyle: TextStyle(fontSize: Utils.isTab ? 20.0 : 12),

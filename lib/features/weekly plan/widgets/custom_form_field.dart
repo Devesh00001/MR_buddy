@@ -43,6 +43,8 @@ class _CustomFormFieldState extends State<CustomFormField> {
       weeklyProvider.setDate(_controller.text);
     } else if (widget.hintText == 'Name') {
       weeklyProvider.setClientName(_controller.text);
+    } else if (widget.hintText == 'Specialization') {
+      weeklyProvider.setSpecialization(_controller.text);
     }
   }
 

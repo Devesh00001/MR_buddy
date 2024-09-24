@@ -69,7 +69,7 @@ class _SingleVisitScreenState extends State<SingleVisitScreen> {
 
   @override
   Widget build(BuildContext context) {
-    Future<void> _selectDateTime(BuildContext context) async {
+    Future<void> selectDate(BuildContext context) async {
       DateTime? selectedDate = await showDialog<DateTime>(
         context: context,
         builder: (context) {
@@ -151,65 +151,60 @@ class _SingleVisitScreenState extends State<SingleVisitScreen> {
       );
 
       if (selectedDate != null) {
-        TimeOfDay? selectedTime = await showTimePicker(
-          // ignore: use_build_context_synchronously
-          context: context,
-          initialTime: TimeOfDay.now(),
-          initialEntryMode: TimePickerEntryMode.inputOnly,
-          builder: (context, child) {
-            return Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Theme(
-                  data: Theme.of(context).copyWith(
-                    materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                    timePickerTheme: TimePickerThemeData(
-                        dayPeriodColor: HexColor("2F52AC"),
-                        dayPeriodTextStyle: const TextStyle(fontSize: 16),
-                        hourMinuteTextStyle: const TextStyle(fontSize: 20),
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10))),
-                    colorScheme: ColorScheme.light(
-                        primary: HexColor("96C9F4"),
-                        onPrimary: Colors.black,
-                        onSurface: Colors.black,
-                        surfaceTint: Colors.transparent),
-                    textButtonTheme: TextButtonThemeData(
-                      style: TextButton.styleFrom(
-                        foregroundColor: HexColor("4AB97B"),
-                      ),
+        final provider =
+            Provider.of<WeeklyProviderPlan>(context, listen: false);
+        provider.setFocusDate(selectedDate);
+      }
+    }
+
+    Future<void> selectTime(BuildContext context) async {
+      TimeOfDay? selectedTime = await showTimePicker(
+        context: context,
+        initialTime: TimeOfDay.now(),
+        initialEntryMode: TimePickerEntryMode.inputOnly,
+        builder: (context, child) {
+          return Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Theme(
+                data: Theme.of(context).copyWith(
+                  materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                  timePickerTheme: TimePickerThemeData(
+                      dayPeriodColor: HexColor("2F52AC"),
+                      dayPeriodTextStyle: const TextStyle(fontSize: 16),
+                      hourMinuteTextStyle: const TextStyle(fontSize: 20),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10))),
+                  colorScheme: ColorScheme.light(
+                      primary: HexColor("96C9F4"),
+                      onPrimary: Colors.black,
+                      onSurface: Colors.black,
+                      surfaceTint: Colors.transparent),
+                  textButtonTheme: TextButtonThemeData(
+                    style: TextButton.styleFrom(
+                      foregroundColor: HexColor("4AB97B"),
                     ),
                   ),
-                  child: child!,
                 ),
-              ],
-            );
-          },
-        );
+                child: child!,
+              ),
+            ],
+          );
+        },
+      );
 
-        if (selectedTime != null) {
-          final now = DateTime.now();
-          final formattedTime = DateFormat('hh:mm a').format(DateTime(now.year,
-              now.month, now.day, selectedTime.hour, selectedTime.minute));
-          final provider =
-              Provider.of<WeeklyProviderPlan>(context, listen: false);
-          provider.setFocusDate(selectedDate);
-          provider.setTime(formattedTime);
-        }
+      if (selectedTime != null) {
+        final now = DateTime.now();
+        final formattedTime = DateFormat('hh:mm a').format(DateTime(now.year,
+            now.month, now.day, selectedTime.hour, selectedTime.minute));
+        final provider =
+            Provider.of<WeeklyProviderPlan>(context, listen: false);
+
+        provider.setTime(formattedTime);
       }
     }
 
-    bool lastDayOfWeek() {
-      final provider = Provider.of<WeeklyProviderPlan>(context, listen: false);
-      if (DateFormat('dd-MM-yyyy').format(provider.focusDate) ==
-          DateFormat('dd-MM-yyyy').format(provider.friday)) {
-        return true;
-      } else {
-        return false;
-      }
-    }
-
-    final _formKey = GlobalKey<FormState>();
+    final formKey = GlobalKey<FormState>();
     User? user = Provider.of<WelcomeProvider>(context).user;
     return PopScope(
       canPop: false,
@@ -260,7 +255,7 @@ class _SingleVisitScreenState extends State<SingleVisitScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Form(
-                          key: _formKey,
+                          key: formKey,
                           child: SizedBox(
                             height: Utils.deviceHeight * 0.78,
                             child: SingleChildScrollView(
@@ -329,42 +324,111 @@ class _SingleVisitScreenState extends State<SingleVisitScreen> {
                                         weeklyProvider.validateInput,
                                   ),
                                   const SizedBox(height: 20),
-                                  Text(
-                                    "Date & Time",
-                                    style: TextStyle(
-                                        color:
-                                            HexColor("1F1F1F").withOpacity(0.5),
-                                        fontSize: Utils.isTab ? 18 : 14),
-                                  ),
-                                  Center(
-                                    child: GestureDetector(
-                                      onTap: () => _selectDateTime(context),
-                                      child: Container(
-                                        padding: const EdgeInsets.all(12.0),
-                                        decoration: BoxDecoration(
-                                          border:
-                                              Border.all(color: Colors.grey),
-                                          borderRadius:
-                                              BorderRadius.circular(4.0),
-                                        ),
-                                        child: Row(
-                                          children: [
-                                            const Icon(
-                                              Icons.calendar_today,
-                                              color: Colors.black,
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            "Date",
+                                            style: TextStyle(
+                                                color: HexColor("1F1F1F")
+                                                    .withOpacity(0.5),
+                                                fontSize:
+                                                    Utils.isTab ? 18 : 14),
+                                          ),
+                                          Center(
+                                            child: GestureDetector(
+                                              onTap: () => selectDate(context),
+                                              child: Container(
+                                                padding:
+                                                    const EdgeInsets.all(12.0),
+                                                decoration: BoxDecoration(
+                                                  border: Border.all(
+                                                      color: Colors.grey),
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          4.0),
+                                                ),
+                                                child: Row(
+                                                  children: [
+                                                    const Icon(
+                                                      Icons.calendar_today,
+                                                      color: Colors.black,
+                                                    ),
+                                                    const SizedBox(width: 8.0),
+                                                    Text(
+                                                      weeklyProvider
+                                                                  .getFocusDate() !=
+                                                              null
+                                                          ? DateFormat(
+                                                                  'dd-MM-yyyy')
+                                                              .format(weeklyProvider
+                                                                  .getFocusDate())
+                                                          : "Select Date",
+                                                      style: const TextStyle(
+                                                          color: Colors.black),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
                                             ),
-                                            const SizedBox(width: 8.0),
-                                            Text(
-                                              weeklyProvider.getTime() != null
-                                                  ? "${DateFormat('dd-MM-yyyy').format(weeklyProvider.getFocusDate())}  ${weeklyProvider.getTime()}"
-                                                  : "Select Date",
-                                              style: const TextStyle(
-                                                  color: Colors.black),
-                                            ),
-                                          ],
-                                        ),
+                                          ),
+                                        ],
                                       ),
-                                    ),
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            "Time",
+                                            style: TextStyle(
+                                                color: HexColor("1F1F1F")
+                                                    .withOpacity(0.5),
+                                                fontSize:
+                                                    Utils.isTab ? 18 : 14),
+                                          ),
+                                          Center(
+                                            child: GestureDetector(
+                                              onTap: () => selectTime(context),
+                                              child: Container(
+                                                padding:
+                                                    const EdgeInsets.all(12.0),
+                                                decoration: BoxDecoration(
+                                                  border: Border.all(
+                                                      color: Colors.grey),
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          4.0),
+                                                ),
+                                                child: Row(
+                                                  children: [
+                                                    const Icon(
+                                                      Icons
+                                                          .access_time_filled_rounded,
+                                                      color: Colors.black,
+                                                    ),
+                                                    const SizedBox(width: 8.0),
+                                                    Text(
+                                                      weeklyProvider
+                                                                  .getTime() !=
+                                                              null
+                                                          ? "${weeklyProvider.getTime()}"
+                                                          : "Select Time",
+                                                      style: const TextStyle(
+                                                          color: Colors.black),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
                                   ),
                                   const SizedBox(height: 10),
                                   Visibility(
@@ -415,7 +479,7 @@ class _SingleVisitScreenState extends State<SingleVisitScreen> {
                                       fontWeight: FontWeight.bold,
                                       color: Colors.white)),
                               onPressed: () async {
-                                if (_formKey.currentState!.validate()) {
+                                if (formKey.currentState!.validate()) {
                                   if (user.role == 'Manager') {
                                     bool status = await weeklyProvider
                                         .uploadWeekDayPlan();
@@ -431,21 +495,17 @@ class _SingleVisitScreenState extends State<SingleVisitScreen> {
                                                   )));
                                     }
                                   } else {
-                                    bool? status =
-                                        await showSubmitPopup(context);
-                                    if (status == true) {
-                                      Navigator.of(context).push(
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  const SuccessScreenWeeklyPlan(
-                                                    heading:
-                                                        'Successfully Created Your Visit',
-                                                    subHeading:
-                                                        'Send notification to your manager to approve for weekly plan',
-                                                  )));
-                                      weeklyProvider.uploadData(user.name,
-                                          uploaded: true);
-                                    } else {}
+                                    Navigator.of(context).push(
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                const SuccessScreenWeeklyPlan(
+                                                  heading:
+                                                      'Successfully Created Your Visit',
+                                                  subHeading:
+                                                      'Send notification to your manager to approve for weekly plan',
+                                                )));
+                                    weeklyProvider.uploadData(user.name,
+                                        uploaded: true);
                                   }
                                 }
                               },
@@ -456,56 +516,6 @@ class _SingleVisitScreenState extends State<SingleVisitScreen> {
                             ),
                           ),
                         ),
-
-                        // Visibility(
-                        //   visible: user.role != 'Manager',
-                        //   child: Center(
-                        //     child: SizedBox(
-                        //       width: Utils.deviceWidth,
-                        //       child: ElevatedButton(
-                        //         style: ElevatedButton.styleFrom(
-                        //             shape: RoundedRectangleBorder(
-                        //                 borderRadius: BorderRadius.circular(10)),
-                        //             backgroundColor: HexColor("39C075"),
-                        //             foregroundColor: Colors.white,
-                        //             elevation: 5,
-                        //             padding: const EdgeInsets.symmetric(
-                        //                 horizontal: 10, vertical: 5),
-                        //             textStyle: const TextStyle(
-                        //                 fontSize: 15,
-                        //                 fontWeight: FontWeight.bold,
-                        //                 color: Colors.white)),
-                        //         onPressed: () async {
-                        //           if (_formKey.currentState!.validate()) {
-                        //             bool? newVisitToday = await _showPopup(context);
-                        //             if (newVisitToday == false) {
-                        //               if (lastDayOfWeek()) {
-                        //                 Navigator.of(context).push(
-                        //                     MaterialPageRoute(
-                        //                         builder: (context) =>
-                        //                             const SuccessScreenWeeklyPlan(
-                        //                               heading:
-                        //                                   'Successfully Created Your Visit',
-                        //                               subHeading:
-                        //                                   'Send notification to your manager to approve for weekly plan',
-                        //                             )));
-                        //               }
-                        //               weeklyProvider.uploadData(user.name);
-                        //             } else {
-                        //               weeklyProvider.addDataInSingleDayVisit(
-                        //                   user.name,
-                        //                   reset: true);
-                        //             }
-                        //           }
-                        //         },
-                        //         child: const Text(
-                        //           "Add Visit",
-                        //           style: TextStyle(fontSize: 16),
-                        //         ),
-                        //       ),
-                        //     ),
-                        //   ),
-                        // ),
                       ],
                     ),
                   ),
@@ -515,92 +525,6 @@ class _SingleVisitScreenState extends State<SingleVisitScreen> {
           );
         }),
       ),
-    );
-  }
-
-  Future<bool?> _showPopup(BuildContext context) async {
-    return await showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          backgroundColor: Colors.white,
-          shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10.0)),
-          ),
-          title: const Text("Create a New Visit"),
-          content: const Text(
-              "Do you want to create a new visit for today's date or the next date? If you want to create a visit for any other date, please click on the date tab above."),
-          actions: <Widget>[
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop(true);
-              },
-              child: const Text(
-                "Today",
-                style: TextStyle(color: Colors.black),
-              ),
-            ),
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop(false);
-              },
-              child: Text(
-                lastDayOfWeek() ? 'Submit' : "Next Date",
-                style: const TextStyle(color: Colors.black),
-              ),
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  bool lastDayOfWeek() {
-    final provider = Provider.of<WeeklyProviderPlan>(context, listen: false);
-    if (DateFormat('dd-MM-yyyy').format(provider.focusDate) ==
-        DateFormat('dd-MM-yyyy').format(provider.friday)) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-
-  Future<bool?> showSubmitPopup(BuildContext context) async {
-    return await showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          backgroundColor: Colors.white,
-          shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10.0)),
-          ),
-          title: const Text("Submit your added visits"),
-          content:
-              const Text("Press ok if you wanted to submit your added visit"),
-          actions: <Widget>[
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop(false);
-              },
-              child: const Text(
-                "Cancel",
-                style: TextStyle(color: Colors.black),
-              ),
-            ),
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop(true);
-              },
-              child: const Text(
-                'Ok',
-                style: TextStyle(color: Colors.black),
-              ),
-            ),
-          ],
-        );
-      },
     );
   }
 }

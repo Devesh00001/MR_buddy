@@ -82,6 +82,12 @@ class DrugService {
               logsList.add(log);
             }
           });
+
+          logsList.sort((a, b) {
+            DateTime dateA = _parseDate(a.date);
+            DateTime dateB = _parseDate(b.date);
+            return dateB.compareTo(dateA);
+          });
         } else {
           log('No logs found for MR: $mrName');
         }
@@ -93,6 +99,14 @@ class DrugService {
     }
 
     return logsList;
+  }
+
+  DateTime _parseDate(String date) {
+    List<String> parts = date.split('-'); 
+    int day = int.parse(parts[0]);
+    int month = int.parse(parts[1]);
+    int year = int.parse(parts[2]);
+    return DateTime(year, month, day); 
   }
 
   Future<String?> downloadPdf(String medicineName) async {

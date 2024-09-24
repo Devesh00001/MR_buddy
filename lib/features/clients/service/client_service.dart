@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:mr_buddy/features/clients/model/clients.dart';
 import 'package:mr_buddy/features/visit_detail/model/past_visit.dart';
@@ -19,12 +21,10 @@ class ClientService {
         return [];
       }
     } catch (e) {
-      print('Error fetching clients: $e');
+      log('Error fetching clients: $e');
       return [];
     }
   }
-
-  
 
   Future<Map<String, Map<String, PastVisit>>> getPastVisit(
       String clientName) async {
@@ -53,8 +53,20 @@ class ClientService {
         return {};
       }
     } catch (e) {
-      print('Error fetching past Visits: $e');
+      log('Error fetching past Visits: $e');
       return {};
+    }
+  }
+
+  Future<void> addClient(Client client) async {
+    CollectionReference clientsCollection =
+        FirebaseFirestore.instance.collection('Clients');
+
+    try {
+      await clientsCollection.add(client.toMap());
+      log('Client added successfully!');
+    } catch (e) {
+      log('Failed to add client: $e');
     }
   }
 }

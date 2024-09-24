@@ -295,7 +295,7 @@ class _SummaryPageState extends State<SummaryPage> {
                                   Column(
                                     children: [
                                       SummaryCardTile(
-                                          title: "Drugs Prescribed",
+                                          title: "Suggested Medication",
                                           value: pastVisit.drugsPrescribed
                                               .substring(
                                                   1,

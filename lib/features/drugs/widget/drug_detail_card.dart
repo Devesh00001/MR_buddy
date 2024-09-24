@@ -9,7 +9,7 @@ class DrugDetailCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.only(left: 20),
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -21,7 +21,8 @@ class DrugDetailCard extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.only(left: 10),
             child: Text(value,
-                style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500)),
+                style:
+                    const TextStyle(fontSize: 14, fontWeight: FontWeight.w500)),
           )
         ],
       ),

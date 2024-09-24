@@ -2,6 +2,8 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:mr_buddy/features/clients/model/clients.dart';
+import 'package:mr_buddy/features/clients/service/client_service.dart';
 import 'package:mr_buddy/features/weekly%20plan/service/weekly_plan_service.dart';
 import 'package:mr_buddy/notifiction_service.dart';
 
@@ -31,7 +33,12 @@ class WeeklyProviderPlan with ChangeNotifier {
   Map<String, dynamic> weekdayPlans = {};
   String? mrName;
   Map<String, dynamic> dayVisits = {};
-  String? time;
+  String time = '12:00 PM';
+  String? specialization;
+
+  void setSpecialization(String value) {
+    specialization = value;
+  }
 
   void setTime(String value) {
     time = value;
@@ -48,6 +55,18 @@ class WeeklyProviderPlan with ChangeNotifier {
 
     weekdayPlans[DateFormat('dd-MM-yyyy').format(focusDate)] =
         Map.from(dayVisits);
+
+    if (clientType == 'New Health Associate') {
+      ClientService clientService = ClientService();
+      Map<String, dynamic> clientMap = {
+        'Name': clientName,
+        'Address': address,
+        'Hospital': '',
+        'Specialization': specialization
+      };
+      Client client = Client.fromJson(clientMap);
+      clientService.addClient(client);
+    }
 
     if (weekday == 'Friday' || uploaded == true) {
       WeeklyPlanService service = WeeklyPlanService();
@@ -91,9 +110,9 @@ class WeeklyProviderPlan with ChangeNotifier {
         day: weekday,
         comments: ' ',
         status: 'Pending',
-        startTime: time!,
+        startTime: time,
         checkOut: false);
-    dayVisits[time!] = Map.from(visit.toMap());
+    dayVisits[time] = Map.from(visit.toMap());
     if (reset) {
       resetProvider(allReset: false);
     }
@@ -114,9 +133,19 @@ class WeeklyProviderPlan with ChangeNotifier {
         day: weekday,
         comments: ' ',
         status: 'Pending',
-        startTime: time!,
+        startTime: time,
         checkOut: false);
-
+    if (clientType == 'New Health Associate') {
+      ClientService clientService = ClientService();
+      Map<String, dynamic> clientMap = {
+        'Name': clientName,
+        'Address': address,
+        'Hospital': '',
+        'Specialization': specialization
+      };
+      Client client = Client.fromJson(clientMap);
+      clientService.addClient(client);
+    }
     WeeklyPlanService service = WeeklyPlanService();
     bool status = await service.addOrUpdateWeekDayPlan(visit);
     if (status) {
@@ -216,7 +245,7 @@ class WeeklyProviderPlan with ChangeNotifier {
     clientType = null;
     client = null;
     clientList.clear();
-    time = null;
+    time = '12:00 PM';
     notifyListeners();
   }
 }

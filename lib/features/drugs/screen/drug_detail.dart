@@ -108,6 +108,7 @@ class _DrugDetailsState extends State<DrugDetails> {
                   ),
                   const SizedBox(height: 10),
                   ExpansionTile(
+                    expandedCrossAxisAlignment: CrossAxisAlignment.start,
                     collapsedBackgroundColor:
                         const Color.fromARGB(255, 226, 241, 255),
                     collapsedIconColor: Colors.black,
@@ -132,6 +133,7 @@ class _DrugDetailsState extends State<DrugDetails> {
                     ],
                   ),
                   ExpansionTile(
+                    expandedCrossAxisAlignment: CrossAxisAlignment.start,
                     collapsedBackgroundColor:
                         const Color.fromARGB(255, 226, 241, 255),
                     collapsedIconColor: Colors.black,
@@ -164,6 +166,7 @@ class _DrugDetailsState extends State<DrugDetails> {
                     ],
                   ),
                   ExpansionTile(
+                    expandedCrossAxisAlignment: CrossAxisAlignment.start,
                     collapsedBackgroundColor:
                         const Color.fromARGB(255, 226, 241, 255),
                     collapsedIconColor: Colors.black,
@@ -196,6 +199,7 @@ class _DrugDetailsState extends State<DrugDetails> {
                     ],
                   ),
                   ExpansionTile(
+                    expandedCrossAxisAlignment: CrossAxisAlignment.start,
                     collapsedBackgroundColor:
                         const Color.fromARGB(255, 226, 241, 255),
                     collapsedIconColor: Colors.black,
@@ -217,13 +221,17 @@ class _DrugDetailsState extends State<DrugDetails> {
                     ),
                     children: [
                       DrugDetailCard(
-                        heading: "Side Effects",
-                        value: widget.drug.sideEffects,
+                        heading: "Recommended Doses",
+                        value: widget.drug.recommendedDoses,
                       ),
                       const SizedBox(height: 10),
                       DrugDetailCard(
-                        heading: "Drug Interactions",
-                        value: widget.drug.drugInteractions,
+                        heading: "Administration Methods",
+                        value: widget.drug.administrationMethods,
+                      ),
+                      DrugDetailCard(
+                        heading: "Frequency",
+                        value: widget.drug.frequency,
                       ),
                     ],
                   ),

@@ -2,18 +2,20 @@ class Client {
   String name;
   String address;
   String hospital;
+  String specialization;
 
-  Client({
-    required this.name,
-    required this.address,
-    required this.hospital,
-  });
+  Client(
+      {required this.name,
+      required this.address,
+      required this.hospital,
+      required this.specialization});
 
   factory Client.fromJson(Map<String, dynamic> data) {
     return Client(
         name: data['Name'],
         address: data['Address'],
-        hospital: data['Hospital']);
+        hospital: data['Hospital'],
+        specialization: data['Specialization'] ?? '');
   }
 
   Map<String, dynamic> toMap() {
@@ -21,6 +23,7 @@ class Client {
       'Name': name,
       'Address': address,
       'Hospital': hospital,
+      'Specialization': specialization
     };
   }
 }
