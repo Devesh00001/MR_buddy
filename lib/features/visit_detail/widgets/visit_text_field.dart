@@ -68,6 +68,7 @@ class _VisitTextFieldState extends State<VisitTextField> {
             readOnly: widget.readOnly,
             obscureText: widget.visibility,
             expands: widget.visibility ? false : true,
+            style: TextStyle(fontSize: 16 * Utils.fontSizeModifer),
             decoration: InputDecoration(
                 suffixIcon: widget.hintText == "Location"
                     ? Icon(

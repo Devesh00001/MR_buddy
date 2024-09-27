@@ -15,7 +15,19 @@ class VisitDetailProvider with ChangeNotifier {
   List<String> medicineName = [];
   String? selectedMedicine;
   String? leadScore;
-  List<String> scoreList = ['20', '25', '30', '35', '40', '45', '50'];
+  List<String> scoreList = [
+    '0%',
+    '10%',
+    '20%',
+    '30%',
+    '40%',
+    '50%',
+    '60%',
+    '70%',
+    '80%',
+    '90%',
+    '100%'
+  ];
   String selectedVisitType = 'Physical visit';
   List<String> visitTypes = [
     'Physical visit',
@@ -204,6 +216,8 @@ class VisitDetailProvider with ChangeNotifier {
   Future<bool> uploadData(Visit visit) async {
     VisitDetailService service = VisitDetailService();
     bool status = await service.updateVisitFromMrDetail(visit);
+
+    String finalLeadScore = leadScore!.substring(0, leadScore!.length - 1);
     if (status) {
       PastVisit pastVisit = PastVisit(
           mrName: visit.mrName,
@@ -213,7 +227,7 @@ class VisitDetailProvider with ChangeNotifier {
               selectedDrugs.map((drug) => drug.name).toList().toString(),
           queriesEncountered: queriesEncountered!,
           additionalNotes: additionalNotes!,
-          leadScore: leadScore!,
+          leadScore: finalLeadScore,
           leadSuggestion: leadSuggestion!,
           visitType: selectedVisitType,
           time: visit.startTime,
@@ -221,7 +235,7 @@ class VisitDetailProvider with ChangeNotifier {
 
       NotificationService notificationService = NotificationService();
       notificationService.addNotificationToUser('Himanshu',
-          '${visit.mrName} check out from ${visit.clientName} give lead score ${pastVisit.leadScore}%');
+          '${visit.mrName} check out from ${visit.clientName} give lead score $finalLeadScore%');
 
       return await service.addPastVisit(pastVisit, imagePath!);
     }
@@ -282,6 +296,7 @@ class VisitDetailProvider with ChangeNotifier {
   }
 
   setLeadScore(String value) {
+    // value = value.substring(0, value.length - 1);
     leadScore = value;
     notifyListeners();
   }

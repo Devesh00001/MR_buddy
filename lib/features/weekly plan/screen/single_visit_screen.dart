@@ -73,7 +73,9 @@ class _SingleVisitScreenState extends State<SingleVisitScreen> {
       DateTime? selectedDate = await showDialog<DateTime>(
         context: context,
         builder: (context) {
-          DateTime tempSelectedDate = DateTime.now();
+          final provider =
+              Provider.of<WeeklyProviderPlan>(context, listen: false);
+          // DateTime tempSelectedDate = DateTime.now();
 
           return Center(
             child: Material(
@@ -122,18 +124,18 @@ class _SingleVisitScreenState extends State<SingleVisitScreen> {
                           ),
                         ),
                         child: CalendarDatePicker(
-                          initialDate: tempSelectedDate,
+                          initialDate: provider.getTempDate(),
                           firstDate: DateTime.now(),
                           lastDate: DateTime(2100),
                           onDateChanged: (date) {
-                            tempSelectedDate = date;
+                            provider.setTempDate(date);
                           },
                         ),
                       ),
                     ),
                     TextButton(
                       onPressed: () {
-                        Navigator.of(context).pop(tempSelectedDate);
+                        Navigator.of(context).pop(provider.getTempDate());
                       },
                       style: ButtonStyle(
                           foregroundColor: MaterialStateProperty.all<Color>(

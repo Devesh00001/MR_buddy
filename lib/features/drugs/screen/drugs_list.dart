@@ -1,8 +1,5 @@
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:figma_squircle/figma_squircle.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 
@@ -79,9 +76,9 @@ class _DrugsListState extends State<DrugsList> {
                             shadows: [
                               BoxShadow(
                                 color: Colors.grey.withOpacity(0.5),
-                                spreadRadius: 5,
-                                blurRadius: 7,
-                                offset: const Offset(0, 3),
+                                spreadRadius: 2,
+                                blurRadius: 10,
+                                offset: const Offset(0, 0),
                               ),
                             ],
                           ),
@@ -106,26 +103,25 @@ class _DrugsListState extends State<DrugsList> {
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   Expanded(
-                                    child: AutoSizeText(
+                                    child: Text(
                                       drugsProvider.displayDrugList[index].name,
-                                      minFontSize: 16,
-                                      maxFontSize: 20,
                                       maxLines: 1,
-                                      // style: const TextStyle(fontSize: 20),
+                                      style: TextStyle(
+                                          fontSize: 16 * Utils.fontSizeModifer),
                                     ),
                                   ),
                                   Expanded(
                                     child: SizedBox(
                                       height: Utils.deviceHeight * 0.05,
                                       width: Utils.deviceWidth * 0.7,
-                                      child: AutoSizeText(
+                                      child: Text(
                                         drugsProvider
                                             .displayDrugList[0].description,
                                         overflow: TextOverflow.clip,
-                                        minFontSize: 12,
-                                        maxFontSize: 16,
-                                        style:
-                                            const TextStyle(color: Colors.grey),
+                                        style: TextStyle(
+                                            color: Colors.grey,
+                                            fontSize:
+                                                10 * Utils.fontSizeModifer),
                                       ),
                                     ),
                                   ),

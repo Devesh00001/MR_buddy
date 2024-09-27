@@ -37,26 +37,32 @@ class Calendar extends StatelessWidget {
               headerStyle: const HeaderStyle(
                 titleCentered: true,
                 formatButtonVisible: false,
+                headerPadding: EdgeInsets.zero,
               ),
               daysOfWeekHeight: Utils.isTab ? 50 : 30,
               daysOfWeekStyle: DaysOfWeekStyle(
-                weekdayStyle: TextStyle(fontSize: Utils.isTab ? 20.0 : 12),
+                weekdayStyle: TextStyle(
+                    fontSize: Utils.isTab ? 20.0 : 12 * Utils.fontSizeModifer),
                 weekendStyle: TextStyle(
-                    fontSize: Utils.isTab ? 20.0 : 12,
+                    fontSize: Utils.isTab ? 20.0 : 12 * Utils.fontSizeModifer,
                     color: Colors.grey.shade400),
               ),
               calendarStyle: CalendarStyle(
                   outsideTextStyle: TextStyle(
-                      fontSize: Utils.isTab ? 20 : 12,
+                      fontSize: Utils.isTab ? 20 : 12 * Utils.fontSizeModifer,
                       color: Colors.grey.shade400),
                   weekendTextStyle: TextStyle(
-                      fontSize: Utils.isTab ? 20 : 12,
+                      fontSize: Utils.isTab ? 20 : 12 * Utils.fontSizeModifer,
                       color: Colors.grey.shade400),
-                  defaultTextStyle: TextStyle(fontSize: Utils.isTab ? 20 : 12),
-                  disabledTextStyle: TextStyle(fontSize: Utils.isTab ? 20 : 12),
-                  todayTextStyle: TextStyle(fontSize: Utils.isTab ? 20 : 12),
+                  defaultTextStyle: TextStyle(
+                      fontSize: Utils.isTab ? 20 : 12 * Utils.fontSizeModifer),
+                  disabledTextStyle: TextStyle(
+                      fontSize: Utils.isTab ? 20 : 12 * Utils.fontSizeModifer),
+                  todayTextStyle: TextStyle(
+                      fontSize: Utils.isTab ? 20 : 12 * Utils.fontSizeModifer),
                   selectedTextStyle: TextStyle(
-                      fontSize: Utils.isTab ? 20 : 12, color: Colors.white)),
+                      fontSize: Utils.isTab ? 20 : 12 * Utils.fontSizeModifer,
+                      color: Colors.white)),
               selectedDayPredicate: (day) {
                 return isSameDay(dashboardProvider.selectedDate, day);
               },

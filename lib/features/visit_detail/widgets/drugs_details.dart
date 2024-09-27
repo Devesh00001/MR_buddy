@@ -1,9 +1,6 @@
 import 'package:blinking_text/blinking_text.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
-
 import '../../../utils.dart';
 import '../../drugs/screen/drug_detail.dart';
 import '../../weekly plan/model/visit.dart';
@@ -30,12 +27,6 @@ class _DrugInfoState extends State<DrugInfo> {
         children: [
           VisitStatus(visit: widget.visit),
           const SizedBox(height: 20),
-          // VisitTextField(
-          //   hintText: "Location",
-          //   value: visitDetailProvider.getLocation(),
-          //   validateFunction: visitDetailProvider.validateInput,
-          // ),
-          const SizedBox(height: 10),
           Form(
             key: formKeys[visitDetailProvider.getCurrectStep()],
             child: CustomDropdown(
@@ -80,9 +71,12 @@ class _DrugInfoState extends State<DrugInfo> {
                           Expanded(
                             child: Row(
                               children: [
-                                Text(
-                                  item.name,
-                                  style: const TextStyle(fontSize: 14),
+                                SizedBox(
+                                  width: 100,
+                                  child: Text(
+                                    item.name,
+                                    style: const TextStyle(fontSize: 14),
+                                  ),
                                 ),
                                 const SizedBox(width: 5),
                                 item.newDrug

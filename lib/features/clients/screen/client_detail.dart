@@ -1,6 +1,7 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:figma_squircle/figma_squircle.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:mr_buddy/features/clients/model/clients.dart';
 import 'package:mr_buddy/features/visit_detail/model/past_visit.dart';
 import 'package:provider/provider.dart';
@@ -69,18 +70,22 @@ class ClientDetail extends StatelessWidget {
                         ),
                       ],
                     ),
-                    ElevatedButton(
-                        onPressed: () {},
-                        style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.white,
-                            foregroundColor: Colors.black,
-                            shape: const SmoothRectangleBorder(
-                                borderRadius: SmoothBorderRadius.all(
-                                    SmoothRadius(
-                                        cornerRadius: 10, cornerSmoothing: 1))),
-                            textStyle: const TextStyle(
-                                fontSize: 16, fontWeight: FontWeight.bold)),
-                        child: const Text("MR"))
+                    Visibility(
+                      visible: false,
+                      child: ElevatedButton(
+                          onPressed: () {},
+                          style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.white,
+                              foregroundColor: Colors.black,
+                              shape: const SmoothRectangleBorder(
+                                  borderRadius: SmoothBorderRadius.all(
+                                      SmoothRadius(
+                                          cornerRadius: 10,
+                                          cornerSmoothing: 1))),
+                              textStyle: const TextStyle(
+                                  fontSize: 16, fontWeight: FontWeight.bold)),
+                          child: const Text("MR")),
+                    )
                   ],
                 ),
                 const SizedBox(height: 20),

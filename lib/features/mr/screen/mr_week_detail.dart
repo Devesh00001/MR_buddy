@@ -1,5 +1,7 @@
 import 'package:figma_squircle/figma_squircle.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
 import 'package:mr_buddy/features/welcome/model/user.dart';
@@ -90,14 +92,46 @@ class _MRWeekDetailsState extends State<MRWeekDetails> {
                                 headerVisible: true,
                                 headerStyle: const HeaderStyle(
                                     titleCentered: true,
+                                    headerPadding: EdgeInsets.zero,
                                     formatButtonVisible: false),
+                                daysOfWeekStyle: DaysOfWeekStyle(
+                                  weekdayStyle: TextStyle(
+                                      fontSize: Utils.isTab
+                                          ? 20.0
+                                          : 12 * Utils.fontSizeModifer),
+                                  weekendStyle: TextStyle(
+                                      fontSize: Utils.isTab
+                                          ? 20.0
+                                          : 12 * Utils.fontSizeModifer,
+                                      color: Colors.grey.shade400),
+                                ),
                                 calendarStyle: CalendarStyle(
+                                    outsideTextStyle: TextStyle(
+                                        fontSize: Utils.isTab
+                                            ? 20
+                                            : 12 * Utils.fontSizeModifer,
+                                        color: Colors.grey.shade400),
+                                    weekendTextStyle: TextStyle(
+                                        fontSize: Utils.isTab
+                                            ? 20
+                                            : 12 * Utils.fontSizeModifer,
+                                        color: Colors.grey.shade400),
+                                    defaultTextStyle: TextStyle(
+                                        fontSize: Utils.isTab
+                                            ? 20
+                                            : 12 * Utils.fontSizeModifer),
                                     disabledTextStyle: TextStyle(
-                                        fontSize: Utils.isTab ? 18 : 12),
+                                        fontSize: Utils.isTab
+                                            ? 20
+                                            : 12 * Utils.fontSizeModifer),
                                     todayTextStyle: TextStyle(
-                                        fontSize: Utils.isTab ? 18 : 12),
+                                        fontSize: Utils.isTab
+                                            ? 20
+                                            : 12 * Utils.fontSizeModifer),
                                     selectedTextStyle: TextStyle(
-                                        fontSize: Utils.isTab ? 18 : 12,
+                                        fontSize: Utils.isTab
+                                            ? 20
+                                            : 12 * Utils.fontSizeModifer,
                                         color: Colors.white)),
                                 selectedDayPredicate: (day) {
                                   return isSameDay(
@@ -160,7 +194,8 @@ class _MRWeekDetailsState extends State<MRWeekDetails> {
                                     };
 
                                     return ListView(
-                                      physics: const NeverScrollableScrollPhysics(),
+                                      physics:
+                                          const NeverScrollableScrollPhysics(),
                                       shrinkWrap: true,
                                       children: sortedData.entries.map((entry) {
                                         String time = entry.key;
@@ -177,7 +212,9 @@ class _MRWeekDetailsState extends State<MRWeekDetails> {
                                                   style: TextStyle(
                                                       fontSize: Utils.isTab
                                                           ? 20
-                                                          : 14),
+                                                          : 12 *
+                                                              Utils
+                                                                  .fontSizeModifer),
                                                 ),
                                                 InkWell(
                                                   onTap: () {
@@ -245,24 +282,24 @@ class _MRWeekDetailsState extends State<MRWeekDetails> {
                                                             MainAxisAlignment
                                                                 .spaceBetween,
                                                         children: [
-                                                          Column(
-                                                            crossAxisAlignment:
-                                                                CrossAxisAlignment
-                                                                    .start,
-                                                            children: [
-                                                              Text(
-                                                                  visit
-                                                                      .clientName,
-                                                                  style: TextStyle(
-                                                                      color: Colors
-                                                                          .white,
-                                                                      fontSize: Utils
-                                                                              .isTab
-                                                                          ? 18
-                                                                          : 14)),
-                                                              SizedBox(
-                                                                width: 120,
-                                                                child: Text(
+                                                          Expanded(
+                                                            flex: 8,
+                                                            child: Column(
+                                                              crossAxisAlignment:
+                                                                  CrossAxisAlignment
+                                                                      .start,
+                                                              children: [
+                                                                Text(
+                                                                    visit
+                                                                        .clientName,
+                                                                    style: TextStyle(
+                                                                        color: Colors
+                                                                            .white,
+                                                                        fontSize: Utils.isTab
+                                                                            ? 18
+                                                                            : 12 *
+                                                                                Utils.fontSizeModifer)),
+                                                                Text(
                                                                   visit.address,
                                                                   style: TextStyle(
                                                                       color: Colors
@@ -273,23 +310,28 @@ class _MRWeekDetailsState extends State<MRWeekDetails> {
                                                                       fontSize: Utils
                                                                               .isTab
                                                                           ? 18
-                                                                          : 14),
+                                                                          : 12 *
+                                                                              Utils.fontSizeModifer),
                                                                 ),
-                                                              ),
-                                                            ],
+                                                              ],
+                                                            ),
                                                           ),
-                                                          Icon(
-                                                              visit.checkOut ==
-                                                                      true
-                                                                  ? Icons
-                                                                      .location_on
-                                                                  : Icons
-                                                                      .location_off,
-                                                              color:
-                                                                  Colors.white,
-                                                              size: Utils.isTab
-                                                                  ? 30
-                                                                  : 24),
+                                                          Expanded(
+                                                            flex: 2,
+                                                            child: Icon(
+                                                                visit.checkOut ==
+                                                                        true
+                                                                    ? Icons
+                                                                        .location_on
+                                                                    : Icons
+                                                                        .location_off,
+                                                                color: Colors
+                                                                    .white,
+                                                                size:
+                                                                    Utils.isTab
+                                                                        ? 30
+                                                                        : 24),
+                                                          ),
                                                         ],
                                                       )),
                                                 ),

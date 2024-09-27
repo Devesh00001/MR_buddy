@@ -9,6 +9,8 @@ class Utils {
   static double _deviceHeight =
       ui.window.physicalSize.height / ui.window.devicePixelRatio;
 
+  static double _fontSizeModifer = _deviceWidth / 375;
+
   static void init(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _updateDimensions();
@@ -18,15 +20,17 @@ class Utils {
     });
   }
 
-  static bool isTab = _deviceWidth>600? true:false;
+  static bool isTab = _deviceWidth > 600 ? true : false;
 
   static void _updateDimensions() {
     _deviceWidth = ui.window.physicalSize.width / ui.window.devicePixelRatio;
     _deviceHeight = ui.window.physicalSize.height / ui.window.devicePixelRatio;
+    _fontSizeModifer = _deviceWidth / 375;
   }
 
   static double get deviceWidth => _deviceWidth;
   static double get deviceHeight => _deviceHeight;
+  static double get fontSizeModifer => _fontSizeModifer;
 }
 
 class HexColor extends Color {

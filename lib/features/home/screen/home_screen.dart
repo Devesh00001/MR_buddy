@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -9,6 +8,7 @@ import 'package:provider/provider.dart';
 
 import '../../clients/screen/all_client.dart';
 import '../../drugs/screen/drugs_list.dart';
+import '../../hrms/screen/hrms_screen.dart';
 import '../../mr_detail_visualization/screen/mr_detail_visualization.dart';
 import '../../weekly plan/screen/single_visit_screen.dart';
 import '../../weekly plan/screen/weekly_plan.dart';
@@ -43,7 +43,7 @@ class _HomeState extends State<Home> {
     const DashBoardScreen(),
     const AllClientScreen(),
     const DrugsList(),
-    const DashBoardScreen(),
+    const HrmsScreen(),
   ];
 
   final List<Widget> _supervisorScreens = [
@@ -68,6 +68,7 @@ class _HomeState extends State<Home> {
       SpeedDialChild(
         child: const Icon(Icons.assignment_rounded),
         label: 'Create Weekly Plan',
+        labelStyle: TextStyle(fontSize: 12 * Utils.fontSizeModifer),
         shape: const CircleBorder(),
         onTap: () {
           Navigator.of(context).push(
@@ -77,6 +78,7 @@ class _HomeState extends State<Home> {
       SpeedDialChild(
         child: const Icon(FontAwesomeIcons.userDoctor),
         label: 'Add a single visit',
+        labelStyle: TextStyle(fontSize: 12 * Utils.fontSizeModifer),
         shape: const CircleBorder(),
         onTap: () {
           Navigator.of(context).push(MaterialPageRoute(
@@ -150,14 +152,14 @@ class _HomeState extends State<Home> {
   }
 
   Widget buildIconColumn(IconData icon, String label, int index) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        InkWell(
-          onTap: () {
-            _onTap(index);
-          },
-          child: AnimatedScale(
+    return InkWell(
+      onTap: () {
+        _onTap(index);
+      },
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          AnimatedScale(
             scale: _currentIndex == index ? _scaleFactor : 1.0,
             duration: const Duration(milliseconds: 200),
             curve: Curves.bounceIn,
@@ -167,15 +169,15 @@ class _HomeState extends State<Home> {
               color: _currentIndex == index ? HexColor("2F52AC") : Colors.black,
             ),
           ),
-        ),
-        Text(
-          label,
-          style: TextStyle(
-            fontSize: Utils.isTab ? 18 : 12,
-            color: _currentIndex == index ? HexColor("2F52AC") : Colors.black,
+          Text(
+            label,
+            style: TextStyle(
+              fontSize: Utils.isTab ? 18 : 12,
+              color: _currentIndex == index ? HexColor("2F52AC") : Colors.black,
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

@@ -10,6 +10,7 @@ class WelcomeProvider with ChangeNotifier {
   String? userName;
   bool status = false;
   User? _user;
+  
 
   User? get user => _user;
 

@@ -15,7 +15,8 @@ import 'features/welcome/provider/welcome_provider.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   Firebase.initializeApp();
-  runApp(MultiProvider(providers: [
+  runApp(
+    MultiProvider(providers: [
     ChangeNotifierProvider(create: (_) => HomeProvider()),
     ChangeNotifierProvider(create: (_) => WelcomeProvider()),
     ChangeNotifierProvider(create: (_) => DashboardProvider()),
@@ -25,7 +26,8 @@ void main() async {
     ChangeNotifierProvider(create: (_) => DrugsProvider()),
     ChangeNotifierProvider(create: (_) => MRDetailProvider()),
     ChangeNotifierProvider(create: (_) => DataVisualizationProvider())
-  ], child: const MyApp()));
+  ],
+   child: const MyApp()));
 }
 
 class MyApp extends StatelessWidget {

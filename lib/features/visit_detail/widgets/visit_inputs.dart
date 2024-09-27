@@ -20,13 +20,6 @@ class VisitInputs extends StatelessWidget {
         child: Column(
           children: [
             VisitStatus(visit: visit),
-            const SizedBox(height: 20),
-            VisitTextField(
-              hintText: "Location",
-              value: visitDetailProvider.getLocation(),
-              validateFunction: visitDetailProvider.validateInput,
-              readOnly: true,
-            ),
             const SizedBox(height: 10),
             Form(
               key: formKeys[visitDetailProvider.getCurrectStep()],
@@ -36,7 +29,7 @@ class VisitInputs extends StatelessWidget {
                     hintText: "Queries Encountered",
                     setFunction: visitDetailProvider.setQuerieEncountered,
                     validateFunction: visitDetailProvider.validateInput,
-                    size: 150,
+                    size: 200,
                     textFieldColor: HexColor("D1E9F6").withOpacity(0.6),
                     value: visitDetailProvider.queriesEncountered ?? '',
                   ),
@@ -46,7 +39,7 @@ class VisitInputs extends StatelessWidget {
                     setFunction: visitDetailProvider.setAdditionalNotes,
                     value: visitDetailProvider.additionalNotes ?? "",
                     validateFunction: (value) {},
-                    size: 150,
+                    size: 200,
                     textFieldColor: HexColor("D1E9F6").withOpacity(0.6),
                   ),
                 ],

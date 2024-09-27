@@ -28,7 +28,7 @@ class _MrDetailVisualizationState extends State<MrDetailVisualization> {
   Widget build(BuildContext context) {
     return Consumer<DataVisualizationProvider>(
         builder: (context, dataProvider, child) {
-      return ListView(children: [
+      return ListView(scrollDirection: Axis.vertical, children: [
         Column(
           children: [
             Container(

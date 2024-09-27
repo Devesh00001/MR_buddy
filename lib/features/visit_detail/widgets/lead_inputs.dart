@@ -18,17 +18,10 @@ class LeadInputs extends StatelessWidget {
         builder: (context, visitDetailProvider, child) {
       return Column(
         children: [
-         VisitStatus(
-                visit: visit),
-          const SizedBox(height: 20),
-          VisitTextField(
-            hintText: "Location",
-            value: visitDetailProvider.getLocation(),
-            validateFunction: visitDetailProvider.validateInput,
-          ),
+          VisitStatus(visit: visit),
           const SizedBox(height: 10),
           Form(
-             key: formKeys[visitDetailProvider.getCurrectStep()],
+            key: formKeys[visitDetailProvider.getCurrectStep()],
             child: Column(
               children: [
                 CustomDropdown(
@@ -44,7 +37,7 @@ class LeadInputs extends StatelessWidget {
                   hintText: "Lead Suggestion",
                   setFunction: visitDetailProvider.setLeadSuggestion,
                   validateFunction: visitDetailProvider.validateInput,
-                  size: 150,
+                  size: 200,
                 ),
               ],
             ),

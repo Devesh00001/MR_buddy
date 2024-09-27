@@ -1,4 +1,3 @@
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:figma_squircle/figma_squircle.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -74,7 +73,9 @@ class VisitList extends StatelessWidget {
                                   Text(
                                     time,
                                     style: TextStyle(
-                                        fontSize: Utils.isTab ? 20 : 14),
+                                        fontSize: Utils.isTab
+                                            ? 20
+                                            : 12 * Utils.fontSizeModifer),
                                   ),
                                   InkWell(
                                     onTap: () {
@@ -119,22 +120,21 @@ class VisitList extends StatelessWidget {
                                           mainAxisAlignment:
                                               MainAxisAlignment.spaceBetween,
                                           children: [
-                                            Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                SizedBox(
-                                                  width: 200,
-                                                  child: Text(visit.clientName,
+                                            Expanded(
+                                              flex: 8,
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(visit.clientName,
                                                       style: TextStyle(
                                                           color: Colors.white,
                                                           fontSize: Utils.isTab
                                                               ? 18
-                                                              : 14)),
-                                                ),
-                                                SizedBox(
-                                                  width: 200,
-                                                  child: AutoSizeText(
+                                                              : 12 *
+                                                                  Utils
+                                                                      .fontSizeModifer)),
+                                                  Text(
                                                     visit.address,
                                                     style: TextStyle(
                                                         color: Colors.white,
@@ -142,20 +142,25 @@ class VisitList extends StatelessWidget {
                                                             .ellipsis,
                                                         fontSize: Utils.isTab
                                                             ? 18
-                                                            : 14),
+                                                            : 12 *
+                                                                Utils
+                                                                    .fontSizeModifer),
                                                   ),
-                                                ),
-                                              ],
+                                                ],
+                                              ),
                                             ),
-                                            Icon(
-                                              visit.placeType ==
-                                                      'Private Clinic'
-                                                  ? FontAwesomeIcons
-                                                      .houseChimneyMedical
-                                                  : FontAwesomeIcons
-                                                      .solidHospital,
-                                              color: Colors.white,
-                                              size: Utils.isTab ? 30 : 24,
+                                            Expanded(
+                                              flex: 2,
+                                              child: Icon(
+                                                visit.placeType ==
+                                                        'Private Clinic'
+                                                    ? FontAwesomeIcons
+                                                        .houseChimneyMedical
+                                                    : FontAwesomeIcons
+                                                        .solidHospital,
+                                                color: Colors.white,
+                                                size: Utils.isTab ? 30 : 24,
+                                              ),
                                             ),
                                           ],
                                         )),

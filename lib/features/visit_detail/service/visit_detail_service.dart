@@ -113,7 +113,9 @@ class VisitDetailService {
       } else {
         await FirebaseFirestore.instance.collection('Past Visits').add({
           'Name': pastVisit.clientName,
-          'Visits': {pastVisit.date: pastVisit.toMap()},
+          'Visits': {
+            pastVisit.date: {pastVisit.time: pastVisit.toMap()}
+          },
         });
         log("New document created with key-value pair.");
         return true;

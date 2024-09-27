@@ -30,11 +30,20 @@ class WeeklyProviderPlan with ChangeNotifier {
   String? purpose;
   String? contactPoint;
   String? date;
+  DateTime tempSelectedDate = DateTime.now();
   Map<String, dynamic> weekdayPlans = {};
   String? mrName;
   Map<String, dynamic> dayVisits = {};
   String time = '12:00 PM';
   String? specialization;
+
+  void setTempDate(DateTime value) {
+    tempSelectedDate = value;
+  }
+
+  DateTime getTempDate() {
+    return tempSelectedDate;
+  }
 
   void setSpecialization(String value) {
     specialization = value;

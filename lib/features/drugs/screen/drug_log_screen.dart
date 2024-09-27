@@ -54,7 +54,8 @@ class _DrugLogScreenState extends State<DrugLogScreen> {
                   Expanded(
                     flex: 18,
                     child: FutureBuilder<List<StepperItemData>>(
-                        future: drugProvider.getLogs('Pregabalin'),
+                        future:
+                            drugProvider.getLogs('AB - FLO - N TAB (10 X 10)'),
                         builder: (context, snapshot) {
                           if (snapshot.connectionState ==
                               ConnectionState.waiting) {

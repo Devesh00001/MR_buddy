@@ -1,6 +1,7 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:figma_squircle/figma_squircle.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mr_buddy/features/clients/screen/client_detail.dart';
 import 'package:mr_buddy/utils.dart';
@@ -88,20 +89,17 @@ class _AllClientScreenState extends State<AllClientScreen> {
                               const SizedBox(width: 10),
                               AutoSizeText(
                                 clinetProvider.displayClientList[index].name,
-                                minFontSize: 12,
-                                maxFontSize: 16,
                                 style: TextStyle(
-                                    // fontSize: isTab ? 20 : 16,
+                                    fontSize: 14 * Utils.fontSizeModifer,
                                     fontWeight: FontWeight.w600,
                                     color: HexColor("2F52AC")),
                               ),
                             ],
                           ),
-                          AutoSizeText(
+                          Text(
                             "Hospital: ${clinetProvider.displayClientList[index].hospital}",
-                            minFontSize: 12,
-                            maxFontSize: 16,
-                            // style: TextStyle(fontSize: isTab ? 20 : 16),
+                            style:
+                                TextStyle(fontSize: 14 * Utils.fontSizeModifer),
                           ),
                         ],
                       ),
