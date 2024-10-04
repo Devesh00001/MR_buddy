@@ -28,7 +28,7 @@ class MRList extends StatelessWidget {
               SizedBox(
                   height: Utils.deviceHeight * 0.4,
                   child: FutureBuilder<Map<String, dynamic>>(
-                      future: dashboardProvider.getAllMRDetail(user.mrNames),
+                      future: dashboardProvider.getAllMRDetail(context,user.mrNames),
                       builder: (context, snapshot) {
                         if (snapshot.connectionState ==
                             ConnectionState.waiting) {

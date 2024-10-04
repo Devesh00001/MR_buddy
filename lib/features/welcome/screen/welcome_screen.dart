@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:lottie/lottie.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:mr_buddy/features/visit_detail/widgets/visit_text_field.dart';
 import 'package:mr_buddy/utils.dart';
 import 'package:provider/provider.dart';
 import '../../../widgets/comman_appbar.dart';
-import '../../home/screen/home_screen.dart';
 import '../provider/welcome_provider.dart';
 
 class WelcomeScreen extends StatefulWidget {
@@ -68,16 +66,15 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                         VisitTextField(
                             hintText: 'Password',
                             validateFunction: provider.validateInput,
+                            setFunction: provider.setPassword,
                             visibility: true),
                         const SizedBox(height: 20),
                         InkWell(
                           onTap: () async {
                             if (_formKey.currentState!.validate()) {
-                              await provider.submitUserDetails();
+                              await provider.submitUserDetails(context);
                               if (provider.status == true) {
-                                Navigator.of(context).pushReplacement(
-                                    MaterialPageRoute(
-                                        builder: (context) => const Home()));
+                            
                               }
                             }
                           },

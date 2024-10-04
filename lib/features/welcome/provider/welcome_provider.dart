@@ -8,6 +8,7 @@ class WelcomeProvider with ChangeNotifier {
   List<String> roles = ["MR", "Manager"];
   bool isLoading = false;
   String? userName;
+  String? password;
   bool status = false;
   User? _user;
   
@@ -18,6 +19,7 @@ class WelcomeProvider with ChangeNotifier {
     _user = user;
     notifyListeners();
   }
+
 
   void setRole(String value) {
     selectedRole = value;
@@ -35,6 +37,10 @@ class WelcomeProvider with ChangeNotifier {
     userName = value;
   }
 
+  void setPassword(String value){
+    password = value;
+  }
+
   void setIsloading(bool value) {
     isLoading = value;
     notifyListeners();
@@ -44,10 +50,10 @@ class WelcomeProvider with ChangeNotifier {
     return isLoading;
   }
 
-  submitUserDetails() async {
+  submitUserDetails(BuildContext context) async {
     setIsloading(true);
     WelcomeService service = WelcomeService();
-    setUser(await service.isUsernamePresent(userName!));
+    setUser(await service.authenticateUser(context,userName!,password!));
     status = true;
     setIsloading(false);
   }

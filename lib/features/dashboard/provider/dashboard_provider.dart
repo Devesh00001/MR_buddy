@@ -66,7 +66,7 @@ class DashboardProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<Map<String, User>> getAllMRDetail(List<String> mrNameList) async {
+  Future<Map<String, User>> getAllMRDetail(BuildContext context, List<String> mrNameList) async {
     WelcomeService service = WelcomeService();
     mrListMap.clear();
     for (int i = 0; i < mrNameList.length; i++) {

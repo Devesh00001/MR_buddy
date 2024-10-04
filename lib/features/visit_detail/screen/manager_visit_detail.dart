@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mr_buddy/features/mr/widget/user_info_card.dart';
 import 'package:mr_buddy/features/welcome/model/user.dart';

@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -110,7 +109,7 @@ class UserDetailFiled extends StatelessWidget {
             color: HexColor("2F52AC"),
             size: Utils.isTab ? 36 : 20,
           ),
-          SizedBox(width: 5),
+          const SizedBox(width: 5),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -118,11 +117,15 @@ class UserDetailFiled extends StatelessWidget {
                 "$title: ",
                 style: TextStyle(fontSize: fontSize),
               ),
-              Text(
-                value,
-                style: TextStyle(
-                  fontSize: fontSize,
-                  color: HexColor("1F1F1F").withOpacity(0.5),
+              SizedBox(
+                width: 100,
+                child: Text(
+                  value,
+                  style: TextStyle(
+                    fontSize: fontSize,
+                    overflow: TextOverflow.fade,
+                    color: HexColor("1F1F1F").withOpacity(0.5),
+                  ),
                 ),
               )
             ],
